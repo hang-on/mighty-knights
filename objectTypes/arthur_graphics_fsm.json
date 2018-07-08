@@ -1,0 +1,26 @@
+{
+	"name": "arthur_graphics_fsm",
+	"plugin-id": "wastrel_switchcase",
+	"sid": 763154560956555,
+	"isGlobal": true,
+	"instanceVariables": [
+		{
+			"name": "state",
+			"type": "string",
+			"desc": "",
+			"sid": 831372532576373
+		},
+		{
+			"name": "previous_feet_state",
+			"type": "string",
+			"desc": "",
+			"sid": 528413898841232
+		},
+		{
+			"name": "previous_hands_state",
+			"type": "string",
+			"desc": "",
+			"sid": 305257371451981
+		}
+	]
+}

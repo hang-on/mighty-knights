@@ -1,0 +1,19 @@
+{
+	"name": "top_hud_line_2",
+	"plugin-id": "Spritefont2",
+	"sid": 940187610571601,
+	"isGlobal": false,
+	"instanceVariables": [],
+	"behaviorTypes": [],
+	"effectTypes": [],
+	"image": {
+		"width": 728,
+		"height": 8,
+		"originX": 0.5,
+		"originY": 0.5,
+		"originalSource": "",
+		"exportFormat": "png",
+		"exportQuality": 0.8,
+		"imageSpriteId": 36
+	}
+}

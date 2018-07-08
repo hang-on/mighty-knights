@@ -1,0 +1,267 @@
+{
+	"projectFormatVersion": 1,
+	"savedWithRelease": 10400,
+	"name": "knights_of_the_square",
+	"runtime": "c2",
+	"useWorker": false,
+	"bundleAddons": false,
+	"usedAddons": [
+		{
+			"type": "plugin",
+			"id": "Tilemap",
+			"name": "Tilemap",
+			"author": "Scirra",
+			"version": "r104",
+			"bundled": false
+		},
+		{
+			"type": "plugin",
+			"id": "Sprite",
+			"name": "Sprite",
+			"author": "Scirra",
+			"version": "r104",
+			"bundled": false
+		},
+		{
+			"type": "plugin",
+			"id": "wastrel_switchcase",
+			"name": "SwitchCase",
+			"author": "Wastrel",
+			"version": "1.0.0.0",
+			"bundled": false
+		},
+		{
+			"type": "plugin",
+			"id": "Text",
+			"name": "Text",
+			"author": "Scirra",
+			"version": "r104",
+			"bundled": false
+		},
+		{
+			"type": "plugin",
+			"id": "Spritefont2",
+			"name": "Sprite font",
+			"author": "Scirra",
+			"version": "r104",
+			"bundled": false
+		},
+		{
+			"type": "plugin",
+			"id": "Keyboard",
+			"name": "Keyboard",
+			"author": "Scirra",
+			"version": "r104",
+			"bundled": false
+		},
+		{
+			"type": "plugin",
+			"id": "Mouse",
+			"name": "Mouse",
+			"author": "Scirra",
+			"version": "r104",
+			"bundled": false
+		},
+		{
+			"type": "behavior",
+			"id": "scrollto",
+			"name": "Scroll To",
+			"author": "Scirra",
+			"version": "r104",
+			"bundled": false
+		}
+	],
+	"uniqueId": "gibgj8ptcwn",
+	"cloudId": "{\"d27eee844d8e42c7\":\"9d416061603f5fd5\",\"dbid:AACOjYRjz1FG-6O6pvwAdA6g2i2HPMWPNA8_DROPBOX\":\"/mighty_knights/mighty_knights_007.c3p\"}",
+	"objectTypes": {
+		"items": [],
+		"subfolders": [
+			{
+				"items": [
+					"level_1_tilemap",
+					"Tilemap"
+				],
+				"subfolders": [],
+				"name": "Background"
+			},
+			{
+				"items": [
+					"arthur",
+					"arthur_feet_fsm",
+					"arthur_graphics_fsm",
+					"arthur_hands_fsm",
+					"arthur_base",
+					"block",
+					"camera"
+				],
+				"subfolders": [],
+				"name": "Arthur"
+			},
+			{
+				"items": [
+					"arthur_state_1",
+					"arthur_state_2",
+					"debug_display_1"
+				],
+				"subfolders": [],
+				"name": "Debug"
+			},
+			{
+				"items": [
+					"top_hud_tilemap",
+					"bottom_hud_line_1",
+					"bottom_hud_line_2",
+					"top_hud_line_1",
+					"top_hud_line_2",
+					"bottom_hud_tilemap",
+					"top_hud_line_3",
+					"top_hud_line_4",
+					"exp_dummy_text"
+				],
+				"subfolders": [],
+				"name": "HUD"
+			},
+			{
+				"items": [
+					"Keyboard",
+					"Mouse"
+				],
+				"subfolders": [],
+				"name": "Controllers"
+			},
+			{
+				"items": [
+					"soldier_sprite"
+				],
+				"subfolders": [],
+				"name": "Soldier"
+			}
+		]
+	},
+	"containers": [],
+	"families": {
+		"items": [],
+		"subfolders": []
+	},
+	"layouts": {
+		"items": [
+			"main"
+		],
+		"subfolders": []
+	},
+	"eventSheets": {
+		"items": [
+			"main_event_sheet",
+			"header"
+		],
+		"subfolders": []
+	},
+	"rootFileFolders": {
+		"sound": {
+			"items": [],
+			"subfolders": []
+		},
+		"music": {
+			"items": [],
+			"subfolders": []
+		},
+		"video": {
+			"items": [],
+			"subfolders": []
+		},
+		"font": {
+			"items": [],
+			"subfolders": []
+		},
+		"icon": {
+			"items": [
+				{
+					"name": "icon-16.png",
+					"type": "image/png"
+				},
+				{
+					"name": "icon-32.png",
+					"type": "image/png"
+				},
+				{
+					"name": "icon-64.png",
+					"type": "image/png"
+				},
+				{
+					"name": "loading-logo.png",
+					"type": "image/png"
+				},
+				{
+					"name": "icon-128.png",
+					"type": "image/png"
+				},
+				{
+					"name": "icon-256.png",
+					"type": "image/png"
+				},
+				{
+					"name": "icon-512.png",
+					"type": "image/png"
+				}
+			],
+			"subfolders": []
+		},
+		"general": {
+			"items": [
+				{
+					"name": "impassable_tiles_level_1.json",
+					"type": "application/json"
+				},
+				{
+					"name": "Tilemap_9.tmx",
+					"type": "application/octet-stream"
+				}
+			],
+			"subfolders": []
+		}
+	},
+	"properties": {
+		"description": "",
+		"version": "1.0.0.0",
+		"author": "",
+		"authorEmail": "",
+		"authorWebsite": "",
+		"appId": "",
+		"pixelRounding": true,
+		"useLoaderLayout": false,
+		"fullscreenMode": "letterbox-integer-scale",
+		"fullscreenQuality": "low",
+		"viewportFit": "auto",
+		"backgroundColor": [
+			0,
+			0,
+			0,
+			0
+		],
+		"splashColor": [
+			1,
+			1,
+			1,
+			0
+		],
+		"useThemeColor": false,
+		"themeColor": [
+			1,
+			1,
+			1,
+			0
+		],
+		"useHighDpi": true,
+		"orientations": "landscape",
+		"enableWebGL": true,
+		"sampling": "point",
+		"downscaling": "medium",
+		"loaderStyle": "splash",
+		"preloadSounds": true,
+		"clearBackground": true,
+		"enhancedAccelerationPrecision": true
+	},
+	"viewportWidth": 256,
+	"viewportHeight": 192,
+	"firstLayout": "main"
+}

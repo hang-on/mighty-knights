@@ -1,0 +1,70 @@
+{
+	"name": "arthur_base",
+	"plugin-id": "Sprite",
+	"sid": 989227864148572,
+	"isGlobal": false,
+	"instanceVariables": [],
+	"behaviorTypes": [],
+	"effectTypes": [],
+	"animations": {
+		"items": [
+			{
+				"frames": [
+					{
+						"width": 8,
+						"height": 8,
+						"originX": 0.5,
+						"originY": 0.5,
+						"originalSource": "",
+						"exportFormat": "png",
+						"exportQuality": 0.8,
+						"imageSpriteId": 4,
+						"collisionPoly": {
+							"points": [
+								0,
+								0.004573170731707233,
+								1,
+								0,
+								1,
+								1,
+								0,
+								1
+							]
+						},
+						"imagePoints": [
+							{
+								"name": "Bottom",
+								"x": 0.5,
+								"y": 1
+							},
+							{
+								"name": "Top",
+								"x": 0.5,
+								"y": 0
+							},
+							{
+								"name": "Left",
+								"x": 0,
+								"y": 0.5
+							},
+							{
+								"name": "Right",
+								"x": 1,
+								"y": 0.5
+							}
+						],
+						"duration": 1
+					}
+				],
+				"sid": 213974435749740,
+				"name": "Default",
+				"isLooping": false,
+				"isPingPong": false,
+				"repeatCount": 1,
+				"repeatTo": 0,
+				"speed": 5
+			}
+		],
+		"subfolders": []
+	}
+}

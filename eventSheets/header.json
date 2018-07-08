@@ -1,0 +1,82 @@
+{
+	"name": "header",
+	"events": [
+		{
+			"eventType": "variable",
+			"name": "slash_1_duration",
+			"type": "number",
+			"initialValue": "8",
+			"comment": "The standard slash's duration in frames",
+			"isStatic": false,
+			"isConstant": true,
+			"sid": 568369043351213
+		},
+		{
+			"eventType": "variable",
+			"name": "scrollpoint",
+			"type": "number",
+			"initialValue": "180",
+			"comment": "",
+			"isStatic": false,
+			"isConstant": true,
+			"sid": 117697236756579
+		},
+		{
+			"eventType": "variable",
+			"name": "arthur_walking_speed",
+			"type": "number",
+			"initialValue": "1",
+			"comment": "How many pixels does Arthur travel when walking?",
+			"isStatic": false,
+			"isConstant": true,
+			"sid": 615260377985345
+		},
+		{
+			"eventType": "variable",
+			"name": "arthur_jumping_vertical_speed",
+			"type": "number",
+			"initialValue": "2",
+			"comment": "How many pixels does Arthur travel vertically when jumping?",
+			"isStatic": false,
+			"isConstant": true,
+			"sid": 906554171777511
+		},
+		{
+			"eventType": "variable",
+			"name": "arthur_jumping_horizontal_speed",
+			"type": "number",
+			"initialValue": "1",
+			"comment": "How many pixels does Arthur travel horizontally when jumping?",
+			"isStatic": false,
+			"isConstant": true,
+			"sid": 899307034674255
+		},
+		{
+			"eventType": "variable",
+			"name": "camera_offset",
+			"type": "number",
+			"initialValue": "44",
+			"comment": "When does the camera start to move ?",
+			"isStatic": false,
+			"isConstant": true,
+			"sid": 511579516380900
+		},
+		{
+			"eventType": "comment",
+			"text": ""
+		},
+		{
+			"eventType": "block",
+			"conditions": [
+				{
+					"id": "on-start-of-layout",
+					"objectClass": "System",
+					"sid": 162016005788138
+				}
+			],
+			"actions": [],
+			"sid": 360746325469416
+		}
+	],
+	"sid": 730529628024447
+}

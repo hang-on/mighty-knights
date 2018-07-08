@@ -1,0 +1,19 @@
+{
+	"name": "debug_display_1",
+	"plugin-id": "Spritefont2",
+	"sid": 340583573881479,
+	"isGlobal": false,
+	"instanceVariables": [],
+	"behaviorTypes": [],
+	"effectTypes": [],
+	"image": {
+		"width": 728,
+		"height": 8,
+		"originX": 0.5,
+		"originY": 0.5,
+		"originalSource": "",
+		"exportFormat": "png",
+		"exportQuality": 0.8,
+		"imageSpriteId": 49
+	}
+}

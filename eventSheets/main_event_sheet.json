@@ -1,0 +1,1900 @@
+{
+	"name": "main_event_sheet",
+	"events": [
+		{
+			"eventType": "include",
+			"includeSheet": "header"
+		},
+		{
+			"eventType": "group",
+			"disabled": false,
+			"title": "Arthur",
+			"description": "Arthur's movement, animations, etc.",
+			"isActiveOnStart": true,
+			"children": [
+				{
+					"eventType": "comment",
+					"text": "Arthur's feet finite state machine"
+				},
+				{
+					"eventType": "block",
+					"conditions": [
+						{
+							"id": "switch0",
+							"objectClass": "arthur_feet_fsm",
+							"sid": 892818642061469,
+							"parameters": {
+								"variable0": "arthur.feet_state"
+							}
+						}
+					],
+					"actions": [],
+					"sid": 341680648778543,
+					"children": [
+						{
+							"eventType": "block",
+							"conditions": [
+								{
+									"id": "case1",
+									"objectClass": "arthur_feet_fsm",
+									"sid": 661282415025837,
+									"parameters": {
+										"value0": "\"standing\""
+									}
+								}
+							],
+							"actions": [
+								{
+									"id": "set-instvar-value",
+									"objectClass": "arthur",
+									"sid": 805527612569137,
+									"parameters": {
+										"instance-variable": "xspeed",
+										"value": "0"
+									}
+								},
+								{
+									"id": "set-instvar-value",
+									"objectClass": "arthur",
+									"sid": 800637925499085,
+									"parameters": {
+										"instance-variable": "yspeed",
+										"value": "0"
+									}
+								}
+							],
+							"sid": 621890002192016,
+							"children": [
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 591284231438887,
+											"parameters": {
+												"instance-variable": "hands_state",
+												"comparison": 0,
+												"value": "\"attacking\""
+											},
+											"isInverted": true
+										}
+									],
+									"actions": [],
+									"sid": 174307791852686,
+									"children": [
+										{
+											"eventType": "block",
+											"conditions": [
+												{
+													"id": "key-is-down",
+													"objectClass": "Keyboard",
+													"sid": 400858378704888,
+													"parameters": {
+														"key": 38
+													}
+												},
+												{
+													"id": "key-is-down",
+													"objectClass": "Keyboard",
+													"sid": 182580593751274,
+													"parameters": {
+														"key": 40
+													}
+												}
+											],
+											"actions": [
+												{
+													"id": "set-instvar-value",
+													"objectClass": "arthur",
+													"sid": 594141430406027,
+													"parameters": {
+														"instance-variable": "feet_state",
+														"value": "\"walking\""
+													}
+												}
+											],
+											"sid": 280754591934014,
+											"isOrBlock": true
+										},
+										{
+											"eventType": "block",
+											"conditions": [
+												{
+													"id": "key-is-down",
+													"objectClass": "Keyboard",
+													"sid": 224342236841727,
+													"parameters": {
+														"key": 37
+													}
+												}
+											],
+											"actions": [],
+											"sid": 840762858668076,
+											"children": [
+												{
+													"eventType": "block",
+													"conditions": [
+														{
+															"id": "compare-instance-variable",
+															"objectClass": "arthur",
+															"sid": 464142587391187,
+															"parameters": {
+																"instance-variable": "direction",
+																"comparison": 0,
+																"value": "\"right\""
+															}
+														}
+													],
+													"actions": [
+														{
+															"id": "set-instvar-value",
+															"objectClass": "arthur",
+															"sid": 847372420754487,
+															"parameters": {
+																"instance-variable": "feet_state",
+																"value": "\"turning\""
+															}
+														}
+													],
+													"sid": 114923470526430
+												},
+												{
+													"eventType": "block",
+													"conditions": [
+														{
+															"id": "else",
+															"objectClass": "System",
+															"sid": 694547969139808
+														}
+													],
+													"actions": [
+														{
+															"id": "set-instvar-value",
+															"objectClass": "arthur",
+															"sid": 824716765025054,
+															"parameters": {
+																"instance-variable": "feet_state",
+																"value": "\"walking\""
+															}
+														}
+													],
+													"sid": 450221270109696
+												}
+											]
+										},
+										{
+											"eventType": "block",
+											"conditions": [
+												{
+													"id": "key-is-down",
+													"objectClass": "Keyboard",
+													"sid": 397837144885454,
+													"parameters": {
+														"key": 39
+													}
+												}
+											],
+											"actions": [],
+											"sid": 597821553475658,
+											"children": [
+												{
+													"eventType": "block",
+													"conditions": [
+														{
+															"id": "compare-instance-variable",
+															"objectClass": "arthur",
+															"sid": 115090722455908,
+															"parameters": {
+																"instance-variable": "direction",
+																"comparison": 0,
+																"value": "\"left\""
+															}
+														}
+													],
+													"actions": [
+														{
+															"id": "set-instvar-value",
+															"objectClass": "arthur",
+															"sid": 177009552083346,
+															"parameters": {
+																"instance-variable": "feet_state",
+																"value": "\"turning\""
+															}
+														}
+													],
+													"sid": 751026388116824
+												},
+												{
+													"eventType": "block",
+													"conditions": [
+														{
+															"id": "else",
+															"objectClass": "System",
+															"sid": 791486479636677
+														}
+													],
+													"actions": [
+														{
+															"id": "set-instvar-value",
+															"objectClass": "arthur",
+															"sid": 137477089749391,
+															"parameters": {
+																"instance-variable": "feet_state",
+																"value": "\"walking\""
+															}
+														}
+													],
+													"sid": 992332489176987
+												}
+											]
+										},
+										{
+											"eventType": "block",
+											"conditions": [
+												{
+													"id": "on-key-pressed",
+													"objectClass": "Keyboard",
+													"sid": 242827960451554,
+													"parameters": {
+														"key": 88
+													}
+												}
+											],
+											"actions": [
+												{
+													"id": "set-instvar-value",
+													"objectClass": "arthur",
+													"sid": 515509836855526,
+													"parameters": {
+														"instance-variable": "feet_state",
+														"value": "\"jumping\""
+													}
+												}
+											],
+											"sid": 462820445184121
+										}
+									]
+								}
+							]
+						},
+						{
+							"eventType": "block",
+							"conditions": [
+								{
+									"id": "case1",
+									"objectClass": "arthur_feet_fsm",
+									"sid": 441512325535197,
+									"parameters": {
+										"value0": "\"turning\""
+									}
+								}
+							],
+							"actions": [
+								{
+									"id": "set-instvar-value",
+									"objectClass": "arthur",
+									"sid": 368265471391631,
+									"parameters": {
+										"instance-variable": "feet_state",
+										"value": "\"standing\""
+									}
+								},
+								{
+									"id": "set-instvar-value",
+									"objectClass": "arthur",
+									"sid": 275463559953807,
+									"parameters": {
+										"instance-variable": "xspeed",
+										"value": "0"
+									}
+								},
+								{
+									"id": "set-instvar-value",
+									"objectClass": "arthur",
+									"sid": 116139643649802,
+									"parameters": {
+										"instance-variable": "yspeed",
+										"value": "0"
+									}
+								}
+							],
+							"sid": 610584090875002,
+							"children": [
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 130081768910535,
+											"parameters": {
+												"instance-variable": "direction",
+												"comparison": 0,
+												"value": "\"right\""
+											}
+										}
+									],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 765185186129995,
+											"parameters": {
+												"instance-variable": "direction",
+												"value": "\"left\""
+											}
+										}
+									],
+									"sid": 279930510172064
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "else",
+											"objectClass": "System",
+											"sid": 326576766155663
+										}
+									],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 385973331880484,
+											"parameters": {
+												"instance-variable": "direction",
+												"value": "\"right\""
+											}
+										}
+									],
+									"sid": 439311241361496
+								}
+							]
+						},
+						{
+							"eventType": "block",
+							"conditions": [
+								{
+									"id": "case1",
+									"objectClass": "arthur_feet_fsm",
+									"sid": 664917707325306,
+									"parameters": {
+										"value0": "\"walking\""
+									}
+								}
+							],
+							"actions": [
+								{
+									"id": "set-instvar-value",
+									"objectClass": "arthur",
+									"sid": 364927548904183,
+									"parameters": {
+										"instance-variable": "yspeed",
+										"value": "0"
+									}
+								},
+								{
+									"id": "set-instvar-value",
+									"objectClass": "arthur",
+									"sid": 550028581421544,
+									"parameters": {
+										"instance-variable": "xspeed",
+										"value": "0"
+									}
+								}
+							],
+							"sid": 816694972538783,
+							"children": [
+								{
+									"eventType": "comment",
+									"text": "Adjust yspeed depending on d-pad up/down and top/bottom border"
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "key-is-down",
+											"objectClass": "Keyboard",
+											"sid": 376844372757092,
+											"parameters": {
+												"key": 40
+											}
+										},
+										{
+											"id": "is-overlapping-at-offset",
+											"objectClass": "arthur_base",
+											"sid": 706162078771326,
+											"parameters": {
+												"object": "block",
+												"offset-x": "0",
+												"offset-y": "arthur_walking_speed"
+											},
+											"isInverted": true
+										}
+									],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 497660913979161,
+											"parameters": {
+												"instance-variable": "yspeed",
+												"value": "arthur_walking_speed"
+											}
+										}
+									],
+									"sid": 392267081699066
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "key-is-down",
+											"objectClass": "Keyboard",
+											"sid": 384270878519151,
+											"parameters": {
+												"key": 38
+											}
+										},
+										{
+											"id": "is-overlapping-at-offset",
+											"objectClass": "arthur_base",
+											"sid": 776997470749685,
+											"parameters": {
+												"object": "block",
+												"offset-x": "0",
+												"offset-y": "-arthur_walking_speed"
+											},
+											"isInverted": true
+										}
+									],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 767695613300564,
+											"parameters": {
+												"instance-variable": "yspeed",
+												"value": "-arthur_walking_speed"
+											}
+										}
+									],
+									"sid": 271725409612504
+								},
+								{
+									"eventType": "comment",
+									"text": "Adjust xspeed or transition to turning depending on d-pad left/right and Arthur's direction."
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "key-is-down",
+											"objectClass": "Keyboard",
+											"sid": 952405100269394,
+											"parameters": {
+												"key": 39
+											}
+										},
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 869484850073183,
+											"parameters": {
+												"instance-variable": "direction",
+												"comparison": 0,
+												"value": "\"right\""
+											}
+										},
+										{
+											"id": "is-overlapping-at-offset",
+											"objectClass": "arthur_base",
+											"sid": 721214775284249,
+											"parameters": {
+												"object": "block",
+												"offset-x": "arthur_walking_speed+1",
+												"offset-y": "0"
+											},
+											"isInverted": true
+										}
+									],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 328270196824137,
+											"parameters": {
+												"instance-variable": "xspeed",
+												"value": "arthur_walking_speed"
+											}
+										}
+									],
+									"sid": 759236947323514
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "key-is-down",
+											"objectClass": "Keyboard",
+											"sid": 311088741917031,
+											"parameters": {
+												"key": 39
+											}
+										},
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 427419675174258,
+											"parameters": {
+												"instance-variable": "direction",
+												"comparison": 0,
+												"value": "\"left\""
+											}
+										}
+									],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 757898496166435,
+											"parameters": {
+												"instance-variable": "feet_state",
+												"value": "\"turning\""
+											}
+										}
+									],
+									"sid": 272697613917441
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "key-is-down",
+											"objectClass": "Keyboard",
+											"sid": 923780627923066,
+											"parameters": {
+												"key": 37
+											}
+										},
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 996437804232499,
+											"parameters": {
+												"instance-variable": "direction",
+												"comparison": 0,
+												"value": "\"left\""
+											}
+										},
+										{
+											"id": "is-overlapping-at-offset",
+											"objectClass": "arthur_base",
+											"sid": 523714707799163,
+											"parameters": {
+												"object": "block",
+												"offset-x": "-(arthur_walking_speed+1)",
+												"offset-y": "0"
+											},
+											"isInverted": true
+										}
+									],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 948564770284428,
+											"parameters": {
+												"instance-variable": "xspeed",
+												"value": "-arthur_walking_speed"
+											}
+										}
+									],
+									"sid": 704423379370201
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "key-is-down",
+											"objectClass": "Keyboard",
+											"sid": 863339312043918,
+											"parameters": {
+												"key": 37
+											}
+										},
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 210697231052098,
+											"parameters": {
+												"instance-variable": "direction",
+												"comparison": 0,
+												"value": "\"right\""
+											}
+										}
+									],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 660129167749543,
+											"parameters": {
+												"instance-variable": "feet_state",
+												"value": "\"turning\""
+											}
+										}
+									],
+									"sid": 576529678685604
+								},
+								{
+									"eventType": "comment",
+									"text": "Back to standing if no d-pad input."
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "key-is-down",
+											"objectClass": "Keyboard",
+											"sid": 786836914731313,
+											"parameters": {
+												"key": 39
+											},
+											"isInverted": true
+										},
+										{
+											"id": "key-is-down",
+											"objectClass": "Keyboard",
+											"sid": 142875738246857,
+											"parameters": {
+												"key": 37
+											},
+											"isInverted": true
+										},
+										{
+											"id": "key-is-down",
+											"objectClass": "Keyboard",
+											"sid": 877506470376692,
+											"parameters": {
+												"key": 38
+											},
+											"isInverted": true
+										},
+										{
+											"id": "key-is-down",
+											"objectClass": "Keyboard",
+											"sid": 765075789790004,
+											"parameters": {
+												"key": 40
+											},
+											"isInverted": true
+										}
+									],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 150492275856608,
+											"parameters": {
+												"instance-variable": "feet_state",
+												"value": "\"standing\""
+											}
+										}
+									],
+									"sid": 399354464870646
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 319437982539101,
+											"parameters": {
+												"instance-variable": "hands_state",
+												"comparison": 0,
+												"value": "\"idle\""
+											},
+											"isInverted": true
+										}
+									],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 403073511388326,
+											"parameters": {
+												"instance-variable": "feet_state",
+												"value": "\"standing\""
+											}
+										}
+									],
+									"sid": 292852551083651
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "on-key-pressed",
+											"objectClass": "Keyboard",
+											"sid": 792588143084017,
+											"parameters": {
+												"key": 88
+											}
+										}
+									],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 478632865613859,
+											"parameters": {
+												"instance-variable": "feet_state",
+												"value": "\"jumping\""
+											}
+										}
+									],
+									"sid": 158494811212209
+								}
+							]
+						},
+						{
+							"eventType": "block",
+							"conditions": [
+								{
+									"id": "case1",
+									"objectClass": "arthur_feet_fsm",
+									"sid": 800604393626328,
+									"parameters": {
+										"value0": "\"jumping\""
+									}
+								}
+							],
+							"actions": [
+								{
+									"id": "add-to-instvar",
+									"objectClass": "arthur",
+									"sid": 739195396755729,
+									"parameters": {
+										"instance-variable": "jump_tick",
+										"value": "1"
+									}
+								}
+							],
+							"sid": 740643658578108,
+							"children": [
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 132322269861171,
+											"parameters": {
+												"instance-variable": "jump_tick",
+												"comparison": 3,
+												"value": "arthur.jump_tick_max/2"
+											}
+										}
+									],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 638404881788273,
+											"parameters": {
+												"instance-variable": "yspeed",
+												"value": "-arthur_jumping_vertical_speed"
+											}
+										}
+									],
+									"sid": 453460863689143
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "else",
+											"objectClass": "System",
+											"sid": 962217311077349
+										}
+									],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 775690368308406,
+											"parameters": {
+												"instance-variable": "yspeed",
+												"value": "arthur_jumping_vertical_speed"
+											}
+										}
+									],
+									"sid": 434043740709736
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "key-is-down",
+											"objectClass": "Keyboard",
+											"sid": 651973853192168,
+											"parameters": {
+												"key": 39
+											}
+										}
+									],
+									"actions": [],
+									"sid": 553660536084276,
+									"children": [
+										{
+											"eventType": "block",
+											"conditions": [
+												{
+													"id": "compare-instance-variable",
+													"objectClass": "arthur",
+													"sid": 133628424628856,
+													"parameters": {
+														"instance-variable": "xspeed",
+														"comparison": 0,
+														"value": "0"
+													}
+												}
+											],
+											"actions": [
+												{
+													"id": "set-instvar-value",
+													"objectClass": "arthur",
+													"sid": 154115437665524,
+													"parameters": {
+														"instance-variable": "xspeed",
+														"value": "arthur_jumping_horizontal_speed"
+													}
+												},
+												{
+													"id": "set-mirrored",
+													"objectClass": "arthur",
+													"sid": 669467859572967,
+													"parameters": {
+														"state": "not-mirrored"
+													}
+												}
+											],
+											"sid": 821571815558659
+										}
+									]
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "key-is-down",
+											"objectClass": "Keyboard",
+											"sid": 924330692100277,
+											"parameters": {
+												"key": 37
+											}
+										}
+									],
+									"actions": [],
+									"sid": 771576164685662,
+									"children": [
+										{
+											"eventType": "block",
+											"conditions": [
+												{
+													"id": "compare-instance-variable",
+													"objectClass": "arthur",
+													"sid": 205395590307785,
+													"parameters": {
+														"instance-variable": "xspeed",
+														"comparison": 0,
+														"value": "0"
+													}
+												}
+											],
+											"actions": [
+												{
+													"id": "set-instvar-value",
+													"objectClass": "arthur",
+													"sid": 547318427274821,
+													"parameters": {
+														"instance-variable": "xspeed",
+														"value": "-arthur_jumping_horizontal_speed"
+													}
+												},
+												{
+													"id": "set-mirrored",
+													"objectClass": "arthur",
+													"sid": 113179816461445,
+													"parameters": {
+														"state": "mirrored"
+													}
+												}
+											],
+											"sid": 737934454775596
+										}
+									]
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 470822534164312,
+											"parameters": {
+												"instance-variable": "jump_tick",
+												"comparison": 0,
+												"value": "arthur.jump_tick_max"
+											}
+										}
+									],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 381671641715903,
+											"parameters": {
+												"instance-variable": "feet_state",
+												"value": "\"standing\""
+											}
+										},
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 887119339175997,
+											"parameters": {
+												"instance-variable": "jump_tick",
+												"value": "0"
+											}
+										}
+									],
+									"sid": 702880778733188
+								}
+							]
+						}
+					]
+				},
+				{
+					"eventType": "comment",
+					"text": "Arthur's hands finite state machine"
+				},
+				{
+					"eventType": "block",
+					"conditions": [
+						{
+							"id": "switch0",
+							"objectClass": "arthur_hands_fsm",
+							"sid": 848419664354641,
+							"parameters": {
+								"variable0": "arthur.hands_state"
+							}
+						}
+					],
+					"actions": [],
+					"sid": 978469867138494,
+					"children": [
+						{
+							"eventType": "block",
+							"conditions": [
+								{
+									"id": "case1",
+									"objectClass": "arthur_hands_fsm",
+									"sid": 221033079619154,
+									"parameters": {
+										"value0": "\"attacking\""
+									}
+								}
+							],
+							"actions": [],
+							"sid": 270614596176948,
+							"children": [
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 239881897668592,
+											"parameters": {
+												"instance-variable": "attack_tick",
+												"comparison": 0,
+												"value": "arthur.attack_tick_max"
+											}
+										}
+									],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 562336206719007,
+											"parameters": {
+												"instance-variable": "hands_state",
+												"value": "\"idle\""
+											}
+										},
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur",
+											"sid": 116425424523060,
+											"parameters": {
+												"instance-variable": "attack_tick",
+												"value": "0"
+											}
+										}
+									],
+									"sid": 974089956072283
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "else",
+											"objectClass": "System",
+											"sid": 625635192152357
+										}
+									],
+									"actions": [
+										{
+											"id": "add-to-instvar",
+											"objectClass": "arthur",
+											"sid": 309642837681267,
+											"parameters": {
+												"instance-variable": "attack_tick",
+												"value": "1"
+											}
+										}
+									],
+									"sid": 224952679340764
+								}
+							]
+						},
+						{
+							"eventType": "block",
+							"conditions": [
+								{
+									"id": "case1",
+									"objectClass": "arthur_hands_fsm",
+									"sid": 554638504135744,
+									"parameters": {
+										"value0": "\"idle\""
+									}
+								}
+							],
+							"actions": [],
+							"sid": 455002758941857,
+							"children": [
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "on-key-pressed",
+											"objectClass": "Keyboard",
+											"sid": 853568965063141,
+											"parameters": {
+												"key": 90
+											}
+										}
+									],
+									"actions": [],
+									"sid": 350417658207203,
+									"children": [
+										{
+											"eventType": "block",
+											"conditions": [],
+											"actions": [
+												{
+													"id": "set-instvar-value",
+													"objectClass": "arthur",
+													"sid": 138128672762361,
+													"parameters": {
+														"instance-variable": "hands_state",
+														"value": "\"attacking\""
+													}
+												},
+												{
+													"id": "set-instvar-value",
+													"objectClass": "arthur",
+													"sid": 334744549991958,
+													"parameters": {
+														"instance-variable": "attack_tick_max",
+														"value": "slash_1_duration"
+													}
+												}
+											],
+											"sid": 324248612518506
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"eventType": "comment",
+					"text": "Regardless of state, we apply x- and y-speed. If Arthur is at the scrollpoint and wants to move right, scroll the background instead of moving Arthur."
+				},
+				{
+					"eventType": "block",
+					"conditions": [
+						{
+							"id": "every-tick",
+							"objectClass": "System",
+							"sid": 460770939838972
+						}
+					],
+					"actions": [
+						{
+							"id": "set-y",
+							"objectClass": "arthur",
+							"sid": 730283842688299,
+							"parameters": {
+								"y": "arthur.Y+arthur.yspeed"
+							}
+						},
+						{
+							"id": "set-x",
+							"objectClass": "arthur",
+							"sid": 209955222306791,
+							"parameters": {
+								"x": "arthur.X + arthur.xspeed"
+							}
+						},
+						{
+							"id": "set-x",
+							"objectClass": "arthur_base",
+							"sid": 716462431784781,
+							"parameters": {
+								"x": "arthur.X"
+							}
+						},
+						{
+							"id": "set-y",
+							"objectClass": "arthur_base",
+							"sid": 193334635651530,
+							"parameters": {
+								"y": "arthur.Y+44"
+							}
+						}
+					],
+					"sid": 613634101358708,
+					"children": [
+						{
+							"eventType": "block",
+							"conditions": [
+								{
+									"id": "compare-x",
+									"objectClass": "arthur",
+									"sid": 265850864743111,
+									"parameters": {
+										"comparison": 5,
+										"x-co-ordinate": "camera.X+camera_offset"
+									}
+								}
+							],
+							"actions": [
+								{
+									"id": "set-x",
+									"objectClass": "camera",
+									"sid": 304727819988318,
+									"parameters": {
+										"x": "camera.X+arthur_walking_speed"
+									}
+								}
+							],
+							"sid": 806456489782815
+						}
+					]
+				},
+				{
+					"eventType": "comment",
+					"text": "Load and play the appropriate animations for Arthur"
+				},
+				{
+					"eventType": "block",
+					"conditions": [
+						{
+							"id": "switch0",
+							"objectClass": "arthur_graphics_fsm",
+							"sid": 681073433620126,
+							"parameters": {
+								"variable0": "arthur_graphics_fsm.state"
+							}
+						}
+					],
+					"actions": [],
+					"sid": 847320013112382,
+					"children": [
+						{
+							"eventType": "block",
+							"conditions": [
+								{
+									"id": "compare-instance-variable",
+									"objectClass": "arthur_graphics_fsm",
+									"sid": 893409132155780,
+									"parameters": {
+										"instance-variable": "state",
+										"comparison": 0,
+										"value": "\"playing\""
+									}
+								}
+							],
+							"actions": [],
+							"sid": 490321419607983,
+							"children": [
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 484593335785850,
+											"parameters": {
+												"instance-variable": "direction",
+												"comparison": 0,
+												"value": "\"right\""
+											}
+										}
+									],
+									"actions": [
+										{
+											"id": "set-mirrored",
+											"objectClass": "arthur",
+											"sid": 261242765521300,
+											"parameters": {
+												"state": "not-mirrored"
+											}
+										}
+									],
+									"sid": 606558887768966
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "else",
+											"objectClass": "System",
+											"sid": 758953958681563
+										}
+									],
+									"actions": [
+										{
+											"id": "set-mirrored",
+											"objectClass": "arthur",
+											"sid": 806381831829612,
+											"parameters": {
+												"state": "mirrored"
+											}
+										}
+									],
+									"sid": 725014230709516
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 611740033513706,
+											"parameters": {
+												"instance-variable": "feet_state",
+												"comparison": 1,
+												"value": "arthur_graphics_fsm.previous_feet_state"
+											}
+										},
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 512625337084195,
+											"parameters": {
+												"instance-variable": "hands_state",
+												"comparison": 1,
+												"value": "arthur_graphics_fsm.previous_hands_state"
+											}
+										}
+									],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur_graphics_fsm",
+											"sid": 562581852721783,
+											"parameters": {
+												"instance-variable": "state",
+												"value": "\"changing\""
+											}
+										}
+									],
+									"sid": 343843807836046,
+									"isOrBlock": true
+								},
+								{
+									"eventType": "block",
+									"conditions": [],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur_graphics_fsm",
+											"sid": 605488712149280,
+											"parameters": {
+												"instance-variable": "previous_feet_state",
+												"value": "arthur.feet_state"
+											}
+										},
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur_graphics_fsm",
+											"sid": 519610904946231,
+											"parameters": {
+												"instance-variable": "previous_hands_state",
+												"value": "arthur.hands_state"
+											}
+										}
+									],
+									"sid": 794122199803875
+								}
+							]
+						},
+						{
+							"eventType": "block",
+							"conditions": [
+								{
+									"id": "compare-instance-variable",
+									"objectClass": "arthur_graphics_fsm",
+									"sid": 390813473082645,
+									"parameters": {
+										"instance-variable": "state",
+										"comparison": 0,
+										"value": "\"changing\""
+									}
+								}
+							],
+							"actions": [],
+							"sid": 982908731997613,
+							"children": [
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 558436673949675,
+											"parameters": {
+												"instance-variable": "feet_state",
+												"comparison": 0,
+												"value": "\"standing\""
+											}
+										}
+									],
+									"actions": [
+										{
+											"id": "set-animation",
+											"objectClass": "arthur",
+											"sid": 232100842216381,
+											"parameters": {
+												"animation": "\"idle\"",
+												"from": "beginning"
+											}
+										}
+									],
+									"sid": 852373724496519,
+									"children": [
+										{
+											"eventType": "block",
+											"conditions": [
+												{
+													"id": "compare-instance-variable",
+													"objectClass": "arthur",
+													"sid": 755455405873993,
+													"parameters": {
+														"instance-variable": "direction",
+														"comparison": 0,
+														"value": "\"right\""
+													}
+												}
+											],
+											"actions": [
+												{
+													"id": "set-mirrored",
+													"objectClass": "arthur",
+													"sid": 346416617146238,
+													"parameters": {
+														"state": "not-mirrored"
+													}
+												}
+											],
+											"sid": 698993729575632
+										},
+										{
+											"eventType": "block",
+											"conditions": [
+												{
+													"id": "else",
+													"objectClass": "System",
+													"sid": 968625237385802
+												}
+											],
+											"actions": [
+												{
+													"id": "set-mirrored",
+													"objectClass": "arthur",
+													"sid": 597497557114601,
+													"parameters": {
+														"state": "mirrored"
+													}
+												}
+											],
+											"sid": 660605577748434
+										}
+									]
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 638482098033663,
+											"parameters": {
+												"instance-variable": "feet_state",
+												"comparison": 0,
+												"value": "\"walking\""
+											}
+										}
+									],
+									"actions": [
+										{
+											"id": "set-animation",
+											"objectClass": "arthur",
+											"sid": 281414525303141,
+											"parameters": {
+												"animation": "\"walking\"",
+												"from": "beginning"
+											}
+										}
+									],
+									"sid": 413827723604477
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 806758646144454,
+											"parameters": {
+												"instance-variable": "feet_state",
+												"comparison": 0,
+												"value": "\"jumping\""
+											}
+										}
+									],
+									"actions": [
+										{
+											"id": "set-animation",
+											"objectClass": "arthur",
+											"sid": 549793034712332,
+											"parameters": {
+												"animation": "\"jumping\"",
+												"from": "beginning"
+											}
+										}
+									],
+									"sid": 570834130294590
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 294660248395314,
+											"parameters": {
+												"instance-variable": "feet_state",
+												"comparison": 0,
+												"value": "\"jumping\""
+											}
+										},
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 330273620600915,
+											"parameters": {
+												"instance-variable": "hands_state",
+												"comparison": 0,
+												"value": "\"attacking\""
+											}
+										}
+									],
+									"actions": [
+										{
+											"id": "set-animation",
+											"objectClass": "arthur",
+											"sid": 306012085157867,
+											"parameters": {
+												"animation": "\"jump_slashing_1\"",
+												"from": "beginning"
+											}
+										}
+									],
+									"sid": 145189528701010
+								},
+								{
+									"eventType": "block",
+									"conditions": [
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 619523617540472,
+											"parameters": {
+												"instance-variable": "feet_state",
+												"comparison": 0,
+												"value": "\"standing\""
+											}
+										},
+										{
+											"id": "compare-instance-variable",
+											"objectClass": "arthur",
+											"sid": 546745196935854,
+											"parameters": {
+												"instance-variable": "hands_state",
+												"comparison": 0,
+												"value": "\"attacking\""
+											}
+										}
+									],
+									"actions": [
+										{
+											"id": "set-animation",
+											"objectClass": "arthur",
+											"sid": 100394770597698,
+											"parameters": {
+												"animation": "\"slashing_1\"",
+												"from": "beginning"
+											}
+										}
+									],
+									"sid": 877565052939579
+								},
+								{
+									"eventType": "block",
+									"conditions": [],
+									"actions": [
+										{
+											"id": "set-instvar-value",
+											"objectClass": "arthur_graphics_fsm",
+											"sid": 433158465028224,
+											"parameters": {
+												"instance-variable": "state",
+												"value": "\"playing\""
+											}
+										}
+									],
+									"sid": 780936849512113
+								}
+							]
+						}
+					]
+				}
+			],
+			"sid": 500082604072095
+		},
+		{
+			"eventType": "group",
+			"disabled": false,
+			"title": "Debug",
+			"description": "Watches, etc..",
+			"isActiveOnStart": true,
+			"children": [
+				{
+					"eventType": "block",
+					"conditions": [
+						{
+							"id": "every-tick",
+							"objectClass": "System",
+							"sid": 757150187386991
+						}
+					],
+					"actions": [
+						{
+							"id": "set-text",
+							"objectClass": "debug_display_1",
+							"sid": 268866274466193,
+							"parameters": {
+								"text": "soldier_sprite.standing_timer"
+							}
+						}
+					],
+					"sid": 779176811374801
+				}
+			],
+			"sid": 626035553673884
+		},
+		{
+			"eventType": "group",
+			"disabled": false,
+			"title": "Soldier",
+			"description": "Soldiers' movement, state-handling, etc.",
+			"isActiveOnStart": true,
+			"children": [
+				{
+					"eventType": "block",
+					"conditions": [
+						{
+							"id": "compare-instance-variable",
+							"objectClass": "soldier_sprite",
+							"sid": 362859550225418,
+							"parameters": {
+								"instance-variable": "feet_state",
+								"comparison": 0,
+								"value": "\"standing\""
+							}
+						}
+					],
+					"actions": [],
+					"sid": 352942917298649,
+					"children": [
+						{
+							"eventType": "block",
+							"conditions": [
+								{
+									"id": "compare-instance-variable",
+									"objectClass": "soldier_sprite",
+									"sid": 842425789700015,
+									"parameters": {
+										"instance-variable": "standing_timer",
+										"comparison": 4,
+										"value": "0"
+									}
+								}
+							],
+							"actions": [
+								{
+									"id": "subtract-from-instvar",
+									"objectClass": "soldier_sprite",
+									"sid": 823655310975650,
+									"parameters": {
+										"instance-variable": "standing_timer",
+										"value": "1"
+									}
+								}
+							],
+							"sid": 997369535570689
+						},
+						{
+							"eventType": "block",
+							"conditions": [
+								{
+									"id": "else",
+									"objectClass": "System",
+									"sid": 685503813971874
+								}
+							],
+							"actions": [
+								{
+									"id": "set-instvar-value",
+									"objectClass": "soldier_sprite",
+									"sid": 385847196726881,
+									"parameters": {
+										"instance-variable": "feet_state",
+										"value": "\"walking\""
+									}
+								},
+								{
+									"id": "set-instvar-value",
+									"objectClass": "soldier_sprite",
+									"sid": 836588237128464,
+									"parameters": {
+										"instance-variable": "destination_x",
+										"value": "arthur_base.X"
+									}
+								},
+								{
+									"id": "set-instvar-value",
+									"objectClass": "soldier_sprite",
+									"sid": 275764685355326,
+									"parameters": {
+										"instance-variable": "destination_y",
+										"value": "arthur_base.Y"
+									}
+								}
+							],
+							"sid": 302448916390182
+						}
+					]
+				},
+				{
+					"eventType": "block",
+					"conditions": [
+						{
+							"id": "compare-instance-variable",
+							"objectClass": "soldier_sprite",
+							"sid": 638171039767366,
+							"parameters": {
+								"instance-variable": "feet_state",
+								"comparison": 0,
+								"value": "\"walking\""
+							}
+						}
+					],
+					"actions": [],
+					"sid": 444304198868019,
+					"children": [
+						{
+							"eventType": "block",
+							"conditions": [
+								{
+									"id": "compare-instance-variable",
+									"objectClass": "soldier_sprite",
+									"sid": 336583503661159,
+									"parameters": {
+										"instance-variable": "destination_x",
+										"comparison": 2,
+										"value": "soldier_sprite.X"
+									}
+								}
+							],
+							"actions": [
+								{
+									"id": "set-x",
+									"objectClass": "soldier_sprite",
+									"sid": 302795844476181,
+									"parameters": {
+										"x": "soldier_sprite.X-soldier_sprite.speed"
+									}
+								}
+							],
+							"sid": 494891284532039
+						},
+						{
+							"eventType": "block",
+							"conditions": [
+								{
+									"id": "compare-instance-variable",
+									"objectClass": "soldier_sprite",
+									"sid": 166076386228579,
+									"parameters": {
+										"instance-variable": "destination_x",
+										"comparison": 4,
+										"value": "soldier_sprite.X"
+									}
+								}
+							],
+							"actions": [
+								{
+									"id": "set-x",
+									"objectClass": "soldier_sprite",
+									"sid": 371461938585888,
+									"parameters": {
+										"x": "soldier_sprite.X+soldier_sprite.speed"
+									}
+								}
+							],
+							"sid": 702289137698854
+						},
+						{
+							"eventType": "block",
+							"conditions": [
+								{
+									"id": "compare-instance-variable",
+									"objectClass": "soldier_sprite",
+									"sid": 299722921126467,
+									"parameters": {
+										"instance-variable": "destination_y",
+										"comparison": 4,
+										"value": "soldier_sprite.Y"
+									}
+								}
+							],
+							"actions": [
+								{
+									"id": "set-y",
+									"objectClass": "soldier_sprite",
+									"sid": 690517351926756,
+									"parameters": {
+										"y": "soldier_sprite.Y+soldier_sprite.speed"
+									}
+								}
+							],
+							"sid": 567873264338004
+						},
+						{
+							"eventType": "block",
+							"conditions": [
+								{
+									"id": "compare-instance-variable",
+									"objectClass": "soldier_sprite",
+									"sid": 289869436653197,
+									"parameters": {
+										"instance-variable": "destination_y",
+										"comparison": 2,
+										"value": "soldier_sprite.Y"
+									}
+								}
+							],
+							"actions": [
+								{
+									"id": "set-y",
+									"objectClass": "soldier_sprite",
+									"sid": 216140094761410,
+									"parameters": {
+										"y": "soldier_sprite.Y-soldier_sprite.speed"
+									}
+								}
+							],
+							"sid": 157858194776074
+						},
+						{
+							"eventType": "block",
+							"conditions": [
+								{
+									"id": "compare-x",
+									"objectClass": "soldier_sprite",
+									"sid": 354025648594809,
+									"parameters": {
+										"comparison": 0,
+										"x-co-ordinate": "soldier_sprite.destination_x"
+									}
+								},
+								{
+									"id": "compare-y",
+									"objectClass": "soldier_sprite",
+									"sid": 965913656686311,
+									"parameters": {
+										"comparison": 0,
+										"y-co-ordinate": "soldier_sprite.destination_y"
+									}
+								}
+							],
+							"actions": [
+								{
+									"id": "set-instvar-value",
+									"objectClass": "soldier_sprite",
+									"sid": 366398126021847,
+									"parameters": {
+										"instance-variable": "feet_state",
+										"value": "\"standing\""
+									}
+								},
+								{
+									"id": "set-instvar-value",
+									"objectClass": "soldier_sprite",
+									"sid": 940647085724007,
+									"parameters": {
+										"instance-variable": "standing_timer",
+										"value": "100"
+									}
+								}
+							],
+							"sid": 577720133143903
+						}
+					]
+				}
+			],
+			"sid": 442455612405857
+		}
+	],
+	"sid": 972003143512871
+}
