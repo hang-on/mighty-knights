@@ -17,13 +17,13 @@
     ; boot code with initialized vram and memory control registers (INIT).
     ;
     ld a,COLOR_0
-    ld b,colors_end-colors
-    ld hl,colors
+    ld b,demo_palette_end-demo_palette
+    ld hl,demo_palette
     call load_cram
     ;
     ld bc,CHARACTER_SIZE
     ld de,SPRITE_BANK_START + CHARACTER_SIZE
-    ld hl,character
+    ld hl,c_character
     call load_vram
     ;
     ld a,16
@@ -84,14 +84,14 @@
 ; Data.
 .bank 1 slot 1
 ; -----------------------------------------------------------------------------
-.section "Misc data" free
+.section "Demo assets" free
 ; -----------------------------------------------------------------------------
-  colors:
+  demo_palette:
+    .db $00 $18 $12 $18 $06 $15 $2A $3F $13 $0B $0F $0C $38 $26 $27 $2F
     .db $00 $10 $12 $18 $06 $15 $2A $3F $13 $0B $0F $0C $38 $26 $27 $2F
-    .db $00 $10 $12 $18 $06 $15 $2A $3F $13 $0B $0F $0C $38 $26 $27 $2F
-    colors_end:
+    demo_palette_end:
   ;
-  character:
+  c_character:
     .db $ff $00 $ff $00
     .db $00 $00 $c0 $c0
     .db $00 $00 $c0 $c0

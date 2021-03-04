@@ -32,9 +32,9 @@
 0000:c0cc demosprite_char
 0000:045c init
 0000:0492 main_loop
-0001:4000 colors
-0001:4020 colors_end
-0001:4020 character
+0001:4000 demo_palette
+0001:4020 demo_palette_end
+0001:4020 c_character
 0000:001b *WLA_SDSC_PRG_AUTHOR_PTR
 0000:052a *WLA_SDSC_PRG_NAME_PTR
 0000:050e *WLA_SDSC_PRG_NOTES_PTR
