@@ -1,7 +1,6 @@
 ; main.asm
-; Main code for testing/demoing bluelib
 ;
-.sdsctag 1.0, "bluelib", "SMS/GG library", "hang-on Entertainment"
+.sdsctag 1.0, "Mighty Knights", "Hack n' slash", "hang-on Entertainment"
 ;
 .include "bluelib.inc"        ; General library with foundation stuff.
 ;
