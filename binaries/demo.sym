@@ -28,7 +28,6 @@
 0000:0051 clear_vram
 0000:0000 boot
 0000:0017 initial_memory_control_register_values
-0000:001b initial_memory_control_register_values_end
 0000:0402 init
 0000:0438 main_loop
 0001:4000 demo_palette

@@ -23,6 +23,7 @@
 .equ ASCENDING 0
 .equ DESCENDING $ff
 ;
+;
 ; -----------------------------------------------------------------------------
 .memorymap
 ; -----------------------------------------------------------------------------
@@ -74,14 +75,13 @@
   boot:
   di
   im 1
-  ld sp,INITIAL_STACK_ADDRESS
+  ld sp,$dff0
   ;
   ; Initialize the memory control registers.
   ld de,$fffc
   ld hl,initial_memory_control_register_values
-  ld bc,initial_memory_control_register_values_end-initial_memory_control_register_values
+  ld bc,4
   ldir
-  ;
   ;
   call clear_vram
   ;
@@ -89,11 +89,9 @@
   ;
   initial_memory_control_register_values:
     .db $00,$00,$01,$02
-    initial_memory_control_register_values_end:
   ;
 .ends
-
-
+;
 .org $0038
 ; ---------------------------------------------------------------------------
 .section "!VDP interrupt" force
@@ -117,7 +115,7 @@
   ei
   reti
 .ends
-
+;
 .org $0066
 ; ---------------------------------------------------------------------------
 .section "!Pause interrupt" force
@@ -129,15 +127,14 @@
   pop af
   retn
 .ends
-
+;
 ; -----------------------------------------------------------------------------
 .section "main" free
 ; -----------------------------------------------------------------------------
   init:
-    ; Run this function once (on game load). Assume we come here from bluelib
-    ; boot code with initialized vram and memory control registers (INIT).
+    ; Run this function once (on game load). 
     ;
-    ld a,COLOR_0
+    ld a,0
     ld b,demo_palette_end-demo_palette
     ld hl,demo_palette
     call load_cram
