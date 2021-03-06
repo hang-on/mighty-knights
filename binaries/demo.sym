@@ -28,9 +28,9 @@
 0000:0017 initial_memory_control_register_values
 0000:046e init
 0000:04a4 main_loop
-0001:4000 demo_palette
-0001:4020 demo_palette_end
-0001:4020 c_character
+0002:8000 demo_palette
+0002:8020 demo_palette_end
+0002:8020 c_character
 0000:001b *WLA_SDSC_PRG_AUTHOR_PTR
 0000:04d1 *WLA_SDSC_PRG_NAME_PTR
 0000:04e0 *WLA_SDSC_PRG_NOTES_PTR
