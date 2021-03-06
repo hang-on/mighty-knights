@@ -14,10 +14,6 @@
 .equ FLAG_SET $ff
 .equ FLAG_RESET $00
 ;
-.equ PLAYER_SIZE 4          ; Number of tiles not part of asc/desc flicker.
-.equ ASCENDING 0
-.equ DESCENDING $ff
-;
 ; -----------------------------------------------------------------------------
 .memorymap
 ; -----------------------------------------------------------------------------
@@ -45,11 +41,6 @@
   vblank_counter db
   hline_counter db
   pause_flag db
-  ;
-  SpriteBufferY dsb 64
-  SpriteBufferXC dsb 128
-  NextFreeSprite db
-  SATLoadMode db             ; Ascending or descending - for flickering.
   ;
   demosprite_x db
   demosprite_y db

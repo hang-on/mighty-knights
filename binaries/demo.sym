@@ -2,16 +2,12 @@
 ; wla symbolic information for "binaries\demo.sms".
 
 [labels]
-0000:c000 temp_byte
-0000:c001 temp_word
-0000:c002 VDPStatus
-0000:c003 vblank_counter
-0000:c004 hline_counter
-0000:c005 pause_flag
-0000:c006 SpriteBufferY
-0000:c046 SpriteBufferXC
-0000:c0c6 NextFreeSprite
-0000:c0c7 SATLoadMode
+0000:c0c2 temp_byte
+0000:c0c3 temp_word
+0000:c0c4 VDPStatus
+0000:c0c5 vblank_counter
+0000:c0c6 hline_counter
+0000:c0c7 pause_flag
 0000:c0c8 demosprite_x
 0000:c0c9 demosprite_y
 0000:c0ca demosprite_char
@@ -20,6 +16,10 @@
 0000:04be load_vram
 0000:0507 set_register
 0000:0051 clear_vram
+0000:c000 SpriteBufferY
+0000:c040 SpriteBufferXC
+0000:c0c0 NextFreeSprite
+0000:c0c1 SATLoadMode
 0000:0071 add_sprite
 0000:00af exit_add_sprite
 0000:00b8 load_sat

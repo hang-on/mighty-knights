@@ -1,7 +1,22 @@
 ; Sprite Handler
 ; -----------------------------------------------------------------------------
-.section "Sprite Handler" free
+; Definitions:
+.equ PRIORITY_SPRITES 4          ; Number of tiles not part of asc/desc flicker.
+.equ ASCENDING 0
+.equ DESCENDING $ff
+;
 ; -----------------------------------------------------------------------------
+.ramsection "Sprite Handler Variables" slot 3
+; -----------------------------------------------------------------------------
+  SpriteBufferY dsb 64
+  SpriteBufferXC dsb 128
+  NextFreeSprite db
+  SATLoadMode db             ; Ascending or descending - for flickering.
+.ends
+;
+; -----------------------------------------------------------------------------
+.section "Sprite Handler" free
+; -----------------------------------------------------------------------------   
   add_sprite:
     ; Add a sprite of size = 1 character to the SAT.
     ; Entry: A = Character code.
@@ -108,12 +123,12 @@
       out (CONTROL_PORT),a
       ld c,DATA_PORT
       ld hl,SpriteBufferY
-      .rept PLAYER_SIZE
+      .rept PRIORITY_SPRITES
         outi
       .endr
       ;
       ld hl,SpriteBufferY+63    ; Point to last y-value in buffer.
-      .rept 64-PLAYER_SIZE
+      .rept 64-PRIORITY_SPRITES
         outd                    ; Output and decrement HL, thus going
       .endr                     ; backwards (descending) through the buffer.
       ;
@@ -126,14 +141,14 @@
       out (CONTROL_PORT),a
       ld c,DATA_PORT
       ld hl,SpriteBufferXC
-      .rept PLAYER_SIZE
+      .rept PRIORITY_SPRITES
         outi
         outi
       .endr
       ;
       ld hl,SpriteBufferXC+126
       ld de,-4
-      .rept 64-PLAYER_SIZE
+      .rept 64-PRIORITY_SPRITES
         outi
         outi
         add hl,de
