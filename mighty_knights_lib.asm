@@ -40,12 +40,12 @@
 .ends
 ;
 ; -----------------------------------------------------------------------------
-.section "start_sat_handler" free
+.section "start_sprite_handler" free
 ; -----------------------------------------------------------------------------
   ; Entry: None
   ; Exit:
   ; Uses: A
-start_sat_handler:
+start_sprite_handler:
   xor a
   ld (NextFreeSprite),a
   ; Cancel sprite drawing from sprite 0.

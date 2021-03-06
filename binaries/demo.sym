@@ -16,7 +16,7 @@
 0000:c0c9 demosprite_y
 0000:c0ca demosprite_char
 0000:04fb wait_for_vblank
-0000:0497 start_sat_handler
+0000:0497 start_sprite_handler
 0000:0071 load_sat
 0000:021a _DescendingLoad
 0000:04ee load_cram

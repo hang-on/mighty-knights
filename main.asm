@@ -165,7 +165,7 @@
     ;
     ; -------------------------------------------------------------------------
     ; Begin general updating (UPDATE).
-    call start_sat_handler
+    call start_sprite_handler
     ;
     ld a,(demosprite_x)
     ld c,a
