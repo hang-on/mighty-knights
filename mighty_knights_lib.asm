@@ -1,5 +1,70 @@
 ; Mighty Knights Library
 ; 
+; =============================================================================
+; M A C R O S
+; =============================================================================
+; -----------------------------------------------------------------------------
+.macro SELECT_EXTRAM
+; -----------------------------------------------------------------------------
+  ; Select external RAM: Now memory addresses from $8000 - $c000 (slot 2)
+  ; are mapped to the battery-backed RAM, and thus its contents are saved
+  ; between sessions.
+  push af
+  ld a,(BANK_CONTROL)
+  or SET_EXTRAM_BIT
+  ld (BANK_CONTROL),a
+  pop af
+.endm
+; -----------------------------------------------------------------------------
+.macro SELECT_ROM
+; -----------------------------------------------------------------------------
+  ; Select ROM: Used to switch mapping in slot 2 ($8000 - $c000) back to ROM
+  ; if external RAM was selected.
+  push af
+  ld a,(BANK_CONTROL)
+  and RESET_EXTRAM_BIT
+  ld (BANK_CONTROL),a
+  pop af
+.endm
+; -----------------------------------------------------------------------------
+.macro SELECT_BANK
+; -----------------------------------------------------------------------------
+  ; Select a bank for slot 2, i.e. SELECT_BANK 4.
+  push af
+  ld a,\1
+  ld (SLOT_2_CONTROL),a
+  pop af
+.endm
+; -----------------------------------------------------------------------------
+.macro SELECT_BANK_IN_REGISTER_A
+; -----------------------------------------------------------------------------
+  ; Select a bank for slot 2, - put value in register A.
+  ld (SLOT_2_CONTROL),a
+.endm
+; -----------------------------------------------------------------------------
+.macro SAVE_REGISTERS
+; -----------------------------------------------------------------------------
+  ; Save all registers, except IX and IY
+  push af
+  push bc
+  push de
+  push hl
+  push ix
+  push iy
+.endm
+; -----------------------------------------------------------------------------
+.macro RESTORE_REGISTERS
+; -----------------------------------------------------------------------------
+  ; Restore all registers, except IX and IY
+  pop iy
+  pop ix
+  pop hl
+  pop de
+  pop bc
+  pop af
+.endm
+;
+;
 ; -----------------------------------------------------------------------------
 .section "start_sat_manager" free
 ; -----------------------------------------------------------------------------
@@ -7,28 +72,6 @@
   ; Exit:
   ; Uses: A
 start_sat_manager:
-  ; Reset the NextFreeSprite index at the beginning of every frame
-  xor a
-  ld (NextFreeSprite),a
-  ;
-  ; Toggle ascending/descending sat load mode.
-  ld a,(SATLoadMode)
-  cpl
-  ld (SATLoadMode),a
-  ;
-  ld a,SPRITE_TERMINATOR
-  ld (SpriteBufferY),a
-  ;
-  ; Set input_ports (word) to mirror current state of ports $dc and $dd.
-  in a,(INPUT_PORT_1)
-  ld (input_ports),a
-  in a,(INPUT_PORT_2)
-  ld (input_ports+1),a
-  ;
-ret
-;
-
-
   xor a
   ld (NextFreeSprite),a
   ; Cancel sprite drawing from sprite 0.
@@ -47,7 +90,18 @@ ret
   ld a,(SATLoadMode)
   cpl
   ld (SATLoadMode),a
-
+  ;
+  ld a,SPRITE_TERMINATOR
+  ld (SpriteBufferY),a
+  ;
+  ; Set input_ports (word) to mirror current state of ports $dc and $dd.
+  in a,(INPUT_PORT_1)
+  ld (input_ports),a
+  in a,(INPUT_PORT_2)
+  ld (input_ports+1),a
+  ;
+ret
+;
 .ends
 
 ; -----------------------------------------------------------------------------
@@ -259,4 +313,24 @@ ret
     RESTORE_REGISTERS
   ret
 
+.ends
+; -----------------------------------------------------------------------------
+.section "clear_vram" free
+; -----------------------------------------------------------------------------
+  ; Write 00 to all vram addresses.
+  ; Uses AF, BC
+  clear_vram:
+    xor a
+    out (CONTROL_PORT),a
+    or VRAM_WRITE_COMMAND
+    out (CONTROL_PORT),a
+    ld bc,VRAM_SIZE
+    -:
+      xor a
+      out (DATA_PORT),a
+      dec bc
+      ld a,b
+      or c
+    jp nz,-
+  ret
 .ends
