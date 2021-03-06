@@ -410,7 +410,7 @@
 ; -----------------------------------------------------------------------------
 .section "bluelib_update_framework" free
 ; -----------------------------------------------------------------------------
-WipeData:
+;WipeData:
   .rept 64
     .db SPRITE_TERMINATOR
   .endr
@@ -425,16 +425,8 @@ bluelib_update_framework:
   cpl
   ld (SATLoadMode),a
   ;
-  ; Wipe Y-buffer.
-  ;ld hl,WipeData
-  ;ld de,SpriteBufferY
-  ;ld bc,64
-  ;ldir
-  ;
-  ; **
   ld a,SPRITE_TERMINATOR
   ld (SpriteBufferY),a
-  ; **
   ;
   ; Set input_ports (word) to mirror current state of ports $dc and $dd.
   in a,(INPUT_PORT_1)
@@ -511,6 +503,7 @@ ret
     exit_add_sprite:
     RESTORE_REGISTERS
   ret
+
 .ends
 ;
 ; -----------------------------------------------------------------------------
