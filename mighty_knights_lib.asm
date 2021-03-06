@@ -94,16 +94,10 @@ start_sat_manager:
   ld a,SPRITE_TERMINATOR
   ld (SpriteBufferY),a
   ;
-  ; Set input_ports (word) to mirror current state of ports $dc and $dd.
-  in a,(INPUT_PORT_1)
-  ld (input_ports),a
-  in a,(INPUT_PORT_2)
-  ld (input_ports+1),a
-  ;
 ret
 ;
 .ends
-
+;
 ; -----------------------------------------------------------------------------
 .section "bluelib_utilize vblank" free
 ; -----------------------------------------------------------------------------

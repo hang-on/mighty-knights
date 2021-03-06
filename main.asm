@@ -23,7 +23,6 @@
 .equ ASCENDING 0
 .equ DESCENDING $ff
 ;
-;
 ; -----------------------------------------------------------------------------
 .memorymap
 ; -----------------------------------------------------------------------------
@@ -51,7 +50,6 @@
   vblank_counter db
   hline_counter db
   pause_flag db
-  input_ports dw
   ;
   SpriteBufferY dsb 64
   SpriteBufferXC dsb 128
@@ -64,9 +62,7 @@
 .ends
 ;
 .include "mighty_knights_lib.asm"
-;.include "bluelib.asm"        ; General library with foundation stuff.
-
-
+;
 .org 0
 .bank 0 slot 0
 ; -----------------------------------------------------------------------------
