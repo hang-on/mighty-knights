@@ -22,20 +22,24 @@
   pop af
 .endm
 ;
-;
 ; -----------------------------------------------------------------------------
-.section "wait_for_vblank" free
+.section "clear_vram" free
 ; -----------------------------------------------------------------------------
-  ; Wait until vblank interrupt > 0.
-  wait_for_vblank:
-    ld hl,vblank_counter
-    -:
-      ld a,(hl)
-      cp 0
-    jp z,-
-    ; Reset counter.
+  ; Write 00 to all vram addresses.
+  ; Uses AF, BC
+  clear_vram:
     xor a
-    ld (hl),a
+    out (CONTROL_PORT),a
+    or VRAM_WRITE_COMMAND
+    out (CONTROL_PORT),a
+    ld bc,VRAM_SIZE
+    -:
+      xor a
+      out (DATA_PORT),a
+      dec bc
+      ld a,b
+      or c
+    jp nz,-
   ret
 .ends
 ;
@@ -99,29 +103,21 @@
     out (CONTROL_PORT),a
   ret
 .ends
-
+;
 ; -----------------------------------------------------------------------------
-.section "add_sprite" free
+.section "wait_for_vblank" free
 ; -----------------------------------------------------------------------------
-
-.ends
-; -----------------------------------------------------------------------------
-.section "clear_vram" free
-; -----------------------------------------------------------------------------
-  ; Write 00 to all vram addresses.
-  ; Uses AF, BC
-  clear_vram:
-    xor a
-    out (CONTROL_PORT),a
-    or VRAM_WRITE_COMMAND
-    out (CONTROL_PORT),a
-    ld bc,VRAM_SIZE
+  ; Wait until vblank interrupt > 0.
+  wait_for_vblank:
+    ld hl,vblank_counter
     -:
-      xor a
-      out (DATA_PORT),a
-      dec bc
-      ld a,b
-      or c
-    jp nz,-
+      ld a,(hl)
+      cp 0
+    jp z,-
+    ; Reset counter.
+    xor a
+    ld (hl),a
   ret
 .ends
+;
+
