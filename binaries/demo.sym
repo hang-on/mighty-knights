@@ -24,7 +24,7 @@
 0000:00af exit_add_sprite
 0000:00b8 load_sat
 0000:0261 _DescendingLoad
-0000:0447 start_sprite_handler
+0000:0447 refresh_sprite_handler
 0000:0000 boot
 0000:0017 initial_memory_control_register_values
 0000:046e init

@@ -49,7 +49,6 @@
 ;
 .include "mighty_knights_lib.asm"
   .include "sprite_handler.asm"
-
 ;
 .org 0
 .bank 0 slot 0
@@ -158,7 +157,7 @@
     ;
     ; -------------------------------------------------------------------------
     ; Begin general updating (UPDATE).
-    call start_sprite_handler
+    call refresh_sprite_handler
     ;
     ld a,(demosprite_x)
     ld c,a

@@ -155,7 +155,8 @@
       .endr
   ret
   ;
-  start_sprite_handler:
+  refresh_sprite_handler:
+    ; Clear buffer index and toggle load mode.
     ; Entry: None
     ; Exit:
     ; Uses: A
