@@ -40,12 +40,12 @@
 .ends
 ;
 ; -----------------------------------------------------------------------------
-.section "start_sprite_handler" free
+.section "Sprite Handler" free
 ; -----------------------------------------------------------------------------
+start_sprite_handler:
   ; Entry: None
   ; Exit:
   ; Uses: A
-start_sprite_handler:
   xor a
   ld (NextFreeSprite),a
   ; Cancel sprite drawing from sprite 0.
@@ -70,12 +70,7 @@ start_sprite_handler:
   ;
 ret
 ;
-.ends
-;
-; -----------------------------------------------------------------------------
-.section "load_sat" free
-; -----------------------------------------------------------------------------
-  load_sat:
+load_sat:
   ; Load the vram sat with the SatY and SatXC buffers.
   ; Sonic 2 inspired flicker engine is in place: Flicker sprites by loading the
   ; SAT in ascending/descending order every other frame.
@@ -154,7 +149,7 @@ ret
   ret
   ;
 .ends
-
+;
 ; -----------------------------------------------------------------------------
 .section "load_cram" free
 ; -----------------------------------------------------------------------------
@@ -176,7 +171,6 @@ ret
     djnz -
   ret
 .ends
-
 ; -----------------------------------------------------------------------------
 .section "load_vram" free
 ; -----------------------------------------------------------------------------
@@ -202,7 +196,6 @@ ret
     jp nz,-
   ret
 .ends
-
 ; -----------------------------------------------------------------------------
 .section "Set register (vdp)" free
 ; -----------------------------------------------------------------------------
