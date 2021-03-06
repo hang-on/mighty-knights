@@ -26,7 +26,10 @@
 .section "set_display" free
 ; -----------------------------------------------------------------------------
   set_display:
-    ; A holds ENABLED/DISABLED
+    ; Use value passed in A to either set or reset the display bit of vdp
+    ; register 1 mirror. Then load the whole mirror into the actual register.
+    ; Entry: A = ENABLED/DISABLED (assuming these constants are defined).
+    ; Assumes the presence of variable: vpd_register_1.
     ld hl,vdp_register_1
     cp ENABLED
     jp z,+
