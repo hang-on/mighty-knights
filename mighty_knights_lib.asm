@@ -1,46 +1,4 @@
 ; Mighty Knights Library
-; 
-; =============================================================================
-; M A C R O S
-; =============================================================================
-; -----------------------------------------------------------------------------
-.macro SELECT_EXTRAM
-; -----------------------------------------------------------------------------
-  ; Select external RAM: Now memory addresses from $8000 - $c000 (slot 2)
-  ; are mapped to the battery-backed RAM, and thus its contents are saved
-  ; between sessions.
-  push af
-  ld a,(BANK_CONTROL)
-  or SET_EXTRAM_BIT
-  ld (BANK_CONTROL),a
-  pop af
-.endm
-; -----------------------------------------------------------------------------
-.macro SELECT_ROM
-; -----------------------------------------------------------------------------
-  ; Select ROM: Used to switch mapping in slot 2 ($8000 - $c000) back to ROM
-  ; if external RAM was selected.
-  push af
-  ld a,(BANK_CONTROL)
-  and RESET_EXTRAM_BIT
-  ld (BANK_CONTROL),a
-  pop af
-.endm
-; -----------------------------------------------------------------------------
-.macro SELECT_BANK
-; -----------------------------------------------------------------------------
-  ; Select a bank for slot 2, i.e. SELECT_BANK 4.
-  push af
-  ld a,\1
-  ld (SLOT_2_CONTROL),a
-  pop af
-.endm
-; -----------------------------------------------------------------------------
-.macro SELECT_BANK_IN_REGISTER_A
-; -----------------------------------------------------------------------------
-  ; Select a bank for slot 2, - put value in register A.
-  ld (SLOT_2_CONTROL),a
-.endm
 ; -----------------------------------------------------------------------------
 .macro SAVE_REGISTERS
 ; -----------------------------------------------------------------------------
@@ -66,12 +24,28 @@
 ;
 ;
 ; -----------------------------------------------------------------------------
-.section "start_sat_manager" free
+.section "wait_for_vblank" free
+; -----------------------------------------------------------------------------
+  ; Wait until vblank interrupt > 0.
+  wait_for_vblank:
+    ld hl,vblank_counter
+    -:
+      ld a,(hl)
+      cp 0
+    jp z,-
+    ; Reset counter.
+    xor a
+    ld (hl),a
+  ret
+.ends
+;
+; -----------------------------------------------------------------------------
+.section "start_sat_handler" free
 ; -----------------------------------------------------------------------------
   ; Entry: None
   ; Exit:
   ; Uses: A
-start_sat_manager:
+start_sat_handler:
   xor a
   ld (NextFreeSprite),a
   ; Cancel sprite drawing from sprite 0.
@@ -99,9 +73,9 @@ ret
 .ends
 ;
 ; -----------------------------------------------------------------------------
-.section "bluelib_utilize vblank" free
+.section "load_sat" free
 ; -----------------------------------------------------------------------------
-  bluelib_utilize_vblank:
+  load_sat:
   ; Load the vram sat with the SatY and SatXC buffers.
   ; Sonic 2 inspired flicker engine is in place: Flicker sprites by loading the
   ; SAT in ascending/descending order every other frame.
@@ -109,7 +83,7 @@ ret
   cp DESCENDING
   jp z,_DescendingLoad
     ; If not descending, then fall through to ascending load mode.
-
+    ;
     ; Load y-coordinates.
     ld hl,SAT_Y_START
     ld a,l
@@ -135,7 +109,7 @@ ret
     .rept 128
       outi
     .endr
-  jp update_sat_end
+  ret
   ;
   _DescendingLoad:
     ; Load y-coordinates.
@@ -177,7 +151,6 @@ ret
       outi
       add hl,de
     .endr
-  update_sat_end:
   ret
   ;
 .ends

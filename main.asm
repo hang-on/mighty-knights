@@ -2,7 +2,6 @@
 ;
 .sdsctag 1.0, "Mighty Knights", "Hack n' slash", "hang-on Entertainment"
 ;
-; Declare constants, global variables etc.
 ; -----------------------------------------------------------------------------
 .include "sms_constants.asm"
 ; -----------------------------------------------------------------------------
@@ -14,10 +13,6 @@
 .equ DISABLED 0
 .equ FLAG_SET $ff
 .equ FLAG_RESET $00
-.equ PAUSE_FLAG_RESET $00
-.equ PAUSE_FLAG_SET $ff
-.equ UNUSED_BYTE $0
-.equ UNUSED_WORD $0000
 ;
 .equ PLAYER_SIZE 4          ; Number of tiles not part of asc/desc flicker.
 .equ ASCENDING 0
@@ -162,24 +157,15 @@
   ; ---------------------------------------------------------------------------
   main_loop:
     ;
-    ; Wait until vblank interrupt handler increments counter.
-    ld hl,vblank_counter
-    -:
-      ld a,(hl)
-      cp 0
-    jp z,-
-    ; Reset counter.
-    xor a
-    ld (hl),a
+    call wait_for_vblank
     ;
     ; -------------------------------------------------------------------------
     ; Begin vblank critical code (DRAW).
-    call bluelib_utilize_vblank
+    call load_sat
     ;
     ; -------------------------------------------------------------------------
     ; Begin general updating (UPDATE).
-    ;call bluelib_update_framework
-    call start_sat_manager
+    call start_sat_handler
     ;
     ld a,(demosprite_x)
     ld c,a
