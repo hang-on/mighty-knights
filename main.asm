@@ -37,7 +37,6 @@
   temp_byte db                  ; Temporary variable - byte.
   temp_word db                  ; Temporary variable - word.
   ;
-  VDPStatus db
   vblank_counter db
   hline_counter db
   pause_flag db
