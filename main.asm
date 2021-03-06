@@ -40,6 +40,8 @@
   vblank_counter db
   hline_counter db
   pause_flag db
+  vdp_register_0 db
+  vdp_register_1 db
   ;
   demosprite_x db
   demosprite_y db
@@ -66,6 +68,15 @@
   ldir
   ;
   call clear_vram
+  ;
+  ld a,%00110110
+  ld (vdp_register_0),a
+  ld b,0
+  call set_register
+  ld a,%10100000
+  ld (vdp_register_1),a
+  ld b,1
+  call set_register
   ;
   jp init
   ;
@@ -139,9 +150,8 @@
     xor a
     ld (vblank_counter),a
     ;
-    ld a,NORMAL_DISPLAY
-    ld b,1
-    call set_register
+    ld a,ENABLED
+    call set_display
     ;
   jp main_loop
   ;
