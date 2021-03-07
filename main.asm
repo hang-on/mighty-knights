@@ -49,7 +49,7 @@
 .ends
 ;
 .include "mighty_knights_lib.asm"
-  .include "sprite_handler.asm"
+  .include "sat_handler.asm"
 ;
 .org 0
 .bank 0 slot 0

@@ -15,7 +15,7 @@
 .ends
 ;
 ; -----------------------------------------------------------------------------
-.section "Sprite Handler" free
+.section "SAT Handler" free
 ; -----------------------------------------------------------------------------   
   add_sprite:
     ; Add a sprite of size = 1 character to the SAT.
