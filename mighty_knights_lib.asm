@@ -21,29 +21,6 @@
   push ix
   push iy
 .endm
-;
-; -----------------------------------------------------------------------------
-.section "set_display" free
-; -----------------------------------------------------------------------------
-  set_display:
-    ; Use value passed in A to either set or reset the display bit of vdp
-    ; register 1 mirror. Then load the whole mirror into the actual register.
-    ; Entry: A = ENABLED/DISABLED (assuming these constants are defined).
-    ; Assumes the presence of variable: vpd_register_1.
-    ld hl,vdp_register_1
-    cp ENABLED
-    jp z,+
-      res 6,(hl)
-      jp ++
-    +:
-      set 6,(hl)
-    ++:
-    ld a,(hl)
-    ld b,1
-    call set_register
-  ret
-;
-.ends
 ; -----------------------------------------------------------------------------
 .section "clear_vram" free
 ; -----------------------------------------------------------------------------
@@ -64,7 +41,6 @@
     jp nz,-
   ret
 .ends
-;
 ; -----------------------------------------------------------------------------
 .section "load_cram" free
 ; -----------------------------------------------------------------------------
@@ -112,6 +88,27 @@
   ret
 .ends
 ; -----------------------------------------------------------------------------
+.section "set_display" free
+; -----------------------------------------------------------------------------
+  set_display:
+    ; Use value passed in A to either set or reset the display bit of vdp
+    ; register 1 mirror. Then load the whole mirror into the actual register.
+    ; Entry: A = ENABLED/DISABLED (assuming these constants are defined).
+    ; Assumes the presence of variable: vpd_register_1.
+    ld hl,vdp_register_1
+    cp ENABLED
+    jp z,+
+      res 6,(hl)
+      jp ++
+    +:
+      set 6,(hl)
+    ++:
+    ld a,(hl)
+    ld b,1
+    call set_register
+  ret
+.ends
+; -----------------------------------------------------------------------------
 .section "Set register (vdp)" free
 ; -----------------------------------------------------------------------------
   ; Write to target register.
@@ -125,7 +122,6 @@
     out (CONTROL_PORT),a
   ret
 .ends
-;
 ; -----------------------------------------------------------------------------
 .section "wait_for_vblank" free
 ; -----------------------------------------------------------------------------

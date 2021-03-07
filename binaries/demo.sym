@@ -12,10 +12,10 @@
 0000:c0c9 demosprite_x
 0000:c0ca demosprite_y
 0000:c0cb demosprite_char
-0000:04bc set_display
 0000:0051 clear_vram
 0000:0518 load_cram
 0000:04e8 load_vram
+0000:04bc set_display
 0000:002f set_register
 0000:0525 wait_for_vblank
 0000:c000 sprite_buffer_y
