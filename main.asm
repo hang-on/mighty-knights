@@ -167,7 +167,7 @@
     ;
     ; -------------------------------------------------------------------------
     ; Begin general updating (UPDATE).
-    call refresh_sprite_handler
+    call refresh_sat_handler
     ;
     ld a,(demosprite_x)
     ld c,a

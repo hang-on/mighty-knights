@@ -6,11 +6,11 @@
 .equ DESCENDING $ff
 ;
 ; -----------------------------------------------------------------------------
-.ramsection "Sprite Handler Variables" slot 3
+.ramsection "SAT Handler Variables" slot 3
 ; -----------------------------------------------------------------------------
-  sprite_buffer_y dsb 64
-  sprite_buffer_xc dsb 128
-  sprite_buffer_index db
+  sat_buffer_y dsb 64
+  sat_buffer_xc dsb 128
+  sat_buffer_index db
   load_mode db             ; Ascending or descending - for flickering.
 .ends
 ;
@@ -27,7 +27,7 @@
     ; Test for sprite overflow (more than 64 hardware sprites at once).
     SAVE_REGISTERS
     ld d,a                    ; Save the tile in unused register.
-    ld a,(sprite_buffer_index)
+    ld a,(sat_buffer_index)
     inc a
     cp 65
     jp nc,exit_add_sprite
@@ -35,9 +35,9 @@
     ;
     push af
     push bc
-    ; Point DE to sprite_buffer_y[sprite_buffer_index].
-    ld a,(sprite_buffer_index)
-    ld de,sprite_buffer_y
+    ; Point DE to sat_buffer_y[sat_buffer_index].
+    ld a,(sat_buffer_index)
+    ld de,sat_buffer_y
     add a,e
     ld e,a
     ld a,0
@@ -54,10 +54,10 @@
     ld (de),a
     ; **
     ;
-    ; Point DE to sprite_buffer_xc[sprite_buffer_index].
-    ld a,(sprite_buffer_index)
+    ; Point DE to sat_buffer_xc[sat_buffer_index].
+    ld a,(sat_buffer_index)
     add a,a               ; Table elements are words!
-    ld de,sprite_buffer_xc
+    ld de,sat_buffer_xc
     add a,e
     ld e,a
     ld a,0
@@ -70,7 +70,7 @@
     pop af                ; Retrieve the charcode.
     ld (de),a             ; Write it to the buffer
     ;
-    ld hl,sprite_buffer_index
+    ld hl,sat_buffer_index
     inc (hl)
     ;
     exit_add_sprite:
@@ -93,7 +93,7 @@
       ld a,h
       or VRAM_WRITE_COMMAND
       out (CONTROL_PORT),a
-      ld hl,sprite_buffer_y
+      ld hl,sat_buffer_y
       ld c,DATA_PORT
       .rept 64
         outi
@@ -106,7 +106,7 @@
       ld a,h
       or VRAM_WRITE_COMMAND
       out (CONTROL_PORT),a
-      ld hl,sprite_buffer_xc
+      ld hl,sat_buffer_xc
       ld c,DATA_PORT
       .rept 128
         outi
@@ -122,12 +122,12 @@
       or VRAM_WRITE_COMMAND
       out (CONTROL_PORT),a
       ld c,DATA_PORT
-      ld hl,sprite_buffer_y
+      ld hl,sat_buffer_y
       .rept PRIORITY_SPRITES
         outi
       .endr
       ;
-      ld hl,sprite_buffer_y+63    ; Point to last y-value in buffer.
+      ld hl,sat_buffer_y+63    ; Point to last y-value in buffer.
       .rept 64-PRIORITY_SPRITES
         outd                    ; Output and decrement HL, thus going
       .endr                     ; backwards (descending) through the buffer.
@@ -140,13 +140,13 @@
       or VRAM_WRITE_COMMAND
       out (CONTROL_PORT),a
       ld c,DATA_PORT
-      ld hl,sprite_buffer_xc
+      ld hl,sat_buffer_xc
       .rept PRIORITY_SPRITES
         outi
         outi
       .endr
       ;
-      ld hl,sprite_buffer_xc+126
+      ld hl,sat_buffer_xc+126
       ld de,-4
       .rept 64-PRIORITY_SPRITES
         outi
@@ -155,16 +155,16 @@
       .endr
   ret
   ;
-  refresh_sprite_handler:
+  refresh_sat_handler:
     ; Clear buffer index and toggle load mode.
     ; Entry: None
     ; Exit:
     ; Uses: A
     xor a
-    ld (sprite_buffer_index),a
+    ld (sat_buffer_index),a
     ; Cancel sprite drawing from sprite 0.
     ld a,SPRITE_TERMINATOR
-    ld (sprite_buffer_y),a
+    ld (sat_buffer_y),a
     ; Toggle descending load mode on/off
     ld a,(load_mode)
     cp DESCENDING
@@ -180,7 +180,7 @@
     ld (load_mode),a
     ;
     ld a,SPRITE_TERMINATOR
-    ld (sprite_buffer_y),a
+    ld (sat_buffer_y),a
     ;
   ret
   ;
