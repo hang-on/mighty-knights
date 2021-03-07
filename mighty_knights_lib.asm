@@ -1,16 +1,5 @@
 ; Mighty Knights Library
 ; -----------------------------------------------------------------------------
-.macro SAVE_REGISTERS
-; -----------------------------------------------------------------------------
-  ; Save all registers, except IX and IY
-  push af
-  push bc
-  push de
-  push hl
-  push ix
-  push iy
-.endm
-; -----------------------------------------------------------------------------
 .macro RESTORE_REGISTERS
 ; -----------------------------------------------------------------------------
   ; Restore all registers, except IX and IY
@@ -20,6 +9,17 @@
   pop de
   pop bc
   pop af
+.endm
+; -----------------------------------------------------------------------------
+.macro SAVE_REGISTERS
+; -----------------------------------------------------------------------------
+  ; Save all registers, except IX and IY
+  push af
+  push bc
+  push de
+  push hl
+  push ix
+  push iy
 .endm
 ;
 ; -----------------------------------------------------------------------------
