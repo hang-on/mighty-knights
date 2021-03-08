@@ -1,4 +1,15 @@
 ; Mighty Knights Library
+
+; -----------------------------------------------------------------------------
+.macro FILL_MEMORY args value
+; -----------------------------------------------------------------------------
+;  Fills work RAM ($C001 to $DFF0) with the specified value.
+  ld    hl, $C001
+  ld    de, $C002
+  ld    bc, $1FEE
+  ld    (hl), value
+  ldir
+.endm
 ; -----------------------------------------------------------------------------
 .macro RESTORE_REGISTERS
 ; -----------------------------------------------------------------------------
@@ -24,7 +35,7 @@
 ; -----------------------------------------------------------------------------
 ; SAT Handler
 ; -----------------------------------------------------------------------------
-.equ PRIORITY_SPRITES 4          ; Number of tiles not part of asc/desc flicker.
+.equ PRIORITY_SPRITES 1          ; Number of tiles not part of asc/desc flicker.
 .equ ASCENDING 0
 .equ DESCENDING $ff
 ; -----------------------------------------------------------------------------
@@ -98,7 +109,7 @@
       .rept PRIORITY_SPRITES
         outi
       .endr
-      ;
+      ; FIX: Det er her det går galt første gang!
       ld hl,sat_buffer_y+63     ; Point to last y-value in buffer.
       .rept 64-PRIORITY_SPRITES
         outd                    ; Output and decrement HL, thus going
@@ -131,6 +142,9 @@
         add hl,de
       .endr
     ++:
+    ld a,(load_mode)
+    cpl
+    ld (load_mode),a
   ret
   ;
   refresh_sat_handler:

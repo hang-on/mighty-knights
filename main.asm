@@ -51,17 +51,7 @@
   ld hl,initial_memory_control_register_values
   ld bc,4
   ldir
-  ;
-  call clear_vram
-  ; Set the VDP display and interrupt mode.
-  ld a,%00100110          ; Scroll vertically and horizontally, blank left
-  ld (vdp_register_0),a   ; column, disable raster ints., normal sprite pos.
-  ld b,0
-  call set_register
-  ld a,%10100000          ; Disable display, enable frame ints, 8 x 8 sprites.
-  ld (vdp_register_1),a
-  ld b,1
-  call set_register
+  FILL_MEMORY $00
   ;
   jp init
   ;
@@ -103,7 +93,19 @@
 .section "main" free
 ; -----------------------------------------------------------------------------
   init:
-    ; Run this function once (on game load/reset). 
+  ; Run this function once (on game load/reset). 
+    ;
+    call clear_vram
+    ; Set the VDP display and interrupt mode.
+    ld a,%00100110          ; Scroll vertically and horizontally, blank left
+    ld (vdp_register_0),a   ; column, disable raster ints., normal sprite pos.
+    ld b,0
+    call set_register
+    ld a,%10100000          ; Disable display, enable frame ints, 8 x 8 sprites.
+    ld (vdp_register_1),a
+    ld b,1
+    call set_register
+    ;
     ld a,0
     ld b,demo_palette_end-demo_palette
     ld hl,demo_palette
@@ -137,7 +139,23 @@
     ; Begin general updating (UPDATE).
     call refresh_sat_handler
     ;
-    ld ix,c_sprite
+    ld ix,c_sprite_1
+    call add_sprite
+    ld ix,c_sprite_2
+    call add_sprite
+    ld ix,c_sprite_3
+    call add_sprite
+    ld ix,c_sprite_4
+    call add_sprite
+    ld ix,c_sprite_5
+    call add_sprite
+    ld ix,c_sprite_6
+    call add_sprite
+    ld ix,c_sprite_7
+    call add_sprite
+    ld ix,c_sprite_8
+    call add_sprite
+    ld ix,c_sprite_9
     call add_sprite
     ;
   jp main_loop
@@ -161,6 +179,23 @@
     .db $00 $00 $c0 $c0
     .db $00 $ff $00 $00
   ;
-  c_sprite:
+  c_sprite_1:
     .db $0F $0F $01
+  c_sprite_2:  
+    .db $10 $18 $01
+  c_sprite_3:  
+    .db $11 $21 $01
+  c_sprite_4:  
+    .db $12 $2A $01
+  c_sprite_5:  
+    .db $13 $33 $01
+  c_sprite_6:  
+    .db $14 $3C $01
+  c_sprite_7:  
+    .db $15 $45 $01
+  c_sprite_8:  
+    .db $16 $4E $01
+  c_sprite_9:  
+    .db $17 $57 $01
+
 .ends
