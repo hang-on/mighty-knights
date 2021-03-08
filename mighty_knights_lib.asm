@@ -101,7 +101,7 @@
     ld a,(load_mode)
     cp DESCENDING
     jp z,+
-      .rept 64
+      .rept HARDWARE_SPRITE_MAX
         outi
       .endr
       jp ++
@@ -109,9 +109,8 @@
       .rept PRIORITY_SPRITES
         outi
       .endr
-      ; FIX: Det er her det går galt første gang!
-      ld hl,sat_buffer_y+63     ; Point to last y-value in buffer.
-      .rept 64-PRIORITY_SPRITES
+      ld hl,sat_buffer_y+HARDWARE_SPRITE_MAX-1  ; Point to last y-value in buffer.
+      .rept HARDWARE_SPRITE_MAX-PRIORITY_SPRITES
         outd                    ; Output and decrement HL, thus going
       .endr                     ; backwards (descending) through the buffer.
     ++:
@@ -136,7 +135,7 @@
       ;
       ld hl,sat_buffer_xc+126
       ld de,-4
-      .rept 64-PRIORITY_SPRITES
+      .rept HARDWARE_SPRITE_MAX-PRIORITY_SPRITES
         outi
         outi
         add hl,de
@@ -148,15 +147,12 @@
   ret
   ;
   refresh_sat_handler:
-    ; Clear buffer index and toggle load mode.
+    ; Clear SAT buffer (Y), buffer index and toggle load mode.
     ; Entry: None
     ; Exit:
     ; Uses: A
     xor a
     ld (sat_buffer_index),a
-    ; Cancel sprite drawing from sprite 0.
-    ;ld a,SPRITE_TERMINATOR
-    ;ld (sat_buffer_y),a
     ; Toggle descending load mode on/off
     ld a,(load_mode)
     cp DESCENDING
@@ -171,16 +167,14 @@
     cpl
     ld (load_mode),a
     ;
-    ;ld a,SPRITE_TERMINATOR
-    ;ld (sat_buffer_y),a
-    ld hl,init__sat_buffer_data
+    ld hl,clean_buffer
     ld de,sat_buffer_y
-    ld bc,64
+    ld bc,HARDWARE_SPRITE_MAX
     ldir
     ;
   ret
-  init__sat_buffer_data:
-    .rept 64
+  clean_buffer:
+    .rept HARDWARE_SPRITE_MAX
       .db $00
     .endr
 .ends

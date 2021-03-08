@@ -10,7 +10,7 @@
 0000:0099 exit_add_sprite
 0000:009a load_sat
 0000:0416 refresh_sat_handler
-0000:043e init__sat_buffer_data
+0000:043e clean_buffer
 0000:051b clear_vram
 0000:055b load_cram
 0000:0025 load_vram
