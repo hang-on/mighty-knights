@@ -35,14 +35,14 @@
 ; -----------------------------------------------------------------------------
 ; SAT Handler
 ; -----------------------------------------------------------------------------
-.equ PRIORITY_SPRITES 1          ; Number of tiles not part of asc/desc flicker.
+.equ PRIORITY_SPRITES 1         ; Number of tiles not part of asc/desc flicker.
 .equ ASCENDING 0
 .equ DESCENDING $ff
 ; -----------------------------------------------------------------------------
 .ramsection "SAT Handler Variables" slot 3
 ; -----------------------------------------------------------------------------
-  sat_buffer_y dsb 64
-  sat_buffer_xc dsb 128
+  sat_buffer_y dsb HARDWARE_SPRITE_MAX
+  sat_buffer_xc dsb HARDWARE_SPRITE_MAX*2
   sat_buffer_index db
   load_mode db             ; Ascending or descending - for flickering.
 .ends
