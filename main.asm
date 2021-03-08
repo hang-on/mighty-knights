@@ -35,10 +35,6 @@
   pause_flag db
   vdp_register_0 db
   vdp_register_1 db
-  ;
-  demosprite_x db
-  demosprite_y db
-  demosprite_char db
 .ends
 .org 0
 .bank 0 slot 0

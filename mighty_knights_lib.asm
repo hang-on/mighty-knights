@@ -255,10 +255,11 @@
 .section "Offset table" free
 ; -----------------------------------------------------------------------------
   ; Offset base address (in HL) of a table of bytes or words. 
-  ; Uses: A, HL
+  ; Entry: A  = Offset to apply.
+  ;        HL = Pointer to table of values (bytes or words).  
+  ; Exit:  HL = Offset table address.
+  ; Uses:  A, HL
   offset_byte_table:
-    ; HL = table of byte values
-    ; A  = offset to apply
     add a,l
     ld l,a
     ld a,0
@@ -267,8 +268,6 @@
   ret
   ;
   offset_word_table:
-    ; HL = table of word values
-    ; A  = offset to apply
     add a,a              
     add a,l
     ld l,a

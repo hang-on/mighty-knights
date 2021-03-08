@@ -26,9 +26,6 @@
 0000:c0c6 pause_flag
 0000:c0c7 vdp_register_0
 0000:c0c8 vdp_register_1
-0000:c0c9 demosprite_x
-0000:c0ca demosprite_y
-0000:c0cb demosprite_char
 0000:0000 boot
 0000:002b initial_memory_control_register_values
 0000:0454 init
