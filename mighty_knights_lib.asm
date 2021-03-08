@@ -67,9 +67,9 @@
     ; Retrieve Y and X coords.
     ld a,(ix+0)
     ld (hl),a               ; Write the Y to the sprite buffer.
-    inc hl
-    ld a,SPRITE_TERMINATOR
-    ld (hl),a
+   ; inc hl
+   ; ld a,SPRITE_TERMINATOR
+   ; ld (hl),a
     ;
     ; Point DE to sat_buffer_xc[sat_buffer_index].
     ld a,(sat_buffer_index)
@@ -155,8 +155,8 @@
     xor a
     ld (sat_buffer_index),a
     ; Cancel sprite drawing from sprite 0.
-    ld a,SPRITE_TERMINATOR
-    ld (sat_buffer_y),a
+    ;ld a,SPRITE_TERMINATOR
+    ;ld (sat_buffer_y),a
     ; Toggle descending load mode on/off
     ld a,(load_mode)
     cp DESCENDING
@@ -171,10 +171,18 @@
     cpl
     ld (load_mode),a
     ;
-    ld a,SPRITE_TERMINATOR
-    ld (sat_buffer_y),a
+    ;ld a,SPRITE_TERMINATOR
+    ;ld (sat_buffer_y),a
+    ld hl,init__sat_buffer_data
+    ld de,sat_buffer_y
+    ld bc,64
+    ldir
     ;
   ret
+  init__sat_buffer_data:
+    .rept 64
+      .db $00
+    .endr
 .ends
 ; -----------------------------------------------------------------------------
 ; Misc. routines sorted alphabetically

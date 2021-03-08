@@ -182,20 +182,20 @@
   c_sprite_1:
     .db $0F $0F $01
   c_sprite_2:  
-    .db $10 $18 $01
+    .db $0F $18 $01
   c_sprite_3:  
-    .db $11 $21 $01
+    .db $0F $21 $01
   c_sprite_4:  
-    .db $12 $2A $01
+    .db $0F $2A $01
   c_sprite_5:  
-    .db $13 $33 $01
+    .db $0F $33 $01
   c_sprite_6:  
-    .db $14 $3C $01
+    .db $0F $3C $01
   c_sprite_7:  
-    .db $15 $45 $01
+    .db $0F $45 $01
   c_sprite_8:  
-    .db $16 $4E $01
+    .db $0F $4E $01
   c_sprite_9:  
-    .db $17 $57 $01
+    .db $0F $57 $01
 
 .ends
