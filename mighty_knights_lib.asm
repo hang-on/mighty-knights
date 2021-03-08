@@ -81,6 +81,62 @@
     ; Load the vram sat with the SatY and SatXC buffers.
     ; Sonic 2 inspired flicker engine is in place: Flicker sprites by loading the
     ; SAT in ascending/descending order every other frame.
+    ;
+    ld hl,SAT_Y_START           ; Load the sprite Y-positions into the SAT.
+    call setup_vram_write
+    ld hl,sat_buffer_y
+    ld c,DATA_PORT
+    ;
+    ld a,(load_mode)
+    cp DESCENDING
+    jp z,+
+      .rept 64
+        outi
+      .endr
+      jp ++
+    +:
+      .rept PRIORITY_SPRITES
+        outi
+      .endr
+      ;
+      ld hl,sat_buffer_y+63     ; Point to last y-value in buffer.
+      .rept 64-PRIORITY_SPRITES
+        outd                    ; Output and decrement HL, thus going
+      .endr                     ; backwards (descending) through the buffer.
+    ++:
+    ;                           
+    ld hl,SAT_XC_START          ; Load the X-position and character code pairs
+    call setup_vram_write       ; of the sprites into the SAT.
+    ld hl,sat_buffer_xc
+    ld c,DATA_PORT
+    ;
+    ld a,(load_mode)
+    cp DESCENDING
+    jp z,+
+      .rept 128
+        outi
+      .endr
+      jp ++
+    +:
+      .rept PRIORITY_SPRITES
+        outi
+        outi
+      .endr
+      ;
+      ld hl,sat_buffer_xc+126
+      ld de,-4
+      .rept 64-PRIORITY_SPRITES
+        outi
+        outi
+        add hl,de
+      .endr
+    ++:
+  ret
+  ;
+  load_sat_old:
+    ; Load the vram sat with the SatY and SatXC buffers.
+    ; Sonic 2 inspired flicker engine is in place: Flicker sprites by loading the
+    ; SAT in ascending/descending order every other frame.
     ld a,(load_mode)
     cp DESCENDING
     jp z,_descending_load
@@ -108,11 +164,7 @@
     _descending_load:
       ; Load y-coordinates.
       ld hl,SAT_Y_START
-      ld a,l
-      out (CONTROL_PORT),a
-      ld a,h
-      or VRAM_WRITE_COMMAND
-      out (CONTROL_PORT),a
+      call setup_vram_write
       ld c,DATA_PORT
       ld hl,sat_buffer_y
       .rept PRIORITY_SPRITES
@@ -126,11 +178,7 @@
       ;
       ; Load x-coordinates and character codes
       ld hl,SAT_XC_START
-      ld a,l
-      out (CONTROL_PORT),a
-      ld a,h
-      or VRAM_WRITE_COMMAND
-      out (CONTROL_PORT),a
+      call setup_vram_write
       ld c,DATA_PORT
       ld hl,sat_buffer_xc
       .rept PRIORITY_SPRITES
@@ -146,6 +194,8 @@
         add hl,de
       .endr
   ret
+
+
   ;
   refresh_sat_handler:
     ; Clear buffer index and toggle load mode.
