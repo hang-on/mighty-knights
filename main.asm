@@ -117,14 +117,6 @@
     ld de,SPRITE_BANK_START + CHARACTER_SIZE
     ld hl,c_character
     call load_vram
-    ;
-    ld a,16
-    ld (demosprite_y),a
-    ld a,16
-    ld (demosprite_x),a
-    ld a,1
-    ld (demosprite_char),a
-    ;
     ei
     halt
     halt
@@ -149,12 +141,12 @@
     ; Begin general updating (UPDATE).
     call refresh_sat_handler
     ;
-    ld a,(demosprite_x)
-    ld c,a
-    ld a,(demosprite_y)
-    ld b,a
-    ld a,(demosprite_char)
+    ld ix,my_sprite_data
     call add_sprite
+    jp +
+      my_sprite_data:
+        .db $0F $0F $01
+    +:
     ;
   jp main_loop
 .ends

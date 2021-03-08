@@ -41,24 +41,16 @@
 ; -----------------------------------------------------------------------------   
   add_sprite:
     ; Add a sprite of size = 1 character to the SAT.
-    ; Entry: A = Character code.
-    ;        B = vertical position, C = horizontal position.
+    ; Entry: IX = Pointer to 3 bytes: Y X C
     ; Exit:
-    ; Uses: None - all registers saved
+    ; Uses: ?
     ;
     ; Test for sprite overflow (more than 64 hardware sprites at once).
-    SAVE_REGISTERS
-    ld d,a                    ; Save the tile in unused register.
     ld a,(sat_buffer_index)
-    inc a
-    cp 65
+    cp 64
     jp nc,exit_add_sprite
-    ld a,d                    ; Restore tile in A.
     ;
-    push af
-    push bc
     ; Point DE to sat_buffer_y[sat_buffer_index].
-    ld a,(sat_buffer_index)
     ld de,sat_buffer_y
     add a,e
     ld e,a
@@ -67,14 +59,11 @@
     ld d,a
     ;
     ; Retrieve Y and X coords.
-    pop bc
-    ld a,b
+    ld a,(ix+0)
     ld (de),a               ; Write the Y to the sprite buffer.
-    ; **
     inc de
     ld a,SPRITE_TERMINATOR
     ld (de),a
-    ; **
     ;
     ; Point DE to sat_buffer_xc[sat_buffer_index].
     ld a,(sat_buffer_index)
@@ -86,17 +75,16 @@
     adc a,d
     ld d,a
     ;
-    ld a,c                ; Get the x-pos.
+    ld a,(ix+1)                ; Get the x-pos.
     ld (de),a             ; Write it to the buffer.
+    ld a,(ix+2)
     inc de
-    pop af                ; Retrieve the charcode.
     ld (de),a             ; Write it to the buffer
     ;
     ld hl,sat_buffer_index
     inc (hl)
     ;
     exit_add_sprite:
-    RESTORE_REGISTERS
   ret
   ;
   load_sat:
