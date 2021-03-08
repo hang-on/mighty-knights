@@ -38,11 +38,13 @@
 .equ PRIORITY_SPRITES 1         ; Number of tiles not part of asc/desc flicker.
 .equ ASCENDING 0
 .equ DESCENDING $ff
+.equ SAT_Y_SIZE HARDWARE_SPRITES
+.equ SAT_XC_SIZE HARDWARE_SPRITES*2
 ; -----------------------------------------------------------------------------
 .ramsection "SAT Handler Variables" slot 3
 ; -----------------------------------------------------------------------------
-  sat_buffer_y dsb HARDWARE_SPRITE_MAX
-  sat_buffer_xc dsb HARDWARE_SPRITE_MAX*2
+  sat_buffer_y dsb HARDWARE_SPRITES
+  sat_buffer_xc dsb HARDWARE_SPRITES*2
   sat_buffer_index db
   load_mode db             ; Ascending or descending - for flickering.
 .ends
@@ -57,7 +59,7 @@
     ;
     ; Test for sprite overflow (more than 64 hardware sprites at once).
     ld a,(sat_buffer_index)
-    cp HARDWARE_SPRITE_MAX
+    cp HARDWARE_SPRITES
     jp nc,exit_add_sprite
     ;
     ; Point DE to sat_buffer_y[sat_buffer_index].
@@ -101,7 +103,7 @@
     ld a,(load_mode)
     cp DESCENDING
     jp z,+
-      .rept HARDWARE_SPRITE_MAX
+      .rept SAT_Y_SIZE
         outi
       .endr
       jp ++
@@ -109,8 +111,8 @@
       .rept PRIORITY_SPRITES
         outi
       .endr
-      ld hl,sat_buffer_y+HARDWARE_SPRITE_MAX-1  ; Point to last y-value in buffer.
-      .rept HARDWARE_SPRITE_MAX-PRIORITY_SPRITES
+      ld hl,sat_buffer_y+SAT_Y_SIZE-1  ; Point to last y-value in buffer.
+      .rept HARDWARE_SPRITES-PRIORITY_SPRITES
         outd                    ; Output and decrement HL, thus going
       .endr                     ; backwards (descending) through the buffer.
     ++:
@@ -123,7 +125,7 @@
     ld a,(load_mode)
     cp DESCENDING
     jp z,+
-      .rept 128
+      .rept SAT_XC_SIZE
         outi
       .endr
       jp ++
@@ -133,9 +135,9 @@
         outi
       .endr
       ;
-      ld hl,sat_buffer_xc+126
+      ld hl,sat_buffer_xc+SAT_XC_SIZE-2
       ld de,-4
-      .rept HARDWARE_SPRITE_MAX-PRIORITY_SPRITES
+      .rept HARDWARE_SPRITES-PRIORITY_SPRITES
         outi
         outi
         add hl,de
@@ -169,12 +171,12 @@
     ;
     ld hl,clean_buffer
     ld de,sat_buffer_y
-    ld bc,HARDWARE_SPRITE_MAX
+    ld bc,HARDWARE_SPRITES
     ldir
     ;
   ret
   clean_buffer:                       ; Data for a clean sat Y buffer.
-    .rept HARDWARE_SPRITE_MAX
+    .rept HARDWARE_SPRITES
       .db $00
     .endr
 .ends
