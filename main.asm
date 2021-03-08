@@ -1,8 +1,9 @@
 ; main.asm
 .sdsctag 1.0, "Mighty Knights", "Hack n' slash", "hang-on Entertainment"
 ; -----------------------------------------------------------------------------
-; SOFTWARE DEFINITIONS
+; GLOBAL DEFINITIONS
 ; -----------------------------------------------------------------------------
+.include "sms_constants.asm"
 .equ ENABLED $ff
 .equ DISABLED 0
 ; -----------------------------------------------------------------------------
@@ -22,7 +23,6 @@
   banks 8
 .endro
 ;
-.include "sms_constants.asm"
 .include "mighty_knights_lib.asm"        
 ; -----------------------------------------------------------------------------
 .ramsection "main variables" slot 3
@@ -141,12 +141,8 @@
     ; Begin general updating (UPDATE).
     call refresh_sat_handler
     ;
-    ld ix,my_sprite_data
+    ld ix,c_sprite
     call add_sprite
-    jp +
-      my_sprite_data:
-        .db $0F $0F $01
-    +:
     ;
   jp main_loop
 .ends
@@ -168,4 +164,7 @@
     .db $00 $00 $c0 $c0
     .db $00 $00 $c0 $c0
     .db $00 $ff $00 $00
+  ;
+  c_sprite:
+    .db $0F $0F $01
 .ends

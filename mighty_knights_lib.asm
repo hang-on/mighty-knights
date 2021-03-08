@@ -51,35 +51,26 @@
     jp nc,exit_add_sprite
     ;
     ; Point DE to sat_buffer_y[sat_buffer_index].
-    ld de,sat_buffer_y
-    add a,e
-    ld e,a
-    ld a,0
-    adc a,d
-    ld d,a
+    ld hl,sat_buffer_y
+    call offset_byte_table
     ;
     ; Retrieve Y and X coords.
     ld a,(ix+0)
-    ld (de),a               ; Write the Y to the sprite buffer.
-    inc de
+    ld (hl),a               ; Write the Y to the sprite buffer.
+    inc hl
     ld a,SPRITE_TERMINATOR
-    ld (de),a
+    ld (hl),a
     ;
     ; Point DE to sat_buffer_xc[sat_buffer_index].
     ld a,(sat_buffer_index)
-    add a,a               ; Table elements are words!
-    ld de,sat_buffer_xc
-    add a,e
-    ld e,a
-    ld a,0
-    adc a,d
-    ld d,a
+    ld hl,sat_buffer_xc
+    call offset_word_table
     ;
     ld a,(ix+1)                ; Get the x-pos.
-    ld (de),a             ; Write it to the buffer.
+    ld (hl),a             ; Write it to the buffer.
     ld a,(ix+2)
-    inc de
-    ld (de),a             ; Write it to the buffer
+    inc hl
+    ld (hl),a             ; Write it to the buffer
     ;
     ld hl,sat_buffer_index
     inc (hl)
@@ -258,6 +249,32 @@
       ld a,c
       or b
     jp nz,-
+  ret
+.ends
+; -----------------------------------------------------------------------------
+.section "Offset table" free
+; -----------------------------------------------------------------------------
+  ; Offset base address (in HL) of a table of bytes or words. 
+  ; Uses: A, HL
+  offset_byte_table:
+    ; HL = table of byte values
+    ; A  = offset to apply
+    add a,l
+    ld l,a
+    ld a,0
+    adc a,h
+    ld h,a
+  ret
+  ;
+  offset_word_table:
+    ; HL = table of word values
+    ; A  = offset to apply
+    add a,a              
+    add a,l
+    ld l,a
+    ld a,0
+    adc a,h
+    ld h,a
   ret
 .ends
 ; -----------------------------------------------------------------------------
