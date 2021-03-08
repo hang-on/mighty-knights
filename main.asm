@@ -139,24 +139,15 @@
     ; Begin general updating (UPDATE).
     call refresh_sat_handler
     ;
-    ld ix,c_sprite_1
-    call add_sprite
-    ld ix,c_sprite_2
-    call add_sprite
-    ld ix,c_sprite_3
-    call add_sprite
-    ld ix,c_sprite_4
-    call add_sprite
-    ld ix,c_sprite_5
-    call add_sprite
-    ld ix,c_sprite_6
-    call add_sprite
-    ld ix,c_sprite_7
-    call add_sprite
-    ld ix,c_sprite_8
-    call add_sprite
-    ld ix,c_sprite_9
-    call add_sprite
+    ; Put C-sprites on the screen.
+    ld b,9
+    ld ix,c_sprites
+    -:
+      call add_sprite
+      inc ix
+      inc ix
+      inc ix
+    djnz -
     ;
   jp main_loop
 .ends
@@ -179,23 +170,14 @@
     .db $00 $00 $c0 $c0
     .db $00 $ff $00 $00
   ;
-  c_sprite_1:
+  c_sprites:
     .db $0F $0F $01
-  c_sprite_2:  
     .db $0F $18 $01
-  c_sprite_3:  
     .db $0F $21 $01
-  c_sprite_4:  
     .db $0F $2A $01
-  c_sprite_5:  
     .db $0F $33 $01
-  c_sprite_6:  
     .db $0F $3C $01
-  c_sprite_7:  
     .db $0F $45 $01
-  c_sprite_8:  
     .db $0F $4E $01
-  c_sprite_9:  
     .db $0F $57 $01
-
 .ends
