@@ -57,7 +57,7 @@
     ;
     ; Test for sprite overflow (more than 64 hardware sprites at once).
     ld a,(sat_buffer_index)
-    cp 64
+    cp HARDWARE_SPRITE_MAX
     jp nc,exit_add_sprite
     ;
     ; Point DE to sat_buffer_y[sat_buffer_index].
@@ -173,7 +173,7 @@
     ldir
     ;
   ret
-  clean_buffer:
+  clean_buffer:                       ; Data for a clean sat Y buffer.
     .rept HARDWARE_SPRITE_MAX
       .db $00
     .endr
