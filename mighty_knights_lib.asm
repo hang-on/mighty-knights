@@ -41,8 +41,8 @@
   add_sprite:
     ; Add a sprite of size = 1 character to the SAT.
     ; Entry: IX = Pointer to 3 bytes: Y X C
-    ; Exit:
-    ; Uses: ?
+    ; Exit: None
+    ; Uses: A, HL, IX.
     ;
     ; Test for sprite overflow (more than 64 hardware sprites at once).
     ld a,(sat_buffer_index)
@@ -88,11 +88,7 @@
       ;
       ; Load y-coordinates.
       ld hl,SAT_Y_START
-      ld a,l
-      out (CONTROL_PORT),a
-      ld a,h
-      or VRAM_WRITE_COMMAND
-      out (CONTROL_PORT),a
+      call setup_vram_write
       ld hl,sat_buffer_y
       ld c,DATA_PORT
       .rept 64
@@ -101,11 +97,7 @@
       ;
       ; Load x-coordinates and character codes.
       ld hl,SAT_XC_START
-      ld a,l
-      out (CONTROL_PORT),a
-      ld a,h
-      or VRAM_WRITE_COMMAND
-      out (CONTROL_PORT),a
+      call setup_vram_write
       ld hl,sat_buffer_xc
       ld c,DATA_PORT
       .rept 128
@@ -309,6 +301,18 @@
     out (CONTROL_PORT),a
     ld a,REGISTER_WRITE_COMMAND
     or b
+    out (CONTROL_PORT),a
+  ret
+.ends
+; -----------------------------------------------------------------------------
+.section "Setup for VRAM Write Operation" free
+; -----------------------------------------------------------------------------
+  ; hl = address in vram
+  setup_vram_write:
+    ld a,l
+    out (CONTROL_PORT),a
+    ld a,h
+    or VRAM_WRITE_COMMAND
     out (CONTROL_PORT),a
   ret
 .ends
