@@ -23,6 +23,7 @@
   banks 8
 .endro
 ;
+.include "psglib.inc"
 .include "mighty_knights_lib.asm"        
 ; -----------------------------------------------------------------------------
 .ramsection "main variables" slot 3
@@ -95,6 +96,8 @@
   init:
   ; Run this function once (on game load/reset). 
     ;
+    call PSGInit
+    ;
     call clear_vram
     ; Set the VDP display and interrupt mode.
     ld a,%00100110          ; Scroll vertically and horizontally, blank left
@@ -124,6 +127,9 @@
     ld a,ENABLED
     call set_display
     ;
+    ld hl,adventure_awaits
+    call PSGPlay
+    ;
   jp main_loop
   ;
   ; ---------------------------------------------------------------------------
@@ -137,6 +143,8 @@
     ;
     ; -------------------------------------------------------------------------
     ; Begin general updating (UPDATE).
+    call PSGFrame
+    call PSGSFXFrame
     call refresh_sat_handler
     ;
     ; Put C-sprites on the screen.
@@ -180,4 +188,7 @@
     .db $0F $45 $01
     .db $0F $4E $01
     .db $0F $57 $01
+  ;
+  adventure_awaits:
+    .incbin "adventure_awaits_compr.psg"
 .ends
