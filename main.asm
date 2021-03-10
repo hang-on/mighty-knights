@@ -118,6 +118,10 @@
     ld de,SPRITE_BANK_START + CHARACTER_SIZE
     ld hl,c_character
     call load_vram
+    ;
+    ld hl,adventure_awaits
+    call PSGPlay
+    ;
     ei
     halt
     halt
@@ -126,9 +130,6 @@
     ;
     ld a,ENABLED
     call set_display
-    ;
-    ld hl,adventure_awaits
-    call PSGPlay
     ;
   jp main_loop
   ;

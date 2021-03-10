@@ -336,4 +336,32 @@
   ret
 .ends
 ;
+;
+; -----------------------------------------------------------------------------
+.section "Scratchpad" free
+; -----------------------------------------------------------------------------
+  ; Temporary sandbox for prototyping routines.
+  ;
+  initialize_vdp_registers:
+    ; HL = init data
+    ld b,11
+    ld c,0
+    ld de,vdp_register_0
+    -:
+      ld a,(hl)
+      ld (de),a
+      out (CONTROL_PORT),a
+      ld a,REGISTER_WRITE_COMMAND
+      or c
+      out (CONTROL_PORT),a
+      inc hl
+      inc de
+      inc c
+    djnz -
+  ret
+  vdp_register_init:
+    .db %00100110  %10100000 $ff $ff $ff
+    .db $ff $fb $f0 $00 $00 $ff
+.ends
+;
 
