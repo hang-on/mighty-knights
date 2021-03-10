@@ -106,6 +106,8 @@
   ; Run this function once (on game load/reset). 
     ;
     call PSGInit
+    ld hl,adventure_awaits
+    call PSGPlay
     ;
     call clear_vram
     ld hl,vdp_register_init
@@ -121,9 +123,6 @@
     ld de,SPRITE_BANK_START + CHARACTER_SIZE
     ld hl,c_character
     call load_vram
-    ;
-    ld hl,adventure_awaits
-    call PSGPlay
     ;
     ei
     halt
