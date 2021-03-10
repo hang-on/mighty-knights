@@ -134,7 +134,9 @@
     call set_display
     ;
   jp main_loop
-  ;
+  vdp_register_init:
+    .db %00100110  %10100000 $ff $ff $ff
+    .db $ff $fb $f0 $00 $00 $ff
   ; ---------------------------------------------------------------------------
   main_loop:
     ;

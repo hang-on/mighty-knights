@@ -342,8 +342,19 @@
 ; -----------------------------------------------------------------------------
   ; Temporary sandbox for prototyping routines.
   ;
-  initialize_vdp_registers:
-    ; HL = init data
+
+
+.ends
+;
+; -----------------------------------------------------------------------------
+.section "Initialize VDP Registers" free
+; -----------------------------------------------------------------------------
+  ; Load 11 bytes of init values into the 11 VDP registers and the RAM mirror.
+  ; Entry: HL = Pointer to initialization data (11 bytes).
+  ;        DE = Pointer to RAM mirror.
+  ; Exit:  None
+  ; Uses:  A, BC, DE, HL
+    initialize_vdp_registers:
     ld b,11
     ld c,0
     -:
@@ -358,9 +369,4 @@
       inc c
     djnz -
   ret
-  vdp_register_init:
-    .db %00100110  %10100000 $ff $ff $ff
-    .db $ff $fb $f0 $00 $00 $ff
 .ends
-;
-
