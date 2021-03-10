@@ -99,15 +99,9 @@
     call PSGInit
     ;
     call clear_vram
-    ; Set the VDP display and interrupt mode.
-    ld a,%00100110          ; Scroll vertically and horizontally, blank left
-    ld (vdp_register_0),a   ; column, disable raster ints., normal sprite pos.
-    ld b,0
-    call set_register
-    ld a,%10100000          ; Disable display, enable frame ints, 8 x 8 sprites.
-    ld (vdp_register_1),a
-    ld b,1
-    call set_register
+    ld hl,vdp_register_init
+    ld de,vdp_register_0
+    call initialize_vdp_registers
     ;
     ld a,0
     ld b,demo_palette_end-demo_palette

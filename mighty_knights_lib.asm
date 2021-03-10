@@ -346,7 +346,6 @@
     ; HL = init data
     ld b,11
     ld c,0
-    ld de,vdp_register_0
     -:
       ld a,(hl)
       ld (de),a
