@@ -28,7 +28,7 @@
             "command": "cmd",
             "args": [
                 "/c",
-                "C:\\Users\\ANSJ\\Documents\\Batch\\run-emu.bat"
+                "C:\\Users\\ANSJ\\Documents\\Batch\\run-emu-new.bat"
             ],
         },
 

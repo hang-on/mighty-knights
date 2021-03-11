@@ -104,11 +104,9 @@
 0000:06d9 main_loop
 0002:8000 demo_palette
 0002:8020 demo_palette_end
-0002:8020 c_character
-0002:8040 c_sprites
-0002:805b arthur_standing_0
-0002:813b arthur_standing_0_layout
-0002:8150 adventure_awaits
+0002:8020 arthur_standing_0
+0002:8100 arthur_standing_0_layout
+0002:8115 adventure_awaits
 0000:0050 *WLA_SDSC_PRG_AUTHOR_PTR
 0000:0783 *WLA_SDSC_PRG_NAME_PTR
 0000:07a1 *WLA_SDSC_PRG_NOTES_PTR
