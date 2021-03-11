@@ -34,17 +34,6 @@
   vblank_counter db
   hline_counter db
   pause_flag db
-  vdp_register_0 db
-  vdp_register_1 db
-  vdp_register_2 db
-  vdp_register_3 db
-  vdp_register_4 db
-  vdp_register_5 db
-  vdp_register_6 db
-  vdp_register_7 db
-  vdp_register_8 db
-  vdp_register_9 db
-  vdp_register_10 db
 .ends
 .org 0
 .bank 0 slot 0
@@ -134,7 +123,7 @@
     call set_display
     ;
   jp main_loop
-  vdp_register_init:
+    vdp_register_init:
     .db %00100110  %10100000 $ff $ff $ff
     .db $ff $fb $f0 $00 $00 $ff
   ; ---------------------------------------------------------------------------

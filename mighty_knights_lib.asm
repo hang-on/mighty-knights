@@ -181,6 +181,74 @@
     .endr
 .ends
 ; -----------------------------------------------------------------------------
+.ramsection "VDP Register Variables" slot 3
+; -----------------------------------------------------------------------------
+  vdp_register_0 db
+  vdp_register_1 db
+  vdp_register_2 db
+  vdp_register_3 db
+  vdp_register_4 db
+  vdp_register_5 db
+  vdp_register_6 db
+  vdp_register_7 db
+  vdp_register_8 db
+  vdp_register_9 db
+  vdp_register_10 db
+.ends
+; -----------------------------------------------------------------------------
+.section "VDP Register Handler" free
+; -----------------------------------------------------------------------------
+  initialize_vdp_registers:
+    ; Load 11 bytes of init values into the 11 VDP registers and the RAM mirror.
+    ; Entry: HL = Pointer to initialization data (11 bytes).
+    ;        DE = Pointer to RAM mirror.
+    ; Exit:  None
+    ; Uses:  A, BC, DE, HL
+    ld b,11
+    ld c,0
+    -:
+      ld a,(hl)
+      ld (de),a
+      out (CONTROL_PORT),a
+      ld a,REGISTER_WRITE_COMMAND
+      or c
+      out (CONTROL_PORT),a
+      inc hl
+      inc de
+      inc c
+    djnz -
+  ret
+  ;
+  set_display:
+    ; Use value passed in A to either set or reset the display bit of vdp
+    ; register 1 mirror. Then load the whole mirror into the actual register.
+    ; Entry: A = ENABLED/DISABLED (assuming these constants are defined).
+    ; Assumes the presence of variable: vpd_register_1.
+    ld hl,vdp_register_1
+    cp ENABLED
+    jp z,+
+      res 6,(hl)
+      jp ++
+    +:
+      set 6,(hl)
+    ++:
+    ld a,(hl)
+    ld b,1
+    call set_register
+  ret
+  ;
+  set_register:
+    ; Write to target register.
+    ; Entry: A = byte to be loaded into vdp register.
+    ;        B = target register 0-10.
+    ; Uses: AF, B
+    out (CONTROL_PORT),a
+    ld a,REGISTER_WRITE_COMMAND
+    or b
+    out (CONTROL_PORT),a
+  ret
+.ends
+; -----------------------------------------------------------------------------
 ; Misc. routines sorted alphabetically
 ; -----------------------------------------------------------------------------
 .section "clear_vram" free
@@ -274,41 +342,6 @@
   ret
 .ends
 ; -----------------------------------------------------------------------------
-.section "set_display" free
-; -----------------------------------------------------------------------------
-  set_display:
-    ; Use value passed in A to either set or reset the display bit of vdp
-    ; register 1 mirror. Then load the whole mirror into the actual register.
-    ; Entry: A = ENABLED/DISABLED (assuming these constants are defined).
-    ; Assumes the presence of variable: vpd_register_1.
-    ld hl,vdp_register_1
-    cp ENABLED
-    jp z,+
-      res 6,(hl)
-      jp ++
-    +:
-      set 6,(hl)
-    ++:
-    ld a,(hl)
-    ld b,1
-    call set_register
-  ret
-.ends
-; -----------------------------------------------------------------------------
-.section "Set register (vdp)" free
-; -----------------------------------------------------------------------------
-  ; Write to target register.
-  ; Entry: A = byte to be loaded into vdp register.
-  ;        B = target register 0-10.
-  ; Uses: AF, B
-  set_register:
-    out (CONTROL_PORT),a
-    ld a,REGISTER_WRITE_COMMAND
-    or b
-    out (CONTROL_PORT),a
-  ret
-.ends
-; -----------------------------------------------------------------------------
 .section "Setup for VRAM Write Operation" free
 ; -----------------------------------------------------------------------------
   ; hl = address in vram
@@ -344,29 +377,4 @@
   ;
 
 
-.ends
-;
-; -----------------------------------------------------------------------------
-.section "Initialize VDP Registers" free
-; -----------------------------------------------------------------------------
-  ; Load 11 bytes of init values into the 11 VDP registers and the RAM mirror.
-  ; Entry: HL = Pointer to initialization data (11 bytes).
-  ;        DE = Pointer to RAM mirror.
-  ; Exit:  None
-  ; Uses:  A, BC, DE, HL
-    initialize_vdp_registers:
-    ld b,11
-    ld c,0
-    -:
-      ld a,(hl)
-      ld (de),a
-      out (CONTROL_PORT),a
-      ld a,REGISTER_WRITE_COMMAND
-      or c
-      out (CONTROL_PORT),a
-      inc hl
-      inc de
-      inc c
-    djnz -
-  ret
 .ends
