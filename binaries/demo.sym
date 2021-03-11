@@ -2,10 +2,8 @@
 ; wla symbolic information for "binaries\demo.sms".
 
 [labels]
-0000:079f PSGInit
-0000:073e PSGPlayNoRepeat
-0000:0742 PSGPlay
-0000:0765 PSGStop
+0000:0772 PSGInit
+0000:0738 PSGStop
 0000:061b PSGSFXStop
 0000:0666 _skip_chn2
 0000:068b _skip_chn3
@@ -84,16 +82,16 @@
 0000:0416 refresh_sat_handler
 0000:043e clean_buffer
 0000:c0e7 vdp_registers
-0000:0702 initialize_vdp_registers
-0000:0718 set_display
-0000:072e set_register
-0000:078b clear_vram
-0000:07dc load_cram
+0000:06fc initialize_vdp_registers
+0000:0712 set_display
+0000:0728 set_register
+0000:075e clear_vram
+0000:07af load_cram
 0000:0025 load_vram
-0000:07bf offset_byte_table
-0000:07c6 offset_word_table
-0000:07f5 setup_vram_write
-0000:07e9 wait_for_vblank
+0000:0792 offset_byte_table
+0000:0799 offset_word_table
+0000:07c8 setup_vram_write
+0000:07bc wait_for_vblank
 0000:c0f2 temp_byte
 0000:c0f3 temp_word
 0000:c0f4 vblank_counter
@@ -102,13 +100,15 @@
 0000:0000 boot
 0000:0021 initial_memory_control_register_values
 0000:0696 init
-0000:06d4 vdp_register_init
-0000:06df main_loop
+0000:06ce vdp_register_init
+0000:06d9 main_loop
 0002:8000 demo_palette
 0002:8020 demo_palette_end
 0002:8020 c_character
 0002:8040 c_sprites
-0002:805b adventure_awaits
+0002:805b arthur_standing_0
+0002:813b arthur_standing_0_layout
+0002:8150 adventure_awaits
 0000:0050 *WLA_SDSC_PRG_AUTHOR_PTR
-0000:07b0 *WLA_SDSC_PRG_NAME_PTR
-0000:07ce *WLA_SDSC_PRG_NOTES_PTR
+0000:0783 *WLA_SDSC_PRG_NAME_PTR
+0000:07a1 *WLA_SDSC_PRG_NOTES_PTR

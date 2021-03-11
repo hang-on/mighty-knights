@@ -95,8 +95,8 @@
   ; Run this function once (on game load/reset). 
     ;
     call PSGInit
-    ld hl,adventure_awaits
-    call PSGPlay
+    ;ld hl,adventure_awaits
+    ;call PSGPlay
     ;
     call clear_vram
     ld hl,vdp_register_init
@@ -111,9 +111,9 @@
     ld hl,demo_palette
     call load_cram
     ;
-    ld bc,CHARACTER_SIZE
+    ld bc,CHARACTER_SIZE*7
     ld de,SPRITE_BANK_START + CHARACTER_SIZE
-    ld hl,c_character
+    ld hl,arthur_standing_0
     call load_vram
     ;
     ei
@@ -145,8 +145,8 @@
     call refresh_sat_handler
     ;
     ; Put C-sprites on the screen.
-    ld b,9
-    ld ix,c_sprites
+    ld b,7
+    ld ix,arthur_standing_0_layout
     -:
       call add_sprite
       inc ix
@@ -165,26 +165,30 @@
     .db $00 $10 $12 $18 $06 $15 $2A $3F $13 $0B $0F $0C $38 $26 $27 $2F
     demo_palette_end:
   ;
-  c_character:
-    .db $ff $00 $ff $00
-    .db $00 $00 $c0 $c0
-    .db $00 $00 $c0 $c0
-    .db $00 $00 $c0 $c0
-    .db $00 $00 $c0 $c0
-    .db $00 $00 $c0 $c0
-    .db $00 $00 $c0 $c0
-    .db $00 $ff $00 $00
-  ;
-  c_sprites:
-    .db $0F $0F $01
-    .db $0F $18 $01
-    .db $0F $21 $01
-    .db $0F $2A $01
-    .db $0F $33 $01
-    .db $0F $3C $01
-    .db $0F $45 $01
-    .db $0F $4E $01
-    .db $0F $57 $01
+  arthur_standing_0:
+    ; Tile index $000
+    .db $24 $DB $DB $C3 $24 $DB $DB $C3 $24 $DB $DB $C3 $24 $DB $DB $C3 $27 $D8 $D8 $C0 $27 $D8 $DB $C0 $67 $98 $9B $80 $40 $BE $BC $81
+    ; Tile index $001
+    .db $00 $FF $FF $FF $00 $FF $FF $FF $00 $FF $FF $FF $00 $FF $FF $FF $E0 $1F $1F $1F $F0 $0F $CF $0F $F0 $0F $EF $0F $10 $0F $0F $EF
+    ; Tile index $002
+    .db $DE $18 $3F $18 $86 $00 $7F $00 $9A $18 $7F $18 $D9 $78 $5F $58 $E1 $3D $23 $21 $61 $83 $81 $9D $30 $C1 $C0 $CE $10 $E0 $E0 $EF
+    ; Tile index $003
+    .db $F0 $AF $AF $AF $F0 $EF $EF $EF $70 $6F $EF $6F $30 $0F $CF $0F $E0 $DF $DF $DF $E0 $DF $DF $DF $60 $9F $1F $1F $40 $3F $3F $BF
+    ; Tile index $004
+    .db $10 $EF $E0 $E0 $10 $E8 $E0 $E7 $30 $C8 $C8 $C7 $27 $D8 $D8 $C0 $65 $82 $9A $82 $CF $00 $30 $00 $FF $00 $00 $00 $7F $80 $80 $80
+    ; Tile index $005
+    .db $C0 $3F $3F $3F $60 $1F $1F $9F $30 $CF $CF $0F $10 $EF $EF $0F $98 $07 $67 $07 $CC $03 $33 $03 $FC $03 $03 $03 $F8 $07 $07 $07
+    ; Tile index $006
+    .db $00 $FF $FF $FF $18 $E7 $E7 $E7 $24 $DB $DB $C3 $24 $DB $DB $C3 $24 $DB $DB $C3 $24 $DB $DB $C3 $24 $DB $DB $C3 $24 $DB $DB $C3
+;
+  arthur_standing_0_layout:
+    .db 16 16 $01
+    .db 16 24 $02
+    .db 24 16 $03
+    .db 24 24 $04
+    .db 32 16 $05
+    .db 32 24 $06
+    .db 8 16 $07
   ;
   adventure_awaits:
     .incbin "adventure_awaits_compr.psg"
