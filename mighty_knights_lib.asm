@@ -183,17 +183,7 @@
 ; -----------------------------------------------------------------------------
 .ramsection "VDP Register Variables" slot 3
 ; -----------------------------------------------------------------------------
-  vdp_register_0 db
-  vdp_register_1 db
-  vdp_register_2 db
-  vdp_register_3 db
-  vdp_register_4 db
-  vdp_register_5 db
-  vdp_register_6 db
-  vdp_register_7 db
-  vdp_register_8 db
-  vdp_register_9 db
-  vdp_register_10 db
+  vdp_registers dsb 11
 .ends
 ; -----------------------------------------------------------------------------
 .section "VDP Register Handler" free
@@ -201,9 +191,9 @@
   initialize_vdp_registers:
     ; Load 11 bytes of init values into the 11 VDP registers and the RAM mirror.
     ; Entry: HL = Pointer to initialization data (11 bytes).
-    ;        DE = Pointer to RAM mirror.
     ; Exit:  None
     ; Uses:  A, BC, DE, HL
+    ld de,vdp_registers
     ld b,11
     ld c,0
     -:
@@ -224,7 +214,7 @@
     ; register 1 mirror. Then load the whole mirror into the actual register.
     ; Entry: A = ENABLED/DISABLED (assuming these constants are defined).
     ; Assumes the presence of variable: vpd_register_1.
-    ld hl,vdp_register_1
+    ld hl,vdp_registers+1
     cp ENABLED
     jp z,+
       res 6,(hl)

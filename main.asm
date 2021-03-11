@@ -100,7 +100,6 @@
     ;
     call clear_vram
     ld hl,vdp_register_init
-    ld de,vdp_register_0
     call initialize_vdp_registers
     ;
     ld a,0
