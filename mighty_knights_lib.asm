@@ -222,10 +222,10 @@
   set_display:
     ; Use value passed in A to either set or reset the display bit of vdp
     ; register 1 mirror. Then load the whole mirror into the actual register.
-    ; Entry: A = ENABLED/DISABLED (assuming these constants are defined).
-    ; Assumes the presence of variable: vpd_register_1.
+    ; Entry: A = $ff = enable display, else disable display.
+    ; Uses: A, B, HL 
     ld hl,vdp_registers+1
-    cp ENABLED
+    cp $ff
     jp z,+
       res 6,(hl)
       jp ++
@@ -238,10 +238,10 @@
   ret
   ;
   set_register:
-    ; Write to target register. Fixme: and more
+    ; Write to target register and register mirror.
     ; Entry: A = byte to be loaded into vdp register.
     ;        B = target register 0-10.
-    ; Uses: AF, B Fix me!
+    ; Uses: AF, B, DE, HL
     ld hl,vdp_registers
     ld d,0
     ld e,b
