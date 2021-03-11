@@ -102,9 +102,8 @@
     ld hl,vdp_register_init
     call initialize_vdp_registers
     ;
-    ; Test set register
-    ld a,$05
-    ld b,7
+    ld a,5
+    ld b,BORDER_COLOR
     call set_register
     ;
     ld a,0
