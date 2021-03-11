@@ -102,6 +102,11 @@
     ld hl,vdp_register_init
     call initialize_vdp_registers
     ;
+    ; Test set register
+    ld a,$05
+    ld b,7
+    call set_register
+    ;
     ld a,0
     ld b,demo_palette_end-demo_palette
     ld hl,demo_palette

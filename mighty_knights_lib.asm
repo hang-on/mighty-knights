@@ -228,10 +228,15 @@
   ret
   ;
   set_register:
-    ; Write to target register.
+    ; Write to target register. Fixme: and more
     ; Entry: A = byte to be loaded into vdp register.
     ;        B = target register 0-10.
-    ; Uses: AF, B
+    ; Uses: AF, B Fix me!
+    ld hl,vdp_registers
+    ld d,0
+    ld e,b
+    add hl,de
+    ld (hl),A
     out (CONTROL_PORT),a
     ld a,REGISTER_WRITE_COMMAND
     or b
