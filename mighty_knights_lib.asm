@@ -53,9 +53,9 @@
 ; -----------------------------------------------------------------------------   
   add_sprite:
     ; Add a sprite of size = 1 character to the SAT.
-    ; Entry: IX = Pointer to 3 bytes: Y X C
+    ; Entry: 
     ; Exit: None
-    ; Uses: A, HL, IX.
+    ; Uses: 
     ;
     ; Test for sprite overflow (more than 64 hardware sprites at once).
     ld a,(sat_buffer_index)
@@ -66,17 +66,19 @@
     ld hl,sat_buffer_y
     call offset_byte_table
     ;
-    ; Retrieve Y and X coords.
-    ld a,(ix+0)
-    ld (hl),a               ; Write the Y to the sprite buffer.
+    ; 
+    ld a,d
+    add a,(ix+0)
+    ld (hl),a          
     ;
     ; Point DE to sat_buffer_xc[sat_buffer_index].
     ld a,(sat_buffer_index)
     ld hl,sat_buffer_xc
     call offset_word_table
     ;
-    ld a,(ix+1)                ; Get the x-pos.
-    ld (hl),a             ; Write it to the buffer.
+    ld a,e                ; Get the x-pos.
+    add a,(ix+1)             ; Write it to the buffer.
+    ld (hl),a
     ld a,(ix+2)
     inc hl
     ld (hl),a             ; Write it to the buffer
@@ -392,13 +394,13 @@
   ret
 
   my_metasprite:
-  .db 7
+  ;.db 7
   ; Fra midt på metasprite, nederst (offsets)
-  .db -8, -8, 4
-  .db -8, 0, 5
-  .db -16, -8, 2
-  .db -16, 0, 3
-  .db -24, -8, 0
-  .db -24, 0, 1
-  .db -32, -8, 6
+  .db -24, -8, 1
+  .db -24, 0, 2
+  .db -16, -8, 3
+  .db -16, 0, 4
+  .db -8, -8, 5
+  .db -8, 0, 6
+  .db -32, -8, 7
 .ends

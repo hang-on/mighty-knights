@@ -144,10 +144,12 @@
     call PSGSFXFrame
     call refresh_sat_handler
     ;
-    ; Put Arthur on the screen.
+    ; xxx
     ld b,7
-    ld ix,arthur_standing_0_layout
+    ld ix,my_metasprite
     -:
+      ld d,50
+      ld e,50
       call add_sprite
       inc ix
       inc ix
