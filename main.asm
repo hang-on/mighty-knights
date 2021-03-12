@@ -144,14 +144,15 @@
     ; Put some standing Arthurs (metasprites) on screen.
     ld hl,origins
     ld ix,arthur_standing_0_layout
-    ld b,5
-    -:
+    .rept 5
       ld d,(hl)
       inc hl
       ld e,(hl)
       inc hl
-      call add_meta_sprite
-    djnz -
+      SAVE_REGISTERS
+        call add_meta_sprite
+      RESTORE_REGISTERS
+    .endr
     ;
   jp main_loop
 .ends

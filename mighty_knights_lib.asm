@@ -57,7 +57,7 @@
     ;        E = X origin.
     ;        IX = Pointer to offset + tile block.
     ; Exit: None
-    ; Uses: 
+    ; Uses: A, DE, HL, IX (Warning: Do not use B!)
     ;
     ; Test for sprite overflow (more than 64 hardware sprites at once).
     ld a,(sat_buffer_index)
@@ -263,9 +263,8 @@
   ;        E = X origin.
   ;        IX = Pointer to metasprite data block.
   ; Exit:  None.
-  ; Uses:  None - all registers saved.
+  ; Uses:  ?
   add_meta_sprite:
-    SAVE_REGISTERS
     ld b,(ix+0)
     inc ix
     -:
@@ -274,7 +273,6 @@
       inc ix
       inc ix
     djnz -
-  RESTORE_REGISTERS
   ret
 .ends
 ; -----------------------------------------------------------------------------
