@@ -95,7 +95,7 @@
   ; Run this function once (on game load/reset). 
     ;
     call PSGInit
-    ;ld hl,adventure_awaits
+    ld hl,adventure_awaits
     ;call PSGPlay
     ;
     call clear_vram
@@ -144,7 +144,7 @@
     call PSGSFXFrame
     call refresh_sat_handler
     ;
-    ; Put C-sprites on the screen.
+    ; Put Arthur on the screen.
     ld b,7
     ld ix,arthur_standing_0_layout
     -:

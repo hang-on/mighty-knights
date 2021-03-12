@@ -375,11 +375,45 @@
 .ends
 ;
 ;
+.ramsection "Metasprite buffer" slot 3
+  metasprite_buffer dsb 3*12
+.ends
 ; -----------------------------------------------------------------------------
 .section "Scratchpad" free
 ; -----------------------------------------------------------------------------
   ; Temporary sandbox for prototyping routines.
   ;
+  add_metasprite:
+    ; hl = metasprite
+    ; d = y
+    ; e = x
+    ld a,(hl)
+    ld b,A            ; could it be save partial info to sprite?
+    -:                ; and on third info, put sprite in buffer...
+      inc hl
+      ld a,(hl) ; get y-offset
+      add a,d
+      ; save this..
+      inc hl
+      ld a,(hl)
+      add a, e
+      ; save this
+      inc hl
+      ld a,(hl)
+      ; save this (tile)
 
+    djnz -
 
+  ret
+
+  my_metasprite:
+  .db 7
+  ; Fra midt på metasprite, nederst (offsets)
+  .db -8, -8, 4
+  .db -8, 0, 5
+  .db -16, -8, 2
+  .db -16, 0, 3
+  .db -24, -8, 0
+  .db -24, 0, 1
+  .db -32, -8, 6
 .ends
