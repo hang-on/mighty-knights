@@ -148,6 +148,31 @@
     ld ix,arthur_standing_0_layout
     call add_meta_sprite
     ;
+    ; Add Arthur
+    ld d,96                         ; Y origin.
+    ld e,152                        ; X origin.
+    ld ix,arthur_standing_0_layout
+    call add_meta_sprite
+    ;
+    ; Add Arthur
+    ld d,96                         ; Y origin.
+    ld e,176                        ; X origin.
+    ld ix,arthur_standing_0_layout
+    call add_meta_sprite
+    ;
+    ; Add Arthur
+    ld d,96                         ; Y origin.
+    ld e,200                        ; X origin.
+    ld ix,arthur_standing_0_layout
+    call add_meta_sprite
+    ;
+    ; Add Arthur
+    ld d,96                         ; Y origin.
+    ld e,224                        ; X origin.
+    ld ix,arthur_standing_0_layout
+    call add_meta_sprite
+    ;
+
   jp main_loop
 .ends
 .bank 2 slot 2
