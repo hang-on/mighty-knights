@@ -141,7 +141,7 @@
     call PSGFrame
     call PSGSFXFrame
     call refresh_sat_handler
-    ;
+    ; Put some standing Arthurs (metasprites) on screen.
     ld hl,origins
     ld ix,arthur_standing_0_layout
     ld b,5
