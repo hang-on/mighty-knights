@@ -69,9 +69,6 @@
     ; Retrieve Y and X coords.
     ld a,(ix+0)
     ld (hl),a               ; Write the Y to the sprite buffer.
-   ; inc hl
-   ; ld a,SPRITE_TERMINATOR
-   ; ld (hl),a
     ;
     ; Point DE to sat_buffer_xc[sat_buffer_index].
     ld a,(sat_buffer_index)
@@ -383,26 +380,12 @@
 ; -----------------------------------------------------------------------------
   ; Temporary sandbox for prototyping routines.
   ;
-  add_metasprite:
-    ; hl = metasprite
-    ; d = y
-    ; e = x
-    ld a,(hl)
-    ld b,A            ; could it be save partial info to sprite?
-    -:                ; and on third info, put sprite in buffer...
-      inc hl
-      ld a,(hl) ; get y-offset
-      add a,d
-      ; save this..
-      inc hl
-      ld a,(hl)
-      add a, e
-      ; save this
-      inc hl
-      ld a,(hl)
-      ; save this (tile)
-
-    djnz -
+  add_sprite_2:
+  ; y, x origin, c char
+  ; hl offset
+  ; apply offset
+  ; put in buffer
+  ; return, with hl pointing to next offset pair (for consecutive calls)
 
   ret
 
