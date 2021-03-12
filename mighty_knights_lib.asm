@@ -57,7 +57,8 @@
     ;        E = X origin.
     ;        IX = Pointer to offset + tile block.
     ; Exit: None
-    ; Uses: A, DE, HL, IX (Warning: Do not use B!)
+    ; Uses: A, DE, HL, IX (Warning: Do not use B!, as it is used by 
+    ; add_meta_sprite).
     ;
     ; Test for sprite overflow (more than 64 hardware sprites at once).
     ld a,(sat_buffer_index)
