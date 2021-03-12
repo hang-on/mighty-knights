@@ -382,17 +382,6 @@
 ; -----------------------------------------------------------------------------
   ; Temporary sandbox for prototyping routines.
   ;
-  add_sprite_2:
-  ; eller lave det som udv. feature på add sprite. at det får origin Y,x i DE,
-  ;  og så offset y,x og char pointer til table
-  ; y, x origin, c char - man kunne lave char som en del af offset?
-  ; hl offset
-  ; apply offset
-  ; put in buffer
-  ; return, with hl pointing to next offset pair (for consecutive calls)
-
-  ret
-
   add_meta_sprite:
     ; ix = metaspriteblock
     ; d = y-origin, d = x-origin
@@ -406,14 +395,5 @@
     djnz -
   ret
 
-  my_metasprite:
-  .db 7
-  ; Fra midt på metasprite, nederst (offsets)
-  .db -24, -8, 1
-  .db -24, 0, 2
-  .db -16, -8, 3
-  .db -16, 0, 4
-  .db -8, -8, 5
-  .db -8, 0, 6
-  .db -32, -8, 7
+
 .ends

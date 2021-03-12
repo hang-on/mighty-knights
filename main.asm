@@ -144,24 +144,11 @@
     call PSGSFXFrame
     call refresh_sat_handler
     ;
-    ; xxx
+    ; Add Arthur
     ld d,96
     ld e,128
     ld ix,my_metasprite
     call add_meta_sprite
-    
-    jp +
-    ld b,7
-    ld ix,my_metasprite
-    -:
-      ld d,50
-      ld e,50
-      call add_sprite
-      inc ix
-      inc ix
-      inc ix
-    djnz -
-    +:
     ;
   jp main_loop
 .ends
@@ -190,15 +177,17 @@
     ; Tile index $006
     .db $00 $00 $00 $00 $18 $00 $00 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00
 ;
-  arthur_standing_0_layout:
-    .db 16 16 $01
-    .db 16 24 $02
-    .db 24 16 $03
-    .db 24 24 $04
-    .db 32 16 $05
-    .db 32 24 $06
-    .db 8 16 $07
-  ;
+  my_metasprite:
+    .db 7
+    ; Fra midt på metasprite, nederst (offsets)
+    .db -24, -8, 1
+    .db -24, 0, 2
+    .db -16, -8, 3
+    .db -16, 0, 4
+    .db -8, -8, 5
+    .db -8, 0, 6
+    .db -32, -8, 7
+;
   adventure_awaits:
     .incbin "adventure_awaits_compr.psg"
 .ends
