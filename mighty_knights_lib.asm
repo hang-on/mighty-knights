@@ -381,7 +381,9 @@
   ; Temporary sandbox for prototyping routines.
   ;
   add_sprite_2:
-  ; y, x origin, c char
+  ; eller lave det som udv. feature på add sprite. at det får origin Y,x i DE,
+  ;  og så offset y,x og char pointer til table
+  ; y, x origin, c char - man kunne lave char som en del af offset?
   ; hl offset
   ; apply offset
   ; put in buffer
