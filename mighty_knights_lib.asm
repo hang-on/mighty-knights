@@ -35,7 +35,7 @@
 ; -----------------------------------------------------------------------------
 ; SAT Handler
 ; -----------------------------------------------------------------------------
-.equ PRIORITY_SPRITES 1         ; Number of tiles not part of asc/desc flicker.
+.equ PRIORITY_SPRITES 6         ; Number of tiles not part of asc/desc flicker.
 .equ ASCENDING 0
 .equ DESCENDING $ff
 .equ SAT_Y_SIZE HARDWARE_SPRITES
@@ -53,7 +53,9 @@
 ; -----------------------------------------------------------------------------   
   add_sprite:
     ; Add a sprite of size = 1 character to the SAT.
-    ; Entry: 
+    ; Entry: D = Y origin.
+    ;        E = X origin.
+    ;        IX = Pointer to offset + tile block.
     ; Exit: None
     ; Uses: 
     ;
@@ -66,7 +68,6 @@
     ld hl,sat_buffer_y
     call offset_byte_table
     ;
-    ; 
     ld a,d
     add a,(ix+0)
     ld (hl),a          
@@ -255,6 +256,26 @@
 ; -----------------------------------------------------------------------------
 ; Misc. routines sorted alphabetically
 ; -----------------------------------------------------------------------------
+.section "Add metasprite" free
+; -----------------------------------------------------------------------------
+  ; Put a metasprite in the SAT buffer.
+  ; Entry: D = Y origin.
+  ;        E = X origin.
+  ;        IX = Pointer to metasprite data block.
+  ; Exit:  None.
+  ; Uses: A, B, DE, HL, IX
+  add_meta_sprite:
+    ld b,(ix+0)
+    inc ix
+    -:
+      call add_sprite
+      inc ix
+      inc ix
+      inc ix
+    djnz -
+  ret
+.ends
+; -----------------------------------------------------------------------------
 .section "clear_vram" free
 ; -----------------------------------------------------------------------------
   ; Write 00 to all vram addresses.
@@ -382,18 +403,6 @@
 ; -----------------------------------------------------------------------------
   ; Temporary sandbox for prototyping routines.
   ;
-  add_meta_sprite:
-    ; ix = metaspriteblock
-    ; d = y-origin, d = x-origin
-    ld b,(ix+0)
-    inc ix
-    -:
-      call add_sprite
-      inc ix
-      inc ix
-      inc ix
-    djnz -
-  ret
 
 
 .ends

@@ -113,7 +113,7 @@
     ;
     ld bc,CHARACTER_SIZE*7
     ld de,SPRITE_BANK_START + CHARACTER_SIZE
-    ld hl,arthur_standing_0
+    ld hl,arthur_standing_0_tiles
     call load_vram
     ;
     ei
@@ -131,9 +131,7 @@
     .db $ff $fb $f0 $00 $00 $ff
   ; ---------------------------------------------------------------------------
   main_loop:
-    ;
     call wait_for_vblank
-    ;
     ; -------------------------------------------------------------------------
     ; Begin vblank critical code (DRAW).
     call load_sat
@@ -145,9 +143,9 @@
     call refresh_sat_handler
     ;
     ; Add Arthur
-    ld d,96
-    ld e,128
-    ld ix,my_metasprite
+    ld d,96                         ; Y origin.
+    ld e,128                        ; X origin.
+    ld ix,arthur_standing_0_layout
     call add_meta_sprite
     ;
   jp main_loop
@@ -161,25 +159,17 @@
     .db $23 $10 $12 $18 $06 $15 $2A $3F $13 $0B $0F $0C $38 $26 $27 $2F
     demo_palette_end:
   ;
-  arthur_standing_0:
-    ; Tile index $000
+  arthur_standing_0_tiles:
     .db $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $27 $18 $18 $00 $27 $18 $1B $00 $67 $18 $1B $00 $40 $3E $3C $01
-    ; Tile index $001
     .db $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $E0 $00 $00 $00 $F0 $00 $C0 $00 $F0 $00 $E0 $00 $10 $00 $00 $E0
-    ; Tile index $002
     .db $DE $18 $3F $18 $86 $00 $7F $00 $9A $18 $7F $18 $D9 $78 $5F $58 $E1 $3D $23 $21 $61 $03 $01 $1D $30 $01 $00 $0E $10 $00 $00 $0F
-    ; Tile index $003
     .db $F0 $A0 $A0 $A0 $F0 $E0 $E0 $E0 $70 $60 $E0 $60 $30 $00 $C0 $00 $E0 $C0 $C0 $C0 $E0 $C0 $C0 $C0 $60 $80 $00 $00 $40 $00 $00 $80
-    ; Tile index $004
     .db $10 $0F $00 $00 $10 $08 $00 $07 $30 $08 $08 $07 $27 $18 $18 $00 $65 $00 $18 $00 $CF $00 $30 $00 $FF $00 $00 $00 $7F $00 $00 $00
-    ; Tile index $005
     .db $C0 $00 $00 $00 $60 $00 $00 $80 $30 $C0 $C0 $00 $10 $E0 $E0 $00 $98 $00 $60 $00 $CC $00 $30 $00 $FC $00 $00 $00 $F8 $00 $00 $00
-    ; Tile index $006
     .db $00 $00 $00 $00 $18 $00 $00 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00
 ;
-  my_metasprite:
-    .db 7
-    ; Fra midt på metasprite, nederst (offsets)
+  arthur_standing_0_layout:
+    .db 7               ; Number of sprites in metasprite.
     .db -24, -8, 1
     .db -24, 0, 2
     .db -16, -8, 3
