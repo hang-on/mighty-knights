@@ -393,8 +393,21 @@
 
   ret
 
+  add_meta_sprite:
+    ; ix = metaspriteblock
+    ; d = y-origin, d = x-origin
+    ld b,(ix+0)
+    inc ix
+    -:
+      call add_sprite
+      inc ix
+      inc ix
+      inc ix
+    djnz -
+  ret
+
   my_metasprite:
-  ;.db 7
+  .db 7
   ; Fra midt på metasprite, nederst (offsets)
   .db -24, -8, 1
   .db -24, 0, 2

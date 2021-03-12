@@ -2,8 +2,8 @@
 ; wla symbolic information for "binaries\demo.sms".
 
 [labels]
-0000:0791 PSGInit
-0000:0741 PSGStop
+0000:07b1 PSGInit
+0000:0777 PSGStop
 0000:061d PSGSFXStop
 0000:0668 _skip_chn2
 0000:068d _skip_chn3
@@ -82,19 +82,20 @@
 0000:0418 refresh_sat_handler
 0000:0440 clean_buffer
 0000:c10b vdp_registers
-0000:0705 initialize_vdp_registers
-0000:071b set_display
-0000:0731 set_register
-0000:077d clear_vram
-0000:07ce load_cram
+0000:0713 initialize_vdp_registers
+0000:0729 set_display
+0000:073f set_register
+0000:079d clear_vram
+0000:07ee load_cram
 0000:0025 load_vram
-0000:07b1 offset_byte_table
-0000:07b8 offset_word_table
-0000:07e7 setup_vram_write
-0000:07db wait_for_vblank
+0000:07d1 offset_byte_table
+0000:07d8 offset_word_table
+0000:0807 setup_vram_write
+0000:07fb wait_for_vblank
 0000:c0e7 metasprite_buffer
-0000:0767 add_sprite_2
-0000:0768 my_metasprite
+0000:074f add_sprite_2
+0000:0750 add_meta_sprite
+0000:0761 my_metasprite
 0000:c116 temp_byte
 0000:c117 temp_word
 0000:c118 vblank_counter
@@ -111,5 +112,5 @@
 0002:8100 arthur_standing_0_layout
 0002:8115 adventure_awaits
 0000:0050 *WLA_SDSC_PRG_AUTHOR_PTR
-0000:07a2 *WLA_SDSC_PRG_NAME_PTR
-0000:07c0 *WLA_SDSC_PRG_NOTES_PTR
+0000:07c2 *WLA_SDSC_PRG_NAME_PTR
+0000:07e0 *WLA_SDSC_PRG_NOTES_PTR

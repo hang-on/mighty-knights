@@ -145,6 +145,12 @@
     call refresh_sat_handler
     ;
     ; xxx
+    ld d,96
+    ld e,128
+    ld ix,my_metasprite
+    call add_meta_sprite
+    
+    jp +
     ld b,7
     ld ix,my_metasprite
     -:
@@ -155,6 +161,7 @@
       inc ix
       inc ix
     djnz -
+    +:
     ;
   jp main_loop
 .ends
