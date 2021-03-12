@@ -142,37 +142,17 @@
     call PSGSFXFrame
     call refresh_sat_handler
     ;
-    ; Add Arthur
-    ld d,96                         ; Y origin.
-    ld e,128                        ; X origin.
+    ld hl,origins
     ld ix,arthur_standing_0_layout
-    call add_meta_sprite
+    ld b,5
+    -:
+      ld d,(hl)
+      inc hl
+      ld e,(hl)
+      inc hl
+      call add_meta_sprite
+    djnz -
     ;
-    ; Add Arthur
-    ld d,96                         ; Y origin.
-    ld e,152                        ; X origin.
-    ld ix,arthur_standing_0_layout
-    call add_meta_sprite
-    ;
-    ; Add Arthur
-    ld d,96                         ; Y origin.
-    ld e,176                        ; X origin.
-    ld ix,arthur_standing_0_layout
-    call add_meta_sprite
-    ;
-    ; Add Arthur
-    ld d,96                         ; Y origin.
-    ld e,200                        ; X origin.
-    ld ix,arthur_standing_0_layout
-    call add_meta_sprite
-    ;
-    ; Add Arthur
-    ld d,96                         ; Y origin.
-    ld e,224                        ; X origin.
-    ld ix,arthur_standing_0_layout
-    call add_meta_sprite
-    ;
-
   jp main_loop
 .ends
 .bank 2 slot 2
@@ -202,6 +182,9 @@
     .db -8, -8, 5
     .db -8, 0, 6
     .db -32, -8, 7
+;
+  origins:
+    .db 96, 128, 96, 152, 96, 176, 96,200, 96, 224
 ;
   adventure_awaits:
     .incbin "adventure_awaits_compr.psg"

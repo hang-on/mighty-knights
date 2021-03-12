@@ -263,8 +263,9 @@
   ;        E = X origin.
   ;        IX = Pointer to metasprite data block.
   ; Exit:  None.
-  ; Uses: A, B, DE, HL, IX
+  ; Uses: None - all registers saved.
   add_meta_sprite:
+    SAVE_REGISTERS
     ld b,(ix+0)
     inc ix
     -:
@@ -273,6 +274,7 @@
       inc ix
       inc ix
     djnz -
+  RESTORE_REGISTERS
   ret
 .ends
 ; -----------------------------------------------------------------------------
