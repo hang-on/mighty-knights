@@ -407,3 +407,11 @@
 
 
 .ends
+
+.STRUCT object
+y       db
+x       db
+layout  dw
+.ENDST
+
+       
