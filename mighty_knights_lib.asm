@@ -405,13 +405,15 @@
   ; Temporary sandbox for prototyping routines.
   ;
 
-
-.ends
-
 .STRUCT object
 y       db
 x       db
 layout  dw
 .ENDST
+
+.DSTRUCT arthur INSTANCEOF object DATA 100, 100, arthur_standing_0_layout
+
+
+.ends
 
        

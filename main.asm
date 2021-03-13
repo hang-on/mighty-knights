@@ -96,7 +96,7 @@
     ;
     call PSGInit
     ld hl,adventure_awaits
-    call PSGPlay
+    ;call PSGPlay
     ;
     call clear_vram
     ld hl,vdp_register_init
@@ -141,18 +141,8 @@
     call PSGFrame
     call PSGSFXFrame
     call refresh_sat_handler
-    ; Put some standing Arthurs (metasprites) on screen.
-    ld hl,origins
-    ld ix,arthur_standing_0_layout
-    .rept 5
-      ld d,(hl)
-      inc hl
-      ld e,(hl)
-      inc hl
-      SAVE_REGISTERS
-        call add_meta_sprite
-      RESTORE_REGISTERS
-    .endr
+    ;
+    ld a,(arthur.y)
     ;
   jp main_loop
 .ends
