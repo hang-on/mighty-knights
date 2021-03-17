@@ -1,0 +1,4 @@
+Vague initial requirement:
+Write a library that can handle objects.
+
+1. Add a metasprite to a given y,x

@@ -8,8 +8,8 @@
 
   object_tests:
 
-  ; call object_test_1
-  ; call object_test_2_etc...
+
+  
 
   exit_with_failure:
     ld a,8
