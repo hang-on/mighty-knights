@@ -116,10 +116,6 @@
     ld hl,arthur_standing_0_tiles
     call load_vram
     ;
-    call initialize_object_list
-    ld hl,arthur
-    call add_object_to_list
-    ;
     ei
     halt
     halt
@@ -145,9 +141,6 @@
     call PSGFrame
     call PSGSFXFrame
     call refresh_sat_handler
-    ;
-    ld ix,arthur
-    call process_object
     ;
   jp main_loop
 .ends
