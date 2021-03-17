@@ -406,14 +406,57 @@
   ;
 
 .STRUCT object
+status  db
 y       db
 x       db
 layout  dw
 .ENDST
 
-.DSTRUCT arthur INSTANCEOF object DATA 100, 100, arthur_standing_0_layout
+.DSTRUCT arthur INSTANCEOF object DATA ENABLED, 100, 100, arthur_standing_0_layout
+.DSTRUCT dummy  INSTANCEOF object DATA DISABLED, 0, 0, $0000
 
+process_object:
+  
+  
+  ld a,(ix+object.status)
+  cp ENABLED
+  ret nz
+  ;
+  ld d,(ix+object.y)
+  ld e,(ix+object.x)
+  ld l,(ix+object.layout)
+  ld h,(ix+object.layout+1)
+  push hl
+  pop ix
+  call add_meta_sprite
+ret
 
+initialize_object_list:
+  ld b,6
+  ld de,objects
+  -:
+    ld hl,dummy
+    ld a,l
+    ld (de),a
+    ld a,h
+    inc de
+    ld (de),a
+    inc de
+  djnz -
+ret
+
+add_object_to_list:
+  ; fixme: only overwrites the first position in list.
+  ld de,objects ; fixme, this routine should be used to add dummies..
+  ld a,l
+  ld (de),a
+  ld a,h
+  inc de
+  ld (de),a
+  inc de  
+ret
 .ends
-
+.ramsection "Objects" slot 3
+  objects dsb 2*6
+.ends
        
