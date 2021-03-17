@@ -98,7 +98,7 @@
     ;
     call PSGInit
     ld hl,adventure_awaits
-    ;call PSGPlay
+    call PSGPlay
     ;
     call clear_vram
     ld hl,vdp_register_init
@@ -127,7 +127,7 @@
     ld a,ENABLED
     call set_display
 
-    call object_tests
+    ;call object_tests
 
     ;
   jp main_loop
