@@ -1,5 +1,5 @@
 ; main.asm
-.sdsctag 1.0, "Mighty Knights", "Hack n' slash", "hang-on Entertainment"
+;.sdsctag 1.0, "Mighty Knights", "Hack n' slash", "hang-on Entertainment"
 ; -----------------------------------------------------------------------------
 ; GLOBAL DEFINITIONS
 ; -----------------------------------------------------------------------------
@@ -24,7 +24,9 @@
 .endro
 ;
 .include "psglib.inc"
-.include "mighty_knights_lib.asm"        
+.include "mighty_knights_lib.asm"
+.include "objects.asm"
+.include "object_tests.asm"        
 ; -----------------------------------------------------------------------------
 .ramsection "main variables" slot 3
 ; -----------------------------------------------------------------------------
@@ -124,6 +126,9 @@
     ;
     ld a,ENABLED
     call set_display
+
+    call object_tests
+
     ;
   jp main_loop
     vdp_register_init:
