@@ -98,7 +98,7 @@
     ;
     call PSGInit
     ld hl,adventure_awaits
-    call PSGPlay
+    ;call PSGPlay
     ;
     call clear_vram
     ld hl,vdp_register_init
@@ -127,7 +127,7 @@
     ld a,ENABLED
     call set_display
 
-    ;call object_tests
+    call object_tests
 
     ;
   jp main_loop
@@ -176,10 +176,8 @@
     .db -8, -8, 5
     .db -8, 0, 6
     .db -32, -8, 7
-;
-  origins:
-    .db 96, 128, 96, 152, 96, 176, 96,200, 96, 224
-;
+
+
   adventure_awaits:
     .incbin "adventure_awaits_compr.psg"
 .ends

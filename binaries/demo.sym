@@ -2,10 +2,8 @@
 ; wla symbolic information for "binaries\demo.sms".
 
 [labels]
-0000:0777 PSGInit
-0000:072a PSGPlayNoRepeat
-0000:072e PSGPlay
-0000:0751 PSGStop
+0000:0789 PSGInit
+0000:0763 PSGStop
 0000:0618 PSGSFXStop
 0000:0663 _skip_chn2
 0000:0688 _skip_chn3
@@ -88,12 +86,18 @@
 0000:0704 set_display
 0000:071a set_register
 0000:0050 clear_vram
-0000:0797 load_cram
+0000:07a9 load_cram
 0000:0025 load_vram
-0000:0788 offset_byte_table
-0000:078f offset_word_table
-0000:07b0 setup_vram_write
-0000:07a4 wait_for_vblank
+0000:079a offset_byte_table
+0000:07a1 offset_word_table
+0000:07c2 setup_vram_write
+0000:07b6 wait_for_vblank
+0000:07cb apply_origin
+0000:072a object_tests
+0000:072d y_100_o_m24
+0000:073e y_100_o_m16
+0000:074c exit_with_succes
+0000:0757 exit_with_failure
 0000:c0f2 temp_byte
 0000:c0f3 temp_word
 0000:c0f4 vblank_counter
@@ -108,5 +112,4 @@
 0002:8020 demo_palette_end
 0002:8020 arthur_standing_0_tiles
 0002:8100 arthur_standing_0_layout
-0002:8116 origins
-0002:8120 adventure_awaits
+0002:8116 adventure_awaits
