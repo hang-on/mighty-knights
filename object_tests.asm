@@ -43,7 +43,9 @@
   ld a,(ram_origin_y_100_1)
   ld hl,offset_m16_1
   call apply_origin_with_var
-  ASSERT_A_EQUALS 84  
+  ASSERT_A_EQUALS 84
+
+  
  
 
   ; ------- end of tests ------
