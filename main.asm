@@ -226,10 +226,7 @@
     .db -8, 0, 6
     .db -32, -8, 7
   
-  arthur_standing_0_y_offsets:
-    .db -24, -24, -16, -16, -8, -8, -32
-  arthur_standing_0_x_offsets_and_chars:
-    .db -8, 1, 0, 2, -8, 3, 0, 4, -8, 5, 0, 6, -8, 7
+
   
 
 
