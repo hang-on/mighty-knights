@@ -125,11 +125,16 @@
     call load_vram
     ;
 
+    ; Set globals y and x.
+    ld a,100
+    ld (arthur_y),a
+    ld (arthur_x),a
+
     ld hl,arthur_standing_0_y_offsets
     ld de,arthur_y_buffer
     ld b,7
-    ld a,(arthur_y)
     -:
+      ld a,(arthur_y)
       add a,(hl)
       inc hl
       ld (de),a
@@ -139,8 +144,8 @@
     ld hl,arthur_standing_0_x_offsets_and_chars
     ld de,arthur_xc_buffer
     ld b,7
-    ld a,(arthur_x)
     -:
+      ld a,(arthur_x)
       add a,(hl)
       ld (de),a
       inc de
@@ -150,7 +155,17 @@
       inc hl
       inc de
     djnz -
-  
+
+    ld bc,7
+    ld de,SAT_Y_START
+    ld hl,arthur_y_buffer
+    call load_vram
+
+    ld bc,14
+    ld de,SAT_XC_START
+    ld hl,arthur_xc_buffer
+    call load_vram
+
 
     ei
     halt
@@ -173,13 +188,13 @@
     call wait_for_vblank
     ; -------------------------------------------------------------------------
     ; Begin vblank critical code (DRAW).
-    call load_sat
+    ;call load_sat
     ;
     ; -------------------------------------------------------------------------
     ; Begin general updating (UPDATE).
     call PSGFrame
     call PSGSFXFrame
-    call refresh_sat_handler
+    ;call refresh_sat_handler
     ;
   jp main_loop
 .ends
@@ -212,7 +227,7 @@
     .db -32, -8, 7
   
   arthur_standing_0_y_offsets:
-    .db -24, -24, -16, -16, -8, -8, 32
+    .db -24, -24, -16, -16, -8, -8, -32
   arthur_standing_0_x_offsets_and_chars:
     .db -8, 1, 0, 2, -8, 3, 0, 4, -8, 5, 0, 6, -8, 7
   
