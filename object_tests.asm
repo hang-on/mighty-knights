@@ -4,27 +4,25 @@
   nop
 .endm
 
+.macro EVALUATE_POSITION
+  jp +
+    position\@:
+      .db \2 \3
+  +:
+  ld hl,position\@
+  call \1
+.endm
+
 .section "Unit testing" free
 
   object_tests:
 
-  jp +
-    y_100_o_m24:
-      .db 100, -24
-  +:
-  ld hl,y_100_o_m24
-  call apply_origin
+  EVALUATE_POSITION apply_origin, 100, -24
   ASSERT_A_EQUALS 76 
-  
-  jp +
-    y_100_o_m16:
-      .db 100, -16
-  +:
-  ld hl,y_100_o_m16
-  call apply_origin
-  ASSERT_A_EQUALS 84
 
-  
+  EVALUATE_POSITION apply_origin, 100, -16
+  ASSERT_A_EQUALS 84 
+
 
   ; ------- end of tests ------
   exit_with_succes:

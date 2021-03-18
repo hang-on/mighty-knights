@@ -94,8 +94,8 @@
 0000:07b6 wait_for_vblank
 0000:07cb apply_origin
 0000:072a object_tests
-0000:072d y_100_o_m24
-0000:073e y_100_o_m16
+0000:072d position0
+0000:073e position1
 0000:074c exit_with_succes
 0000:0757 exit_with_failure
 0000:c0f2 temp_byte
