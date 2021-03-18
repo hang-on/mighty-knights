@@ -8,4 +8,15 @@
   apply_origin_with_var:
     add a,(hl)
   ret
+
+  .struct object
+    y db
+    x db
+    layout dw
+  .endst
+
+  .dstruct arthur instanceof object data 100, 100, test_layout
+
+  test_layout:
+  
 .ends
