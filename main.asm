@@ -104,7 +104,7 @@
     ;
     call PSGInit
     ld hl,adventure_awaits
-    ;call PSGPlay
+    call PSGPlay
     ;
     call clear_vram
     ld hl,vdp_register_init
@@ -131,8 +131,8 @@
 
     ld a,(hl)
     ld b,a
+    ld c,a  ; save the size for later...
     inc hl
-    ld hl,arthur_standing_0_y_offsets
     ld de,arthur_y_buffer
     -:
       ld a,(arthur.y)
@@ -141,10 +141,8 @@
       ld (de),a
       inc de
     djnz -
-
-    ld hl,arthur_standing_0_x_offsets_and_chars
     ld de,arthur_xc_buffer
-    ld b,7
+    ld b,c
     -:
       ld a,(arthur.x)
       add a,(hl)
@@ -156,7 +154,7 @@
       inc hl
       inc de
     djnz -
-
+    
     ld bc,7
     ld de,SAT_Y_START
     ld hl,arthur_y_buffer
