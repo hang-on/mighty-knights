@@ -18,6 +18,15 @@
 
   .dstruct arthur instanceof object data 100, 100, test_layout
 
+  get_address:
+    ; in: Pointer in HL, out: Address pointed to in HL 
+    ld a,(hl)
+    ld b,a
+    inc hl
+    ld a,(hl)
+    ld l,b
+    ld h,a
+  ret
 
   test_layout:
     arthur_standing_0_y_offsets:

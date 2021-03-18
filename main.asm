@@ -125,13 +125,9 @@
     call load_vram
     ;
 
+  
     ld hl,arthur.layout
-    ld a,(hl)
-    ld b,a
-    inc hl
-    ld a,(hl)
-    ld l,b
-    ld h,a
+    call get_address
 
     ld a,(hl)
     ld b,a
