@@ -125,16 +125,21 @@
     call load_vram
     ;
 
-    ; Set globals y and x.
-    ld a,100
-    ld (arthur_y),a
-    ld (arthur_x),a
+    ld hl,arthur.layout
+    ld a,(hl)
+    ld b,a
+    inc hl
+    ld a,(hl)
+    ld l,b
+    ld h,a
 
+    ld a,(hl)
+    ld b,a
+    inc hl
     ld hl,arthur_standing_0_y_offsets
     ld de,arthur_y_buffer
-    ld b,7
     -:
-      ld a,(arthur_y)
+      ld a,(arthur.y)
       add a,(hl)
       inc hl
       ld (de),a
@@ -145,7 +150,7 @@
     ld de,arthur_xc_buffer
     ld b,7
     -:
-      ld a,(arthur_x)
+      ld a,(arthur.x)
       add a,(hl)
       ld (de),a
       inc de
@@ -216,18 +221,7 @@
     .db $C0 $00 $00 $00 $60 $00 $00 $80 $30 $C0 $C0 $00 $10 $E0 $E0 $00 $98 $00 $60 $00 $CC $00 $30 $00 $FC $00 $00 $00 $F8 $00 $00 $00
     .db $00 $00 $00 $00 $18 $00 $00 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00
 ;
-  arthur_standing_0_layout:
-    .db 7               ; Number of sprites in metasprite.
-    .db -24, -8, 1
-    .db -24, 0, 2
-    .db -16, -8, 3
-    .db -16, 0, 4
-    .db -8, -8, 5
-    .db -8, 0, 6
-    .db -32, -8, 7
-  
-
-  
+    
 
 
   adventure_awaits:
