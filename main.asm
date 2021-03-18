@@ -129,10 +129,8 @@
     ld hl,arthur.layout
     call get_address
 
-    ld a,(hl)
+    ld a,(arthur.size)
     ld b,a
-    ld c,a  ; save the size for later...
-    inc hl
     ld de,arthur_y_buffer
     -:
       ld a,(arthur.y)
@@ -142,7 +140,8 @@
       inc de
     djnz -
     ld de,arthur_xc_buffer
-    ld b,c
+    ld a,(arthur.size)
+    ld b,a
     -:
       ld a,(arthur.x)
       add a,(hl)
