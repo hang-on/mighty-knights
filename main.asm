@@ -38,7 +38,6 @@
   pause_flag db
   ;
   arthur instanceof actor
-  enemy_a instanceof actor
 
 
 .ends
@@ -123,10 +122,10 @@
     ld hl,arthur_standing_0_tiles
     call load_vram
 
-    INITIALIZE_ACTOR arthur, 100, 100, 7, arthur_standing_0_layout, 0
-
-    INITIALIZE_ACTOR enemy_a, 50, 50, 7, arthur_standing_0_layout, 1
-
+    INITIALIZE_ACTOR arthur, 0, 100, 100
+    ld a,0
+    ld hl,arthur_standing
+    call set_animation
 
     ei
     halt
@@ -156,8 +155,6 @@
     call refresh_sat_handler
 
     ld hl,arthur
-    call draw_actor
-    ld hl, enemy_a
     call draw_actor
 
 
