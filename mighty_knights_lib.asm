@@ -255,29 +255,13 @@
   ret
 .ends
 ; -----------------------------------------------------------------------------
-; Misc. routines sorted alphabetically
+; 
 ; -----------------------------------------------------------------------------
-.section "Add metasprite" free
+
+
+
 ; -----------------------------------------------------------------------------
-  ; Put a metasprite in the SAT buffer.
-  ; Entry: D = Y origin.
-  ;        E = X origin.
-  ;        IX = Pointer to metasprite data block.
-  ; Exit:  None.
-  ; Uses:  ?
-  add_meta_sprite:
-    ld b,(ix+0)
-    inc ix
-    -:
-      call add_sprite
-      inc ix
-      inc ix
-      inc ix
-    djnz -
-  ret
-.ends
-; -----------------------------------------------------------------------------
-.section "clear_vram" free
+.section "Misc. routines sorted alphabetically" free
 ; -----------------------------------------------------------------------------
   ; Write 00 to all vram addresses.
   ; Uses AF, BC
@@ -295,6 +279,19 @@
       or c
     jp nz,-
   ret
+
+  get_address:
+    ; in: Pointer in HL, out: Address pointed to in HL 
+    ld a,(hl)
+    push af
+      inc hl
+      ld a,(hl)
+      ld h,a    
+    pop af  
+    ld l,a
+  ret
+
+
 .ends
 ; -----------------------------------------------------------------------------
 .section "load_cram" free

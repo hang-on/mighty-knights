@@ -37,10 +37,6 @@
   hline_counter db
   pause_flag db
   ;
-  arthur_y_buffer dsb 9
-  arthur_y db
-  arthur_xc_buffer dsb 9*2
-  arthur_x db
 
 .ends
 .org 0
@@ -104,7 +100,7 @@
     ;
     call PSGInit
     ld hl,adventure_awaits
-    call PSGPlay
+    ;call PSGPlay
     ;
     call clear_vram
     ld hl,vdp_register_init
@@ -124,46 +120,6 @@
     ld hl,arthur_standing_0_tiles
     call load_vram
     ;
-
-  
-    ld hl,arthur.layout
-    call get_address
-
-    ld a,(arthur.size)
-    ld b,a
-    ld de,arthur_y_buffer
-    -:
-      ld a,(arthur.y)
-      add a,(hl)
-      inc hl
-      ld (de),a
-      inc de
-    djnz -
-    ld de,arthur_xc_buffer
-    ld a,(arthur.size)
-    ld b,a
-    -:
-      ld a,(arthur.x)
-      add a,(hl)
-      ld (de),a
-      inc de
-      inc hl
-      ld a,(hl)
-      ld (de),a
-      inc hl
-      inc de
-    djnz -
-    
-    ld bc,7
-    ld de,SAT_Y_START
-    ld hl,arthur_y_buffer
-    call load_vram
-
-    ld bc,14
-    ld de,SAT_XC_START
-    ld hl,arthur_xc_buffer
-    call load_vram
-
 
     ei
     halt
@@ -186,14 +142,18 @@
     call wait_for_vblank
     ; -------------------------------------------------------------------------
     ; Begin vblank critical code (DRAW).
-    ;call load_sat
+    call load_sat
     ;
     ; -------------------------------------------------------------------------
     ; Begin general updating (UPDATE).
     call PSGFrame
     call PSGSFXFrame
-    ;call refresh_sat_handler
-    ;
+    call refresh_sat_handler
+
+    ld hl,arthur
+    call draw_actor
+
+
   jp main_loop
 .ends
 .bank 2 slot 2
@@ -213,8 +173,19 @@
     .db $10 $0F $00 $00 $10 $08 $00 $07 $30 $08 $08 $07 $27 $18 $18 $00 $65 $00 $18 $00 $CF $00 $30 $00 $FF $00 $00 $00 $7F $00 $00 $00
     .db $C0 $00 $00 $00 $60 $00 $00 $80 $30 $C0 $C0 $00 $10 $E0 $E0 $00 $98 $00 $60 $00 $CC $00 $30 $00 $FC $00 $00 $00 $F8 $00 $00 $00
     .db $00 $00 $00 $00 $18 $00 $00 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00
-;
-    
+
+  arthur_standing_0_layout:
+    .db -24, -8, 1
+    .db -24, 0, 2
+    .db -16, -8, 3
+    .db -16, 0, 4
+    .db -8, -8, 5
+    .db -8, 0, 6
+    .db -32, -8, 7
+
+
+
+  .dstruct arthur instanceof actor 100, 100, 7, arthur_standing_0_layout
 
 
   adventure_awaits:
