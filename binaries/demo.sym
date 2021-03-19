@@ -93,7 +93,7 @@
 0000:0762 offset_word_table
 0000:076a setup_vram_write
 0000:0773 wait_for_vblank
-0000:07e1 draw_actor
+0000:07ec draw_actor
 0000:c0e7 temp_byte
 0000:c0e8 temp_word
 0000:c0e9 vblank_counter

@@ -8,6 +8,15 @@
     id db
   .endst
 
+  jp +
+    ; Example offsetting
+    ld d,0
+    ld e,actor.id
+    ld hl,arthur
+    add hl,de
+  +:
+
+
   .macro INITIALIZE_ACTOR
     ld hl,init_data_\@
     ld de,\1
