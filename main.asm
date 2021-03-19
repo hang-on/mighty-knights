@@ -37,6 +37,9 @@
   hline_counter db
   pause_flag db
   ;
+  arthur instanceof actor
+  enemy_a instanceof actor
+
 
 .ends
 .org 0
@@ -119,7 +122,11 @@
     ld de,SPRITE_BANK_START + CHARACTER_SIZE
     ld hl,arthur_standing_0_tiles
     call load_vram
-    ;
+
+    INITIALIZE_ACTOR arthur, 100, 100, 7, arthur_standing_0_layout, 0
+
+    INITIALIZE_ACTOR enemy_a, 50, 50, 7, arthur_standing_0_layout, 1
+
 
     ei
     halt
@@ -129,8 +136,6 @@
     ;
     ld a,ENABLED
     call set_display
-
-    ;call object_tests
 
     ;
   jp main_loop
@@ -152,6 +157,8 @@
 
     ld hl,arthur
     call draw_actor
+    ld hl, enemy_a
+    call draw_actor
 
 
   jp main_loop
@@ -164,7 +171,7 @@
     .db $00 $10 $12 $18 $06 $15 $2A $3F $13 $0B $0F $0C $38 $26 $27 $2F
     .db $23 $10 $12 $18 $06 $15 $2A $3F $13 $0B $0F $0C $38 $26 $27 $2F
     demo_palette_end:
-  ;
+
   arthur_standing_0_tiles:
     .db $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $27 $18 $18 $00 $27 $18 $1B $00 $67 $18 $1B $00 $40 $3E $3C $01
     .db $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $E0 $00 $00 $00 $F0 $00 $C0 $00 $F0 $00 $E0 $00 $10 $00 $00 $E0
@@ -182,10 +189,6 @@
     .db -8, -8, 5
     .db -8, 0, 6
     .db -32, -8, 7
-
-
-
-  .dstruct arthur instanceof actor 100, 100, 7, arthur_standing_0_layout
 
 
   adventure_awaits:

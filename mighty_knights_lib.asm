@@ -255,17 +255,13 @@
   ret
 .ends
 ; -----------------------------------------------------------------------------
-; 
-; -----------------------------------------------------------------------------
-
-
 
 ; -----------------------------------------------------------------------------
 .section "Misc. routines sorted alphabetically" free
 ; -----------------------------------------------------------------------------
-  ; Write 00 to all vram addresses.
-  ; Uses AF, BC
   clear_vram:
+    ; Write 00 to all vram addresses.
+    ; Uses AF, BC
     xor a
     out (CONTROL_PORT),a
     or VRAM_WRITE_COMMAND
@@ -281,7 +277,7 @@
   ret
 
   get_address:
-    ; in: Pointer in HL, out: Address pointed to in HL 
+    ; In: Pointer in HL. Out: Address pointed to in HL.
     ld a,(hl)
     push af
       inc hl
@@ -292,18 +288,14 @@
   ret
 
 
-.ends
-; -----------------------------------------------------------------------------
-.section "load_cram" free
-; -----------------------------------------------------------------------------
-  ; Consecutively load a number of color values into color ram (CRAM), given a
-  ; destination color to write the first value.
-  ; Entry: A = Destination color in color ram (0-31)
-  ;        B = Number of color values to load
-  ;        HL = Base address of source data (color values are bytes = SMS)
-  ; Uses: AF, BC, HL
-  ; Assumes blanked display and interrupts off.
   load_cram:
+    ; Consecutively load a number of color values into color ram (CRAM), given a
+    ; destination color to write the first value.
+    ; Entry: A = Destination color in color ram (0-31)
+    ;        B = Number of color values to load
+    ;        HL = Base address of source data (color values are bytes = SMS)
+    ; Uses: AF, BC, HL
+    ; Assumes blanked display and interrupts off.
     out (CONTROL_PORT),a
     ld a,CRAM_WRITE_COMMAND
     out (CONTROL_PORT),a
@@ -313,17 +305,14 @@
       inc hl
     djnz -
   ret
-.ends
-; -----------------------------------------------------------------------------
-.section "load_vram" free
-; -----------------------------------------------------------------------------
-  ; Load a number of bytes from a source address into vram.
-  ; Entry: BC = Number of bytes to load
-  ;        DE = Destination address in vram
-  ;        HL = Source address
-  ; Exit:  DE = Next free byte in vram.
-  ; Uses: AF, BC, DE, HL,
+
   load_vram:
+    ; Load a number of bytes from a source address into vram.
+    ; Entry: BC = Number of bytes to load
+    ;        DE = Destination address in vram
+    ;        HL = Source address
+    ; Exit:  DE = Next free byte in vram.
+    ; Uses: AF, BC, DE, HL,
     ld a,e
     out (CONTROL_PORT),a
     ld a,d
@@ -338,23 +327,22 @@
       or b
     jp nz,-
   ret
-.ends
-; -----------------------------------------------------------------------------
-.section "Offset table" free
-; -----------------------------------------------------------------------------
-  ; Offset base address (in HL) of a table of bytes or words. 
-  ; Entry: A  = Offset to apply.
-  ;        HL = Pointer to table of values (bytes or words).  
-  ; Exit:  HL = Offset table address.
-  ; Uses:  A, HL
+
+
   offset_byte_table:
+    ; Offset base address (in HL) of a table of bytes or words. 
+    ; Entry: A  = Offset to apply.
+    ;        HL = Pointer to table of values (bytes or words).  
+    ; Exit:  HL = Offset table address.
+    ; Uses:  A, HL
     add a,l
     ld l,a
     ld a,0
     adc a,h
     ld h,a
   ret
-  ;
+  
+
   offset_word_table:
     add a,a              
     add a,l
@@ -363,24 +351,18 @@
     adc a,h
     ld h,a
   ret
-.ends
-; -----------------------------------------------------------------------------
-.section "Setup for VRAM Write Operation" free
-; -----------------------------------------------------------------------------
-  ; hl = address in vram
+
   setup_vram_write:
+    ; HL = Address in vram
     ld a,l
     out (CONTROL_PORT),a
     ld a,h
     or VRAM_WRITE_COMMAND
     out (CONTROL_PORT),a
   ret
-.ends
-; -----------------------------------------------------------------------------
-.section "wait_for_vblank" free
-; -----------------------------------------------------------------------------
-  ; Wait until vblank interrupt > 0.
+
   wait_for_vblank:
+    ; Wait until vblank interrupt > 0.
     ld hl,vblank_counter
     -:
       ld a,(hl)
@@ -391,12 +373,5 @@
     ld (hl),a
   ret
 .ends
-; -----------------------------------------------------------------------------
-.section "Testing" free
-; -----------------------------------------------------------------------------
 
-
-
-
-.ends
        
