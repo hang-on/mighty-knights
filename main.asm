@@ -187,6 +187,8 @@
     .db -8, 0, 6
     .db -32, -8, 7
 
+  .dstruct arthur_standing animation 7,arthur_standing_0_layout
+
 
   adventure_awaits:
     .incbin "adventure_awaits_compr.psg"

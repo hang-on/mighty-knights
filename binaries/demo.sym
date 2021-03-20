@@ -3,7 +3,7 @@
 
 [labels]
 0000:0025 PSGInit
-0000:07e9 PSGStop
+0000:07d9 PSGStop
 0000:0618 PSGSFXStop
 0000:0663 _skip_chn2
 0000:0688 _skip_chn3
@@ -82,9 +82,9 @@
 0000:0413 refresh_sat_handler
 0000:043b clean_buffer
 0000:c100 vdp_registers
-0000:07ad initialize_vdp_registers
-0000:07c3 set_display
-0000:07d9 set_register
+0000:076a initialize_vdp_registers
+0000:0780 set_display
+0000:0796 set_register
 0000:070a clear_vram
 0000:071e get_address
 0000:0726 load_cram
@@ -94,15 +94,12 @@
 0000:0755 setup_vram_write
 0000:075e wait_for_vblank
 0000:c0e7 animation_table
-0000:076a get_animation
-0000:0773 set_animation
-0000:0781 arthur_standing
-0000:0781 arthur_standing.size
-0000:0782 arthur_standing.layout
-0000:0786 draw_actor
-0000:080f object_tests
-0000:080f exit_with_succes
-0000:081a exit_with_failure
+0000:07a6 get_animation
+0000:07af set_animation
+0000:07bd draw_actor
+0000:07ff object_tests
+0000:07ff exit_with_succes
+0000:080a exit_with_failure
 0000:c10b temp_byte
 0000:c10c temp_word
 0000:c10d vblank_counter
@@ -122,4 +119,7 @@
 0002:8020 demo_palette_end
 0002:8020 arthur_standing_0_tiles
 0002:8100 arthur_standing_0_layout
-0002:8115 adventure_awaits
+0002:8115 arthur_standing
+0002:8115 arthur_standing.size
+0002:8116 arthur_standing.layout
+0002:811a adventure_awaits

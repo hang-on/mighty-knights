@@ -1,25 +1,17 @@
   
   .equ ACTOR_MAX 5 ;***
 
+  .struct actor
+    id db
+    y db
+    x db
+  .endst
+
   .struct animation
     size db
     layout dw
     frame db    
     timer db
-  .endst
-    ; index with following if not index = 0
-    ; ld de,_sizeof_animation
-    ; ld hl,animation_table
-    ; ld b,a (index)
-    ; -:
-    ;   add hl,de
-    ; djnz -
-
-
-  .struct actor
-    id db
-    y db
-    x db
   .endst
 
   .ramsection "Animation table" slot 3
@@ -29,7 +21,6 @@
 
 
 .section "Actor library" free
-
 
   get_animation:
     ; Index in animation table in A
@@ -51,7 +42,6 @@
     ldir
   ret
 
-  .dstruct arthur_standing animation 7,arthur_standing_0_layout
 
   .macro INITIALIZE_ACTOR
     ld hl,init_data_\@
@@ -85,18 +75,6 @@
       inc ix
     djnz -    
   ret
-
-
-
-
-  jp +
-    ; Example offsetting
-    ld d,0
-    ld e,actor.id
-    ld hl,arthur
-    add hl,de
-  
-  +:
 
 .ends
 
