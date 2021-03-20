@@ -1,4 +1,3 @@
-  
   .equ ACTOR_MAX 5 ;***
 
   .struct actor
@@ -14,35 +13,6 @@
     timer db
   .endst
 
-  .ramsection "Animation table" slot 3
-    ; this table holds up to ACTOR MAX active animations
-    animation_table dsb _sizeof_animation*ACTOR_MAX
-  .ends
-
-
-.section "Actor library" free
-
-  get_animation:
-    ; Index in animation table in A
-    ; HL = pointer to datablock
-    cp 0
-    jp nz,exit_with_failure ; should jump to correct offset in table
-    ld hl,animation_table
-  ret
-
-  set_animation:
-    ; Index in animation table in A
-    ; HL = pointer to datablock
-    cp 0
-    jp nz,exit_with_failure ; should jump to correct offset in table
-
-    ;...
-    ld de,animation_table ; fix me, correct offset
-    ld bc,_sizeof_actor
-    ldir
-  ret
-
-
   .macro INITIALIZE_ACTOR
     ld hl,init_data_\@
     ld de,\1
@@ -54,6 +24,32 @@
     +:
   .endm
 
+
+  .ramsection "Animation table" slot 3
+    ; this table holds up to ACTOR MAX animation structs
+    animation_table dsb _sizeof_animation*ACTOR_MAX
+  .ends
+
+
+.section "Actor library" free
+
+  get_animation:
+    ; Index in animation table in A
+    ; HL = pointer to datablock
+    ASSERT_A_EQUALS 0    
+    ld hl,animation_table
+  ret
+
+  set_animation:
+    ; Index in animation table in A
+    ; HL = pointer to datablock
+    ASSERT_A_EQUALS 0
+
+    ;...
+    ld de,animation_table ; fix me, correct offset
+    ld bc,_sizeof_actor
+    ldir
+  ret
 
   draw_actor:
     ; HL = Pointer to actor struct
