@@ -38,16 +38,25 @@
 .section "Actor library" free
 
   get_animation:
-    ; Index in animation table in A
-    ; HL = pointer to datablock
-    ASSERT_A_EQUALS 0    
-    ld hl,animation_table
+    ; IN: A = Index
+    ; OUT: HL = pointer to animation item.
+    .ifdef TEST_MODE
+      ld hl,fake_animation_table
+    .else
+      ld hl,animation_table
+    .endif
+    cp 0
+    ret z    
+    ld b,a
+    ld de,_sizeof_animation
+    -:
+      add hl,de
+    djnz -
   ret
 
   set_animation:
     ; Index in animation table in A
     ; HL = pointer to datablock
-    ASSERT_A_EQUALS 0
 
     ;...
     ld de,animation_table ; fix me, correct offset
@@ -57,6 +66,7 @@
 
   draw_actor:
     ; HL = Pointer to actor struct
+    ; FIXME - this will not work with reworked get/set anim.!!
     ld a,(hl) ; get id
     inc hl
     ld d,(hl)

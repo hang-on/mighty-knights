@@ -124,6 +124,10 @@
 
     INITIALIZE_ACTOR arthur, 0, 100, 100, arthur_standing
 
+    .ifdef TEST_MODE
+      jp test_bench
+    .endif
+
     ei
     halt
     halt
@@ -132,7 +136,6 @@
     ;
     ld a,ENABLED
     call set_display
-
     ;
   jp main_loop
     vdp_register_init:
