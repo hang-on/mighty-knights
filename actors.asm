@@ -22,6 +22,10 @@
       init_data_\@:
         .db \2 \3 \4 
     +:
+    ld a,\2
+    ld hl,\5
+    call set_animation
+
   .endm
 
 

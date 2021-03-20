@@ -122,10 +122,7 @@
     ld hl,arthur_standing_0_tiles
     call load_vram
 
-    INITIALIZE_ACTOR arthur, 0, 100, 100
-    ld a,0
-    ld hl,arthur_standing
-    call set_animation
+    INITIALIZE_ACTOR arthur, 0, 100, 100, arthur_standing
 
     ei
     halt
