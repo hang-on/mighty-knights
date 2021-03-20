@@ -55,18 +55,28 @@
   ret
 
   set_animation:
-    ; Index in animation table in A
-    ; HL = pointer to datablock
-
-    ;...
-    ld de,animation_table ; fix me, correct offset
-    ld bc,_sizeof_actor
+    ; IN: A = Index, HL = animation struct
+    ; FIXME - test this
+    ; FIXE: Use offset table routine and test that
+    ; FIXE: Make assert_HL_equals..
+    push hl
+      ld hl,animation_table
+      cp 0
+      jp z,+    
+        ld b,a
+        ld de,_sizeof_animation
+        -:
+          add hl,de
+        djnz -
+      +:
+      ex de,hl
+    pop hl
+    ld bc,_sizeof_animation
     ldir
   ret
 
   draw_actor:
     ; HL = Pointer to actor struct
-    ; FIXME - this will not work with reworked get/set anim.!!
     ld a,(hl) ; get id
     inc hl
     ld d,(hl)

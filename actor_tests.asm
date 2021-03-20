@@ -1,4 +1,4 @@
-.equ TEST_MODE
+;.equ TEST_MODE
 
 .macro ASSERT_A_EQUALS
   cp \1
@@ -18,6 +18,13 @@ fake_animation_table:
     .dw $5678,
     .db 0
     .db 0
+
+dummy_animation:
+  .db 4
+  .dw $1111
+  .db 9
+  .db 9
+
 
 test_bench:
 
@@ -42,8 +49,6 @@ exit_with_failure:
 -:
   nop
 jp -
-
-ret
 
 
 test_get_animation_0:
