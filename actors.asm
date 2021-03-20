@@ -23,7 +23,7 @@
   .endst
 
   .ramsection "Animation table" slot 3
-    ; this table holds up to five active animations
+    ; this table holds up to ACTOR MAX active animations
     animation_table dsb _sizeof_animation*ACTOR_MAX
   .ends
 
