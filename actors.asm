@@ -11,6 +11,8 @@
     layout dw
     frame db    
     timer db
+    script dw
+    tiles dw
   .endst
 
   .macro INITIALIZE_ACTOR
@@ -45,30 +47,18 @@
     .else
       ld hl,animation_table
     .endif
-    cp 0
-    ret z    
-    ld b,a
-    ld de,_sizeof_animation
-    -:
-      add hl,de
-    djnz -
+    ld b,_sizeof_animation
+    call offset_custom_table
   ret
 
   set_animation:
-    ; I should copy an animation struct item into the table at index.
+    ; Copy an animation struct item into the table at index.
     ; IN: A = Index, HL = animation struct
-    ; FIXME - test this
-    ; FIXE: Use offset table routine and test that
+    
     push hl
       ld hl,animation_table
-      cp 0
-      jp z,+    
-        ld b,a
-        ld de,_sizeof_animation
-        -:
-          add hl,de
-        djnz -
-      +:
+      ld b,_sizeof_animation
+      call offset_custom_table
       ex de,hl
     pop hl
     ld bc,_sizeof_animation
