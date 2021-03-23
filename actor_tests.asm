@@ -1,9 +1,23 @@
-;.equ TEST_MODE
+.equ TEST_MODE
 
 .macro ASSERT_A_EQUALS
   cp \1
   jp nz,exit_with_failure
   nop
+.endm
+
+.macro ASSERT_HL_EQUALS ; (value)
+  push de
+  push af
+  ld de,\1
+  ld a,d
+  cp h
+  jp nz,exit_with_failure
+  ld a,e
+  cp l
+  jp nz,exit_with_failure
+  pop af
+  pop de
 .endm
 
 
@@ -31,6 +45,7 @@ test_bench:
 
 call test_get_animation_0
 call test_get_animation_1
+call test_macro
 
 ; ------- end of tests ------
 exit_with_succes:
@@ -63,4 +78,9 @@ test_get_animation_1:
   call get_animation
   ld a,l
   ASSERT_A_EQUALS $34+$5
+ret
+
+test_macro:
+  ld hl,$1234
+  ASSERT_HL_EQUALS $1234
 ret
