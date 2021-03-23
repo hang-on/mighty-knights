@@ -352,6 +352,22 @@
     ld h,a
   ret
 
+  offset_custom_table:
+    ; IN: A = Table index, HL = Base address of table, 
+    ;     B = Size of table item.
+    ; OUT: HL = Address of item at specified index.
+    cp 0
+    ret z    
+    ld d,0
+    ld e,b
+    ld b,a
+    -:
+      add hl,de
+    djnz -
+
+  ret
+
+
   setup_vram_write:
     ; HL = Address in vram
     ld a,l

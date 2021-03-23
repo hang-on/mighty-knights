@@ -55,10 +55,10 @@
   ret
 
   set_animation:
+    ; I should copy an animation struct item into the table at index.
     ; IN: A = Index, HL = animation struct
     ; FIXME - test this
     ; FIXE: Use offset table routine and test that
-    ; FIXE: Make assert_HL_equals..
     push hl
       ld hl,animation_table
       cp 0

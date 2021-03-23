@@ -39,6 +39,19 @@ dummy_animation:
   .db 9
   .db 9
 
+ctable1:
+  ; item 0
+  .db 4
+  .dw $1111
+  .db 9
+  .db 9
+  ; item 1
+  .db 5
+  .dw $2222
+  .db 10
+  .db 10
+
+
 
 test_bench:
 
@@ -46,6 +59,8 @@ test_bench:
 call test_get_animation_0
 call test_get_animation_1
 call test_macro
+call test_offset_custom_table_0_ctable1
+call test_offset_custom_table_1_ctable1
 
 ; ------- end of tests ------
 exit_with_succes:
@@ -83,4 +98,22 @@ ret
 test_macro:
   ld hl,$1234
   ASSERT_HL_EQUALS $1234
+ret
+
+test_offset_custom_table_0_ctable1
+  ld a,0
+  ld b,5
+  ld hl,ctable1
+  call offset_custom_table
+  ASSERT_HL_EQUALS ctable1
+ret
+
+test_offset_custom_table_1_ctable1
+  ld a,1
+  ld b,5
+  ld hl,ctable1
+  call offset_custom_table
+  ASSERT_HL_EQUALS ctable1+5
+  ld a,(hl)
+  ASSERT_A_EQUALS 5
 ret
