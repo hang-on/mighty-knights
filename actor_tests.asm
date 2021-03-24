@@ -71,8 +71,8 @@ call test_get_animation_1
 call test_macro
 call test_offset_custom_table_0_ctable1
 call test_offset_custom_table_1_ctable1
-;call test_set_animation_load_dummy_to_index0
-;call test_set_animation_load_dummy_to_index1
+call test_set_animation_load_dummy_to_index0
+call test_set_animation_load_dummy_to_index1
 
 ; ------- end of tests ------
 exit_with_succes:
