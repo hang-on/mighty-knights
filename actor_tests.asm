@@ -1,4 +1,4 @@
-.equ TEST_MODE
+;.equ TEST_MODE
 
 .macro ASSERT_A_EQUALS
   cp \1

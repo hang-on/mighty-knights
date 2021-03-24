@@ -3,7 +3,9 @@
 
 [labels]
 0000:0025 PSGInit
-0000:0802 PSGStop
+0000:0802 PSGPlayNoRepeat
+0000:0806 PSGPlay
+0000:0829 PSGStop
 0000:06aa PSGSFXStop
 0000:06f5 _skip_chn2
 0000:071a _skip_chn3
@@ -123,7 +125,7 @@
 0000:0000 boot
 0000:0021 initial_memory_control_register_values
 0000:0593 init
-0000:05cd init_data_0
+0000:05d0 init_data_0
 0000:0602 vdp_register_init
 0000:060d main_loop
 0002:8000 demo_palette
