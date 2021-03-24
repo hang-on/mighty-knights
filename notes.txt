@@ -1,0 +1,26 @@
+
+
+  jp +
+    ; Example offsetting
+    ld d,0
+    ld e,actor.id
+    ld hl,arthur
+    add hl,de
+  
+  +:
+
+Index the animation table:
+    ; index with following if not index = 0
+    ; ld de,_sizeof_animation
+    ; ld hl,animation_table
+    ; ld b,a (index)
+    ; -:
+    ;   add hl,de
+    ; djnz -
+
+
+
+Vague initial requirement:
+Write a library that can handle objects.
+
+1. Add a metasprite to a given y,x
