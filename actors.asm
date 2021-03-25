@@ -47,6 +47,16 @@
 
 .section "Actor library" free
 
+  get_sprite:
+    push af
+      inc hl ; go past size
+      call get_address
+    pop af
+    ld b,3
+    call offset_custom_table
+
+  ret
+
   get_animation:
     ; IN: A = Index
     ; OUT: HL = pointer to animation item.

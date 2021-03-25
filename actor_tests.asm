@@ -40,6 +40,9 @@ fake_animation_table:
 ; -----------------------------------------------------------------------------
 test_bench:
   call test_size_in_my_frame
+  call test_get_first_sprite
+  call test_get_sprite_1
+
 
 
 
@@ -65,4 +68,37 @@ jp -
 test_size_in_my_frame:
   ld a,(my_frame.size)
   ASSERT_A_EQUALS 7
+ret
+
+
+.dstruct my_frame_0 frame 7 layout_0
+layout_0:
+    .db -24, -8, 1
+    .db -24, 0, 2
+    .db -16, -8, 3
+    .db -16, 0, 4
+    .db -8, -8, 5
+    .db -8, 0, 6
+    .db -32, -8, 7
+test_get_first_sprite:
+  ld hl,my_frame_0
+  ld a,0 ; first sprite
+  call get_sprite
+  ASSERT_HL_EQUALS layout_0
+ret
+
+.dstruct my_frame_1 frame 7 layout_1
+layout_1:
+    .db -24, -8, 1
+    .db -24, 0, 2
+    .db -16, -8, 3
+    .db -16, 0, 4
+    .db -8, -8, 5
+    .db -8, 0, 6
+    .db -32, -8, 7
+test_get_sprite_1:
+  ld hl,my_frame_1
+  ld a,1 
+  call get_sprite
+  ASSERT_HL_EQUALS layout_1 + 3
 ret
