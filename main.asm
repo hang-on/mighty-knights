@@ -168,6 +168,16 @@
     ld hl,arthur
     call draw_actor
 
+    ld ix,arthur_standing_0_layout
+    ld b,7
+    -:
+      ld d,150
+      ld e,150
+      call add_sprite
+      inc ix
+      inc ix
+      inc ix
+    djnz -
 
   jp main_loop
 .ends
