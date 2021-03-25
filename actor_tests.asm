@@ -1,4 +1,4 @@
-;.equ TEST_MODE
+.equ TEST_MODE
 
 .macro ASSERT_A_EQUALS
   cp \1
@@ -39,6 +39,7 @@ fake_animation_table:
 
 ; -----------------------------------------------------------------------------
 test_bench:
+  call test_size_in_my_frame
 
 
 
@@ -60,3 +61,8 @@ exit_with_failure:
   nop
 jp -
 
+.dstruct my_frame frame 7 arthur_standing_0_layout
+test_size_in_my_frame:
+  ld a,(my_frame.size)
+  ASSERT_A_EQUALS 7
+ret

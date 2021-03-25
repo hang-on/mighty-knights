@@ -1,4 +1,12 @@
   .equ ACTOR_MAX 5 ;***
+  
+  .struct frame
+    size db
+    layout dw
+  .endst
+
+
+
 
   .struct actor
     id db
@@ -85,6 +93,7 @@
       inc ix
     djnz -    
   ret
+
 
 .ends
 

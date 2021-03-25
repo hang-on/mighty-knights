@@ -25,8 +25,8 @@
 ;
 .include "psglib.inc"
 .include "mighty_knights_lib.asm"
-.include "actor_tests.asm"        
 .include "actors.asm"
+.include "actor_tests.asm"        
 ; -----------------------------------------------------------------------------
 .ramsection "main variables" slot 3
 ; -----------------------------------------------------------------------------
