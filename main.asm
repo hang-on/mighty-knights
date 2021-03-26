@@ -201,6 +201,14 @@
     .db -8, 0, 6
     .db -32, -8, 7
 
+  arthur_standing_0_y:
+    .db -24, -24, -16, -16, -8, -8, -32
+
+  arthur_standing_0_xc:
+    .db  -8, 1, 0, 2, -8, 3, 0, 4, -8, 5, 0, 6, -8, 7
+
+  
+
   .dstruct arthur_standing animation 7,arthur_standing_0_layout
 
   .dstruct arthur_standing_0 frame 7 arthur_standing_0_layout

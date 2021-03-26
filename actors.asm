@@ -46,6 +46,19 @@
 
 .section "Actor library" free
 
+  batch_offset: ; misleading name right now, not batching
+    ld b,(hl)
+    inc hl
+    ld c,(hl)
+    inc hl
+    -:
+      ld a,c
+      add a,(hl)
+      ; put this byte on the stack..
+      inc hl
+    djnz -
+  ret
+
   get_sprite:
     ; A = index of sprite in layout
     ; HL = ptr to frame

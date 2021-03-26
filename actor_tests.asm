@@ -1,4 +1,4 @@
-;.equ TEST_MODE
+.equ TEST_MODE
 
 .macro ASSERT_A_EQUALS
   cp \1
@@ -25,6 +25,35 @@
 .section "tests" free
 ; -----------------------------------------------------------------------------
 test_bench:
+  jp +
+    my_input_1_120_10_1234:
+      .db 1, 120, 10
+      .dw $1234
+  +:
+  ld hl,my_input_1_120_10_1234
+  call batch_offset
+  ASSERT_A_EQUALS 130
+
+  jp +
+    my_input_1_120_20_1234:
+      .db 1, 120, 20
+      .dw $1234
+  +:
+  ld hl,my_input_1_120_20_1234
+  call batch_offset
+  ASSERT_A_EQUALS 140
+
+  jp +
+    my_input_2_120_20_30_1234:
+      .db 2, 120, 20, 30
+      .dw $1234
+  +:
+  ld hl,my_input_2_120_20_30_1234
+  call batch_offset
+  ASSERT_A_EQUALS 150
+
+
+
   call test_size_in_my_frame
 
 
