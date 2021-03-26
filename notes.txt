@@ -10,6 +10,21 @@ Arthur standing 0: 7 sprites, >> 1 sprite
 
 Tests for the legacy animation struct
 
+.org $1234
+fake_animation_table:
+    .db 7,
+    .dw $1234,
+    .db 0
+    .db 0
+    .dw $0123
+    .dw $4567
+
+    .db 6,
+    .dw $5678,
+    .db 0
+    .db 0
+    .dw $0123
+    .dw $4567
 
 
 dummy_animation:

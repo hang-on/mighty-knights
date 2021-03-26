@@ -7,7 +7,6 @@
 
 
 
-
   .struct actor
     id db
     y db
@@ -48,6 +47,8 @@
 .section "Actor library" free
 
   get_sprite:
+    ; A = index of sprite in layout
+    ; HL = ptr to frame
     push af
       inc hl ; go past size
       call get_address
@@ -60,11 +61,7 @@
   get_animation:
     ; IN: A = Index
     ; OUT: HL = pointer to animation item.
-    .ifdef TEST_MODE
-      ld hl,fake_animation_table
-    .else
-      ld hl,animation_table
-    .endif
+    ld hl,animation_table
     ld b,_sizeof_animation
     call offset_custom_table
   ret
