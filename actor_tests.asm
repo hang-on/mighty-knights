@@ -20,7 +20,7 @@
   pop de
 .endm
 
-.macro ASSERT_TOP_OF_STACK_EQUALS
+.macro ASSERT_TOP_OF_STACK_EQUALS ; (list of bytes to test)
   ld hl,0
   add hl,sp
   .rept NARGS
@@ -28,31 +28,28 @@
     cp \1
     jp nz,exit_with_failure
     inc hl
-    inc sp
+    inc sp                    ; clean stack as we proceed.
     .SHIFT
   .endr
 .endm
 
-.macro ASSERT_TOP_OF_STACK_EQUALS_BYTES_AT
-  ld de,\2
-  
-  ld hl,0
-  add hl,sp
-  .rept \1
-    ld a,(hl)
-    ld b,a
-    ld a,(de)
-    cp b
-    jp nz,exit_with_failure
-    inc hl
-    inc de
-
+.macro ASSERT_TOP_OF_STACK_EQUALS_BYTES_AT ;(bytes, ptr to expected bytes)
+  ; Parameters: Number of bytes, pointer to expected data. 
+  ld de,\2                    ; Comparison string in DE
+  ld hl,0                     ; HL points to top of stack.
+  add hl,sp       
+  .rept \1                    ; Loop through given number of bytes.
+    ld a,(hl)                 ; Get byte from stack.
+    ld b,a                    ; Store it.
+    ld a,(de)                 ; Get comparison byte.
+    cp b                      ; Compare byte on stack with comparison byte.
+    jp nz,exit_with_failure   ; Fail if not equal.
+    inc hl                    ; Point to next byte in stack.
+    inc de                    ; Point to next comparison byte.
   .endr
-
-  .rept \1
-    inc sp
+  .rept \1                    ; Clean stack to leave no trace on the system.
+    inc sp        
   .endr
-
 .endm
 
 
