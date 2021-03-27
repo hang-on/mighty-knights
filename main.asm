@@ -38,6 +38,7 @@
   pause_flag db
   ;
   arthur instanceof actor
+  arthur_twin instanceof actor
 
 
 .ends
@@ -123,6 +124,7 @@
     call load_vram
 
     INITIALIZE_ACTOR arthur, 0, 160, 70, arthur_standing
+    INITIALIZE_ACTOR arthur_twin, 1, 110, 20, arthur_standing
 
     ld bc,96*CHARACTER_SIZE
     ld de,BACKGROUND_BANK_START
@@ -165,24 +167,36 @@
     call PSGSFXFrame
     call refresh_sat_handler
 
-    ld a,150
-    ld hl,arthur_standing_0_y
-    ld de,sat_buffer_y
-    call batch_offset_to_DE
-
-    ld a,100
-    ld hl,arthur_standing_0_xc
-    ld de,sat_buffer_xc
-    call batch_alternating_offset_and_copy_to_DE
-
-    ld b,7
-    ld a,(sat_buffer_index)
-    add a,B
-    ld (sat_buffer_index),a
-
     ld hl,arthur
     call draw_actor
 
+    ld ix,arthur_twin
+    ld iy,arthur_standing_0_frame    ;
+    ld a,(sat_buffer_index)  
+    ld hl,sat_buffer_y
+    call offset_byte_table
+    ex de,hl
+    ld a,(ix+1)
+    ld l,(iy+0)
+    ld h,(iy+1)
+    call batch_offset_to_DE
+
+    ld a,(sat_buffer_index)  
+    ld hl,sat_buffer_xc
+    call offset_word_table
+    ex de,hl
+    ld a,(ix+2)
+    ld l,(iy+2)
+    ld h,(iy+3)
+    call batch_alternating_offset_and_copy_to_DE
+
+    ld l,(iy+0)
+    ld h,(iy+1)
+    ld a,(hl)
+    ld b,a
+    ld a,(sat_buffer_index)
+    add a,b
+    ld (sat_buffer_index),a
 
   jp main_loop
 .ends
@@ -218,6 +232,9 @@
 
   arthur_standing_0_xc: ; batch format
     .db  7, -8, 1, 0, 2, -8, 3, 0, 4, -8, 5, 0, 6, -8, 7
+
+  arthur_standing_0_frame: ; batch format
+    .dw arthur_standing_0_y, arthur_standing_0_xc
 
 
   .dstruct arthur_standing animation 7,arthur_standing_0_layout
