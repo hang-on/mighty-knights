@@ -95,6 +95,26 @@
     djnz -
   ret
 
+  batch_alternating_offset_and_copy_to_DE:
+    ; Create a string at DE.
+    ; A = origin to apply offset to.
+    ; HL = number of pairs, string w. offsets and raw copy pairs
+    ; DE = Destination in RAM.
+    ld c,a
+    ld b,(hl)
+    inc hl
+    -:
+      ld a,c
+      add a,(hl)
+      ld (de),a 
+      inc hl
+      inc de
+      ld a,(hl)
+      ld (de),a
+      inc hl
+      inc de
+    djnz -
+  ret
 
 
   get_animation:

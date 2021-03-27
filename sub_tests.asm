@@ -76,6 +76,7 @@
 
 .ramsection "Fake RAM stuff" slot 3
   fake_sat_y dsb 64
+  fake_sat_xc dsb 128
 .ends
 
 ; -----------------------------------------------------------------------------
@@ -87,6 +88,11 @@ test_bench:
     .db 7, -24, -24, -16, -16, -8, -8, -32
   batch_offset_output_0:
     .db  126, 126, 134, 134, 142, 142, 118
+  alternating_batch_offset_input_1:
+    .db 7, -8, 1, 0, 2, -8, 3, 0, 4, -8, 5, 0, 6, -8, 7 ; pairs
+  alternating_batch_offset_output_1:
+    .db 142, 1, 150, 2, 142, 3, 150, 4, 142, 5, 150, 6, 142, 7
+    ; fix?: let chars be a counter from x to x + size...?
   +:
   dec sp
   dec sp
@@ -102,6 +108,13 @@ test_bench:
   call batch_offset_to_DE
   ld hl,fake_sat_y
   ASSERT_HL_EQUALS_STRING 7, batch_offset_output_0
+
+  ld a,150
+  ld hl,alternating_batch_offset_input_1
+  ld de,fake_sat_xc
+  call batch_alternating_offset_and_copy_to_DE
+  ld hl,fake_sat_xc
+  ASSERT_HL_EQUALS_STRING 14, alternating_batch_offset_output_1
 
   jp +
     arthur_standing_0_y:
