@@ -52,7 +52,7 @@
   ;.endr
 .endm
 
-.macro ASSERT_HL_EQUALS_STRING ARGS STRING, LEN
+.macro ASSERT_HL_EQUALS_STRING ARGS LEN, STRING
   ; Parameters: Pointer to string, string length. 
   ld de,STRING                ; Comparison string in DE
   .rept LEN                   ; Loop through given number of bytes.
@@ -101,7 +101,7 @@ test_bench:
   ld de,fake_sat_y
   call batch_offset_to_DE
   ld hl,fake_sat_y
-  ASSERT_HL_EQUALS_STRING batch_offset_output_0, 7
+  ASSERT_HL_EQUALS_STRING 7, batch_offset_output_0
 
   jp +
     arthur_standing_0_y:
