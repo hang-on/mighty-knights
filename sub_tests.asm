@@ -33,7 +33,7 @@
   .endr
 .endm
 
-.macro ASSERT_TOP_OF_STACK_EQUALS_STRING ARGS STRING, LEN
+.macro ASSERT_TOP_OF_STACK_EQUALS_STRING ARGS LEN, STRING
   ; Parameters: Pointer to string, string length. 
   ld de,STRING                ; Comparison string in DE
   ld hl,0                     ; HL points to top of stack.
@@ -93,7 +93,7 @@ test_bench:
   ld a,150
   ld hl,batch_offset_input_0
   call batch_offset_to_stack
-  ASSERT_TOP_OF_STACK_EQUALS 126, 126, 134, 134, 142, 142, 118;*
+  ASSERT_TOP_OF_STACK_EQUALS_STRING 7,batch_offset_output_0
   CLEAN_STACK 7
 
   ld a,150
