@@ -1,4 +1,4 @@
-.equ TEST_MODE
+;.equ TEST_MODE
 
 .macro ASSERT_A_EQUALS
   cp \1
@@ -115,14 +115,6 @@ test_bench:
   call batch_alternating_offset_and_copy_to_DE
   ld hl,fake_sat_xc
   ASSERT_HL_EQUALS_STRING 14, alternating_batch_offset_output_1
-
-  jp +
-    arthur_standing_0_y:
-      .db -24, -24, -16, -16, -8, -8, -32
-
-    arthur_standing_0_xc:
-      .db  -8, 1, 0, 2, -8, 3, 0, 4, -8, 5, 0, 6, -8, 7
-  +:
 
 
 ; ------- end of tests --------------------------------------------------------

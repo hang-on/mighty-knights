@@ -165,8 +165,24 @@
     call PSGSFXFrame
     call refresh_sat_handler
 
+    ld a,150
+    ld hl,arthur_standing_0_y
+    ld de,sat_buffer_y
+    call batch_offset_to_DE
+
+    ld a,100
+    ld hl,arthur_standing_0_xc
+    ld de,sat_buffer_xc
+    call batch_alternating_offset_and_copy_to_DE
+
+    ld b,7
+    ld a,(sat_buffer_index)
+    add a,B
+    ld (sat_buffer_index),a
+
     ld hl,arthur
     call draw_actor
+
 
   jp main_loop
 .ends
@@ -196,6 +212,13 @@
     .db -8, -8, 5
     .db -8, 0, 6
     .db -32, -8, 7
+
+  arthur_standing_0_y: ; batch format
+    .db 7, -24, -24, -16, -16, -8, -8, -32
+
+  arthur_standing_0_xc: ; batch format
+    .db  7, -8, 1, 0, 2, -8, 3, 0, 4, -8, 5, 0, 6, -8, 7
+
 
   .dstruct arthur_standing animation 7,arthur_standing_0_layout
 
