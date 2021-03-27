@@ -1,6 +1,5 @@
   .equ ACTOR_MAX 5 ;***
 
-
   .struct actor
     id db
     y db
@@ -31,16 +30,14 @@
 
   .endm
 
-
   .ramsection "Animation table" slot 3
     ; this table holds up to ACTOR MAX animation structs
     animation_table dsb _sizeof_animation*ACTOR_MAX
   .ends
 
-
+; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
   
-
   move_bytes_from_string_to_stack:
     ; HL = ptr to string
     ; A = size of string (bytes)
@@ -72,7 +69,6 @@
       inc hl
     djnz -
   ret
-
 
   get_animation:
     ; IN: A = Index
@@ -115,7 +111,6 @@
       inc ix
     djnz -    
   ret
-
 
 .ends
 

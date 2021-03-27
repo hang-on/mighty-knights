@@ -33,7 +33,6 @@
   .endr
 .endm
 
-
 .macro ASSERT_TOP_OF_STACK_EQUALS_STRING ARGS STRING, LEN
   ; Parameters: Pointer to string, string length. 
   ld de,STRING                ; Comparison string in DE
@@ -53,14 +52,10 @@
   .endr
 .endm
 
-
-
-
-.section "tests" free
 ; -----------------------------------------------------------------------------
+.section "tests" free
 test_bench:
 
-  ; ----------------------------------------------------------
   jp +
     arthur_standing_0_y:
       .db -24, -24, -16, -16, -8, -8, -32
@@ -78,7 +73,6 @@ exit_with_succes:
   nop
 jp -
 
-
 exit_with_failure:
   ld a,8
   ld b,BORDER_COLOR
@@ -86,12 +80,4 @@ exit_with_failure:
 -:
   nop
 jp -
-
-
-
-
-
-
-
-
 .ends
