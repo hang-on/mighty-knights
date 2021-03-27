@@ -55,18 +55,25 @@
 
   ret
 
-  batch_offset: ; misleading name right now, not batching
-    ; hl points to data: count, origin, offsets..., destination? (word)
-    ; should reorganize data format, header, then data...
+  batch_offset:
+    ; Create a string on the stack by applying a string of offsets to a 
+    ; fixed origin.
+    ; A = origin
+    ; HL = string length,string w. offsets
+    ex de,hl
+    ld hl,2 ; return address
+    add hl,sp
+    ex de,hl  ; now DE points to stack and HL points to parameter
+    ;    
+    ld c,a
     ld b,(hl)
-    inc hl
-    ld c,(hl)
     inc hl
     -:
       ld a,c
       add a,(hl)
-      ; put this byte on the stack..
+      ld (de),a ;push on stack here...
       inc hl
+      inc de
     djnz -
   ret
 

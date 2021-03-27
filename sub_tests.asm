@@ -28,7 +28,7 @@
     cp \1
     jp nz,exit_with_failure
     inc hl
-    inc sp                    ; clean stack as we proceed.
+    ;inc sp                    ; clean stack as we proceed.
     .SHIFT
   .endr
 .endm
@@ -47,8 +47,14 @@
     inc hl                    ; Point to next byte in stack.
     inc de                    ; Point to next comparison byte.
   .endr
-  .rept LEN                   ; Clean stack to leave no trace on the system.
-    inc sp        
+  ;.rept LEN                   ; Clean stack to leave no trace on the system.
+  ;  inc sp        
+  ;.endr
+.endm
+
+.macro CLEAN_STACK
+  .rept \1
+    inc sp
   .endr
 .endm
 
@@ -57,12 +63,25 @@
 test_bench:
 
   jp +
+  batch_offset_input_0:
+    .db 7, -24, -24, -16, -16, -8, -8, -32
+  +:
+  dec sp
+  dec sp
+  ld a,150
+  ld hl,batch_offset_input_0
+  call batch_offset
+  ASSERT_TOP_OF_STACK_EQUALS 126, 126, 134, 134, 142, 142, 118;*
+  CLEAN_STACK 7
+
+  jp +
     arthur_standing_0_y:
       .db -24, -24, -16, -16, -8, -8, -32
 
     arthur_standing_0_xc:
       .db  -8, 1, 0, 2, -8, 3, 0, 4, -8, 5, 0, 6, -8, 7
   +:
+
 
 ; ------- end of tests --------------------------------------------------------
 exit_with_succes:
