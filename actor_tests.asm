@@ -20,6 +20,14 @@
   pop de
 .endm
 
+.macro ASSERT_TOP_OF_STACK_EQUALS
+  ld hl,0
+  add hl,sp
+  ld a,(hl)
+  cp \1
+  jp nz,exit_with_failure
+.endm
+
 
 
 .section "tests" free
@@ -52,7 +60,22 @@ test_bench:
   call batch_offset
   ASSERT_A_EQUALS 150
 
-
+  ld hl,-2
+  add hl,sp
+  ld sp,hl
+  ld hl,$1234
+  push hl
+  ld a,$56
+  push af
+  inc sp
+  call my_sub
+  ld hl,3
+  add hl,sp
+  ld sp,hl
+  ASSERT_TOP_OF_STACK_EQUALS $12
+  pop hl
+  ld a,l
+  ASSERT_A_EQUALS $12
 
   call test_size_in_my_frame
 

@@ -45,8 +45,28 @@
 
 
 .section "Actor library" free
+  
+  my_sub:
+    ld hl,2
+    add hl,sp
+    ld a,(hl)
+    inc hl
+    ld e,(hl)
+    inc hl
+    ld d,(hl)
+    inc hl
+    ; results , 2 bytes
+    ld a,$12
+    ld (hl),a
+    inc hl
+    ld a,$34
+    ld (hl),a
+    inc hl
+  ret
 
   batch_offset: ; misleading name right now, not batching
+    ; hl points to data: count, origin, offsets..., destination? (word)
+    ; should reorganize data format, header, then data...
     ld b,(hl)
     inc hl
     ld c,(hl)
