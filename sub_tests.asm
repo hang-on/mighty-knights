@@ -52,11 +52,31 @@
   ;.endr
 .endm
 
+.macro ASSERT_HL_EQUALS_STRING ARGS STRING, LEN
+  ; Parameters: Pointer to string, string length. 
+  ld de,STRING                ; Comparison string in DE
+  .rept LEN                   ; Loop through given number of bytes.
+    ld a,(hl)                 ; Get byte
+    ld b,a                    ; Store it.
+    ld a,(de)                 ; Get comparison byte.
+    cp b                      
+    jp nz,exit_with_failure   ; Fail if not equal.
+    inc hl                    ; Point to next byte.
+    inc de                    ; Point to next comparison byte.
+  .endr
+.endm
+
+
+
 .macro CLEAN_STACK
   .rept \1
     inc sp
   .endr
 .endm
+
+.ramsection "Fake RAM stuff" slot 3
+  fake_sat_y dsb 64
+.ends
 
 ; -----------------------------------------------------------------------------
 .section "tests" free
@@ -65,14 +85,23 @@ test_bench:
   jp +
   batch_offset_input_0:
     .db 7, -24, -24, -16, -16, -8, -8, -32
+  batch_offset_output_0:
+    .db  126, 126, 134, 134, 142, 142, 118
   +:
   dec sp
   dec sp
   ld a,150
   ld hl,batch_offset_input_0
-  call batch_offset
+  call batch_offset_to_stack
   ASSERT_TOP_OF_STACK_EQUALS 126, 126, 134, 134, 142, 142, 118;*
   CLEAN_STACK 7
+
+  ld a,150
+  ld hl,batch_offset_input_0
+  ld de,fake_sat_y
+  call batch_offset_to_DE
+  ld hl,fake_sat_y
+  ASSERT_HL_EQUALS_STRING batch_offset_output_0, 7
 
   jp +
     arthur_standing_0_y:
