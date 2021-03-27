@@ -123,8 +123,7 @@
     ld hl,arthur_standing_0_tiles
     call load_vram
 
-    INITIALIZE_ACTOR arthur, 0, 160, 70, arthur_standing
-    INITIALIZE_ACTOR arthur_twin, 1, 110, 20, arthur_standing
+    INITIALIZE_ACTOR arthur, 0, 160, 70, arthur_standing_0
 
     ld bc,96*CHARACTER_SIZE
     ld de,BACKGROUND_BANK_START
@@ -170,11 +169,6 @@
     ld hl,arthur
     call draw_actor
 
-    ld ix,arthur_twin
-    ld iy,arthur_standing_0_frame    ;
-    call draw_frame
-
-
   jp main_loop
 .ends
 .bank 2 slot 2
@@ -203,18 +197,7 @@
     .db -8, -8, 5
     .db -8, 0, 6
     .db -32, -8, 7
-
-  arthur_standing_0_y: ; batch format
-    .db 7, -24, -24, -16, -16, -8, -8, -32
-
-  arthur_standing_0_xc: ; batch format
-    .db  7, -8, 1, 0, 2, -8, 3, 0, 4, -8, 5, 0, 6, -8, 7
-
-  arthur_standing_0_frame: ; batch format
-    .dw arthur_standing_0_y, arthur_standing_0_xc
-
-
-  .dstruct arthur_standing frame 7,arthur_standing_0_layout
+  .dstruct arthur_standing_0 frame 7,arthur_standing_0_layout
 
   ; Mockup background of Village on Fire:
   .include "mockup_background_tilemap.asm"

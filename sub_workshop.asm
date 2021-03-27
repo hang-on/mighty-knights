@@ -6,6 +6,14 @@
     x db
   .endst
 
+  .struct animation ; placeholder p.t.
+    current_frame db
+    timer db
+    frames_total db
+    looping db
+    script dw
+  .endst
+
   .struct frame
     size db
     layout dw
@@ -25,11 +33,6 @@
     call set_frame
 
   .endm
-
-  .ramsection "frame table" slot 3
-    ; this table holds up to ACTOR MAX frame structs
-    frame_table dsb _sizeof_frame*ACTOR_MAX
-  .ends
 
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
@@ -112,7 +115,13 @@
     djnz -
   ret
 
+.ends
 
+.ramsection "Animation control tables" slot 3
+  animation_table dsb _sizeof_animation*ACTOR_MAX
+  frame_table dsb _sizeof_frame*ACTOR_MAX
+.ends
+.section "Drawing and animating actors" free
   get_frame:
     ; IN: A = Index
     ; OUT: HL = pointer to frame item.
@@ -135,6 +144,7 @@
   ret
 
   draw_actor:
+    ; Put the current frame of a given actor into the SAT buffer. 
     ; HL = Pointer to actor struct
     ld a,(hl) ; get id
     inc hl
@@ -154,38 +164,7 @@
       inc ix
     djnz -    
   ret
-
-  draw_frame:
-    ; Draw an frame frame (metasprite) to SAT buffer.
-    ; IN: IX = actor, IY = frame
-    ld a,(sat_buffer_index)  
-    ld hl,sat_buffer_y
-    call offset_byte_table
-    ex de,hl
-    ld a,(ix+1)
-    ld l,(iy+0)
-    ld h,(iy+1)
-    call batch_offset_to_DE
-
-    ld a,(sat_buffer_index)  
-    ld hl,sat_buffer_xc
-    call offset_word_table
-    ex de,hl
-    ld a,(ix+2)
-    ld l,(iy+2)
-    ld h,(iy+3)
-    call batch_alternating_offset_and_copy_to_DE
-
-    ld l,(iy+0)
-    ld h,(iy+1)
-    ld a,(hl)
-    ld b,a
-    ld a,(sat_buffer_index)
-    add a,b
-    ld (sat_buffer_index),a
-    ret
 .ends
-
 
 
  
