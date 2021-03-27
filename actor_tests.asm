@@ -23,9 +23,30 @@
 .macro ASSERT_TOP_OF_STACK_EQUALS
   ld hl,0
   add hl,sp
-  ld a,(hl)
-  cp \1
-  jp nz,exit_with_failure
+  .rept NARGS
+    ld a,(hl)
+    cp \1
+    jp nz,exit_with_failure
+    inc hl
+    .SHIFT
+  .endr
+.endm
+
+.macro ASSERT_TOP_OF_STACK_EQUALS_BYTES_AT
+  ld de,\2
+  
+  ld hl,0
+  add hl,sp
+  .rept \1
+    ld a,(hl)
+    ld b,a
+    ld a,(de)
+    cp b
+    jp nz,exit_with_failure
+    inc hl
+    inc de
+
+  .endr
 .endm
 
 
@@ -60,6 +81,8 @@ test_bench:
   call batch_offset
   ASSERT_A_EQUALS 150
 
+  ; Pass 16 bit and 8 bit parameter in stack
+  ; And get 16 bit result from subroutine.
   ld hl,-2
   add hl,sp
   ld sp,hl
@@ -72,30 +95,50 @@ test_bench:
   ld hl,3
   add hl,sp
   ld sp,hl
-  ASSERT_TOP_OF_STACK_EQUALS $12
+  ASSERT_TOP_OF_STACK_EQUALS $12 $34
   pop hl
   ld a,l
   ASSERT_A_EQUALS $12
 
-  call test_size_in_my_frame
+  ; And get 16 bit result from subroutine.
+  jp +
+    my_data:
+      .db $12, $34
+    my_other_data:
+      .db $12, $35, $56
+  +:
+  ld hl,-2
+  add hl,sp
+  ld sp,hl
+  ld hl,my_data
+  call my_sub_gets_hl
+  ASSERT_TOP_OF_STACK_EQUALS $12 $34
+  ASSERT_TOP_OF_STACK_EQUALS_BYTES_AT 2 my_data
+  pop hl ; two bytes, correspond to size for result (nreslt)
+
+  ld hl,2
+  ld a,l
+  ASSERT_A_EQUALS 2
+
+  jp +
+    my_string:
+      .db $12, $34, $56, $78, $9A
+    my_zero_string:
+      .db $00, $00, $00, $00, $00
+  +:
+  ld hl,-2 ; return address
+  add hl,sp
+  ld sp,hl
+  ld a,5
+  ld hl,my_string
+  call move_bytes_from_string_to_stack
+  ASSERT_TOP_OF_STACK_EQUALS_BYTES_AT 5 my_string
+  .rept 5
+    inc sp
+  .endr
 
 
 
-jp +  
-.dstruct my_frame_1 frame 7 layout_1
-layout_1:
-    .db -24, -8, 1
-    .db -24, 0, 2
-    .db -16, -8, 3
-    .db -16, 0, 4
-    .db -8, -8, 5
-    .db -8, 0, 6
-    .db -32, -8, 7
-+:
-  ld hl,my_frame_1
-  ld a,1 
-  call get_sprite
-  ASSERT_HL_EQUALS layout_1 + 3
 
 
 

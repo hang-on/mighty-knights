@@ -6,6 +6,26 @@ Display frame: Load a number og appropritate sprites (yxc) into SAT.
 Arthur standing 0: 7 sprites, >> 1 sprite
 
 
+  call test_size_in_my_frame
+
+
+
+jp +  
+.dstruct my_frame_1 frame 7 layout_1
+layout_1:
+    .db -24, -8, 1
+    .db -24, 0, 2
+    .db -16, -8, 3
+    .db -16, 0, 4
+    .db -8, -8, 5
+    .db -8, 0, 6
+    .db -32, -8, 7
++:
+  ld hl,my_frame_1
+  ld a,1 
+  call get_sprite
+  ASSERT_HL_EQUALS layout_1 + 3
+
 
 
 Tests for the legacy animation struct
