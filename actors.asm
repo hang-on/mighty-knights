@@ -64,6 +64,39 @@
     inc hl
   ret
 
+  my_sub_gets_hl:
+    ex de,hl
+    ld hl,2
+    add hl,sp
+    ; results
+    ld a,(de)
+    ld (hl),a
+    inc de
+    inc hl
+    ld a,(de)
+    ld (hl),a
+    inc de
+    inc hl
+  ret
+
+  move_bytes_from_string_to_stack:
+    ; HL = ptr to string
+    ; A = size of string (bytes)
+    ex de,hl
+    ld hl,2 ; return address
+    add hl,sp
+    ex de,hl
+    ld b,a
+    -:
+      ld a,(hl)
+      ld (de),a
+      inc hl
+      inc de
+    djnz -
+
+  ret
+
+
   batch_offset: ; misleading name right now, not batching
     ; hl points to data: count, origin, offsets..., destination? (word)
     ; should reorganize data format, header, then data...
