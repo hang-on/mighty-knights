@@ -107,6 +107,8 @@
 ; -----------------------------------------------------------------------------
 ; Drawing and animating actors
 ; -----------------------------------------------------------------------------
+; FIXME: have a animation processing per frame - the anim controls
+; the frames, not directly set (so chance init actor macro).
 .struct animation ; placeholder p.t.
   current_frame db
   timer db
