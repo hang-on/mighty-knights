@@ -28,6 +28,7 @@
     cp \1
     jp nz,exit_with_failure
     inc hl
+    inc sp
     .SHIFT
   .endr
 .endm
@@ -47,6 +48,11 @@
     inc de
 
   .endr
+
+  .rept \1
+    inc sp
+  .endr
+
 .endm
 
 
@@ -96,9 +102,7 @@ test_bench:
   add hl,sp
   ld sp,hl
   ASSERT_TOP_OF_STACK_EQUALS $12 $34
-  pop hl
-  ld a,l
-  ASSERT_A_EQUALS $12
+  ;pop hl
 
   ; And get 16 bit result from subroutine.
   jp +
@@ -112,9 +116,7 @@ test_bench:
   ld sp,hl
   ld hl,my_data
   call my_sub_gets_hl
-  ASSERT_TOP_OF_STACK_EQUALS $12 $34
   ASSERT_TOP_OF_STACK_EQUALS_BYTES_AT 2 my_data
-  pop hl ; two bytes, correspond to size for result (nreslt)
 
   ld hl,2
   ld a,l
@@ -126,18 +128,20 @@ test_bench:
     my_zero_string:
       .db $00, $00, $00, $00, $00
   +:
-  ld hl,-2 ; return address
-  add hl,sp
-  ld sp,hl
-  ld a,5
-  ld hl,my_string
-  call move_bytes_from_string_to_stack
-  ASSERT_TOP_OF_STACK_EQUALS_BYTES_AT 5 my_string
-  .rept 5
-    inc sp
-  .endr
+  .macro EVALUATE_BYTE_MOVER
+    ld hl,-2 ; return address
+    add hl,sp
+    ld sp,hl
+    ld a,\1
+    ld hl,\2
+    call move_bytes_from_string_to_stack
+  .endm
 
+  EVALUATE_BYTE_MOVER 3, my_string
+  ASSERT_TOP_OF_STACK_EQUALS_BYTES_AT 3 my_string
 
+  EVALUATE_BYTE_MOVER 4, my_zero_string
+  ASSERT_TOP_OF_STACK_EQUALS_BYTES_AT 4 my_zero_string
 
 
 
