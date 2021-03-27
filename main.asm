@@ -172,31 +172,8 @@
 
     ld ix,arthur_twin
     ld iy,arthur_standing_0_frame    ;
-    ld a,(sat_buffer_index)  
-    ld hl,sat_buffer_y
-    call offset_byte_table
-    ex de,hl
-    ld a,(ix+1)
-    ld l,(iy+0)
-    ld h,(iy+1)
-    call batch_offset_to_DE
+    call draw_frame
 
-    ld a,(sat_buffer_index)  
-    ld hl,sat_buffer_xc
-    call offset_word_table
-    ex de,hl
-    ld a,(ix+2)
-    ld l,(iy+2)
-    ld h,(iy+3)
-    call batch_alternating_offset_and_copy_to_DE
-
-    ld l,(iy+0)
-    ld h,(iy+1)
-    ld a,(hl)
-    ld b,a
-    ld a,(sat_buffer_index)
-    add a,b
-    ld (sat_buffer_index),a
 
   jp main_loop
 .ends
@@ -237,7 +214,7 @@
     .dw arthur_standing_0_y, arthur_standing_0_xc
 
 
-  .dstruct arthur_standing animation 7,arthur_standing_0_layout
+  .dstruct arthur_standing frame 7,arthur_standing_0_layout
 
   ; Mockup background of Village on Fire:
   .include "mockup_background_tilemap.asm"

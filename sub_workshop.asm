@@ -6,13 +6,9 @@
     x db
   .endst
 
-  .struct animation
+  .struct frame
     size db
     layout dw
-    frame db    
-    timer db
-    script dw
-    tiles dw
   .endst
 
   .macro INITIALIZE_ACTOR
@@ -26,13 +22,13 @@
     +:
     ld a,\2
     ld hl,\5
-    call set_animation
+    call set_frame
 
   .endm
 
-  .ramsection "Animation table" slot 3
-    ; this table holds up to ACTOR MAX animation structs
-    animation_table dsb _sizeof_animation*ACTOR_MAX
+  .ramsection "frame table" slot 3
+    ; this table holds up to ACTOR MAX frame structs
+    frame_table dsb _sizeof_frame*ACTOR_MAX
   .ends
 
 ; -----------------------------------------------------------------------------
@@ -117,24 +113,24 @@
   ret
 
 
-  get_animation:
+  get_frame:
     ; IN: A = Index
-    ; OUT: HL = pointer to animation item.
-    ld hl,animation_table
-    ld b,_sizeof_animation
+    ; OUT: HL = pointer to frame item.
+    ld hl,frame_table
+    ld b,_sizeof_frame
     call offset_custom_table
   ret
 
-  set_animation:
-    ; Copy an animation struct item into the table at index.
-    ; IN: A = Index, HL = animation struct
+  set_frame:
+    ; Copy an frame struct item into the table at index.
+    ; IN: A = Index, HL = frame struct
     push hl
-      ld hl,animation_table
-      ld b,_sizeof_animation
+      ld hl,frame_table
+      ld b,_sizeof_frame
       call offset_custom_table
       ex de,hl
     pop hl
-    ld bc,_sizeof_animation
+    ld bc,_sizeof_frame
     ldir
   ret
 
@@ -145,7 +141,7 @@
     ld d,(hl)
     inc hl
     ld e,(hl)
-    call get_animation
+    call get_frame
     ld b,(hl)
     inc hl
     call get_address
@@ -159,6 +155,35 @@
     djnz -    
   ret
 
+  draw_frame:
+    ; Draw an frame frame (metasprite) to SAT buffer.
+    ; IN: IX = actor, IY = frame
+    ld a,(sat_buffer_index)  
+    ld hl,sat_buffer_y
+    call offset_byte_table
+    ex de,hl
+    ld a,(ix+1)
+    ld l,(iy+0)
+    ld h,(iy+1)
+    call batch_offset_to_DE
+
+    ld a,(sat_buffer_index)  
+    ld hl,sat_buffer_xc
+    call offset_word_table
+    ex de,hl
+    ld a,(ix+2)
+    ld l,(iy+2)
+    ld h,(iy+3)
+    call batch_alternating_offset_and_copy_to_DE
+
+    ld l,(iy+0)
+    ld h,(iy+1)
+    ld a,(hl)
+    ld b,a
+    ld a,(sat_buffer_index)
+    add a,b
+    ld (sat_buffer_index),a
+    ret
 .ends
 
 
