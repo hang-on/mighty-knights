@@ -33,7 +33,7 @@
   .endr
 .endm
 
-.macro ASSERT_TOP_OF_STACK_EQUALS_BYTES_AT ;(bytes, ptr to expected bytes)
+.macro ASSERT_TOP_OF_STACK_EQUALS_BYTES_AT
   ; Parameters: Number of bytes, pointer to expected data. 
   ld de,\2                    ; Comparison string in DE
   ld hl,0                     ; HL points to top of stack.
@@ -51,6 +51,26 @@
     inc sp        
   .endr
 .endm
+
+.macro ASSERT_TOP_OF_STACK_EQUALS_STRING ARGS STRING, LEN
+  ; Parameters: Pointer to string, string length. 
+  ld de,STRING                ; Comparison string in DE
+  ld hl,0                     ; HL points to top of stack.
+  add hl,sp       
+  .rept LEN                   ; Loop through given number of bytes.
+    ld a,(hl)                 ; Get byte from stack.
+    ld b,a                    ; Store it.
+    ld a,(de)                 ; Get comparison byte.
+    cp b                      ; Compare byte on stack with comparison byte.
+    jp nz,exit_with_failure   ; Fail if not equal.
+    inc hl                    ; Point to next byte in stack.
+    inc de                    ; Point to next comparison byte.
+  .endr
+  .rept LEN                   ; Clean stack to leave no trace on the system.
+    inc sp        
+  .endr
+.endm
+
 
 
 
@@ -140,7 +160,8 @@ test_bench:
   EVALUATE_BYTE_MOVER 4, my_zero_string
   ASSERT_TOP_OF_STACK_EQUALS_BYTES_AT 4 my_zero_string
 
-
+  EVALUATE_BYTE_MOVER 5, my_string
+  ASSERT_TOP_OF_STACK_EQUALS_STRING my_string, 5
 
 
 ; ------- end of tests --------------------------------------------------------
