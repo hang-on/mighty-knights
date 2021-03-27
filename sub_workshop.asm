@@ -6,19 +6,6 @@
     x db
   .endst
 
-  .struct animation ; placeholder p.t.
-    current_frame db
-    timer db
-    frames_total db
-    looping db
-    script dw
-  .endst
-
-  .struct frame
-    size db
-    layout dw
-  .endst
-
   .macro INITIALIZE_ACTOR
     ld hl,init_data_\@
     ld de,\1
@@ -117,6 +104,20 @@
 
 .ends
 
+; -----------------------------------------------------------------------------
+; Drawing and animating actors
+; -----------------------------------------------------------------------------
+.struct animation ; placeholder p.t.
+  current_frame db
+  timer db
+  frames_total db
+  looping db
+  script dw
+.endst
+.struct frame
+  size db
+  layout dw
+.endst
 .ramsection "Animation control tables" slot 3
   animation_table dsb _sizeof_animation*ACTOR_MAX
   frame_table dsb _sizeof_frame*ACTOR_MAX
