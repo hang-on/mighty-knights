@@ -345,7 +345,7 @@ test_bench:
   SETUP_VIDEO_JOB_TEST 0, video_job_0, video_job_1, video_job_2
   ld hl,video_job_4
   call add_video_job
-
+  ;
   ld a,(video_jobs)
   dec a ; take it back to the last of the existing entries
   ld hl,video_job_table
@@ -353,7 +353,17 @@ test_bench:
   call get_word
   ASSERT_HL_EQUALS video_job_4
 
-
+  ; Test add video job - prevent overflow
+  SETUP_VIDEO_JOB_TEST 10, video_job_0, video_job_1, video_job_2, video_job_0, video_job_1, video_job_2, video_job_0, video_job_1, video_job_2, video_job_0
+  ld hl,video_job_4
+  call add_video_job
+  ;
+  ld a,(video_jobs)
+  dec a ; take it back to the last of the existing entries
+  ld hl,video_job_table
+  call offset_word_table
+  call get_word
+  ASSERT_HL_EQUALS video_job_0
 
 ; ------- end of tests --------------------------------------------------------
 exit_with_succes:
