@@ -287,13 +287,27 @@ test_bench:
   call get_word
   ASSERT_HL_EQUALS $1111
 
-  ; Test job 0 of three
+  ; Test no jobs, but three (old) items on the list
   SETUP_VIDEO_JOB_TEST 0, video_job_0, video_job_1, video_job_3
   call process_video_job_table
   ld hl,test_kernel_destination
   call get_word
   ASSERT_HL_EQUALS $0000
 
+  ; Full test of last of two jobs, but three (old) items on the list
+  SETUP_VIDEO_JOB_TEST 2, video_job_0, video_job_1, video_job_3
+  call process_video_job_table
+  ld a,(test_kernel_bank)
+  ASSERT_A_EQUALS 2
+  ld hl,test_kernel_destination
+  call get_word
+  ASSERT_HL_EQUALS $5678
+  ld hl,test_kernel_bytes_written
+  call get_word ;
+  ASSERT_HL_EQUALS multicolor_c_size
+  ld hl,test_kernel_source
+  call get_word
+  ASSERT_HL_EQUALS multicolor_c
 
 
 
