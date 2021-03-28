@@ -1,5 +1,5 @@
   .equ ACTOR_MAX 5 ;***
-
+  .equ VIDEO_JOB_MAX 10 ; amount of video jobs the table can hold 
   .struct actor
     id db
     y db
@@ -57,7 +57,7 @@
 
 .ramsection "Video job table" slot 3
   video_jobs db
-  video_job_table dsb 2*10 ; up to 10 video jobs, ptrs to video jobs
+  video_job_table dsb 2*VIDEO_JOB_MAX ; up to 10 video jobs, ptrs to video jobs
 .ends
 
 ; -----------------------------------------------------------------------------
@@ -65,6 +65,10 @@
 ; -----------------------------------------------------------------------------
   add_video_job:
     ; HL: Video job to add to table
+    ld a,(video_jobs)
+    cp VIDEO_JOB_MAX
+    ret z ; Protect against overflow..
+    ;
     ld b,l
     ld c,h
     push bc
