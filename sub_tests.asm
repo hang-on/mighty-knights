@@ -269,6 +269,31 @@ test_bench:
   call get_word
   ASSERT_HL_EQUALS $1234
 
+  jp +
+    .dstruct video_job_3 video_job 2, multicolor_c, multicolor_c_size, $1111
+  +:
+
+  ; Test job 1 of three
+  SETUP_VIDEO_JOB_TEST 1, video_job_0, video_job_1, video_job_3
+  call process_video_job_table
+  ld hl,test_kernel_destination
+  call get_word
+  ASSERT_HL_EQUALS $1234
+
+  ; Test job three of three
+  SETUP_VIDEO_JOB_TEST 3, video_job_0, video_job_1, video_job_3
+  call process_video_job_table
+  ld hl,test_kernel_destination
+  call get_word
+  ASSERT_HL_EQUALS $1111
+
+  ; Test job 0 of three
+  SETUP_VIDEO_JOB_TEST 0, video_job_0, video_job_1, video_job_3
+  call process_video_job_table
+  ld hl,test_kernel_destination
+  call get_word
+  ASSERT_HL_EQUALS $0000
+
 
 
 
