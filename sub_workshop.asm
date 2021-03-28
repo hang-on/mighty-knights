@@ -118,7 +118,7 @@
 .endst
 .struct frame
   size db
-  layout dw
+  layout dw ; FIXME: Add a ptr to tiles?
 .endst
 .ramsection "Animation control tables" slot 3
   animation_table dsb _sizeof_animation*ACTOR_MAX
