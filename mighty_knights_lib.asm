@@ -316,11 +316,20 @@
     .ifdef USE_TEST_KERNEL
       push hl
       pop ix ; save HL
-      ld hl,test_kernel_address
+      ld hl,test_kernel_destination
       ld (hl),e
       inc hl
       ld (hl),d
-    
+      ld hl,test_kernel_bytes_written
+      ld (hl),c
+      inc hl
+      ld (hl),b
+      ld hl,test_kernel_source
+      push ix
+      pop de
+      ld (hl),e
+      inc hl
+      ld (hl),d
     .else
       ld a,e
       out (CONTROL_PORT),a

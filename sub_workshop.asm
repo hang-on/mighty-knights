@@ -21,10 +21,11 @@
 
   .endm
   .ramsection "Test kernel" slot 3
+    ; For faking writes to vram.
+    test_kernel_source dw
     test_kernel_bank db
-    test_kernel_address dw
+    test_kernel_destination dw
     test_kernel_bytes_written dw
-    test_kernel_data_written dw
   .ends
 
 

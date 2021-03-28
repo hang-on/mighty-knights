@@ -149,14 +149,15 @@ test_bench:
   call run_video_job
   ld a,(test_kernel_bank)
   ASSERT_A_EQUALS 2
-  ld hl,test_kernel_address
+  ld hl,test_kernel_destination
   call get_word
   ASSERT_HL_EQUALS $1234
   ld hl,test_kernel_bytes_written
   call get_word ;more like get value, or ptr2value16
-  ;ASSERT_HL_EQUALS multicolor_c_size
-  ld hl,test_kernel_data_written
-  ;ASSERT_HL_EQUALS_STRING 32, multicolor_c
+  ASSERT_HL_EQUALS multicolor_c_size
+  ld hl,test_kernel_source
+  call get_word
+  ASSERT_HL_EQUALS multicolor_c
 
 
 ; ------- end of tests --------------------------------------------------------
