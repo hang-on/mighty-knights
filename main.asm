@@ -7,8 +7,11 @@
 .equ ENABLED $ff
 .equ DISABLED 0
 
+; Remove comment to enable unit testing
 .equ TEST_MODE
-.equ USE_TEST_KERNEL
+.ifdef TEST_MODE
+  .equ USE_TEST_KERNEL
+.endif
 
 ; -----------------------------------------------------------------------------
 .memorymap

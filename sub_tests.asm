@@ -309,6 +309,50 @@ test_bench:
   call get_word
   ASSERT_HL_EQUALS multicolor_c
 
+  jp +
+    .dstruct video_job_4 video_job 2, multicolor_c, multicolor_c_size, $4444
+  +:
+
+  ; Test video job table format
+  SETUP_VIDEO_JOB_TEST 1, video_job_0
+  ld hl,video_job_table
+  call get_word
+  ASSERT_HL_EQUALS video_job_0
+
+  ; Test video job table format - with three jobs
+  SETUP_VIDEO_JOB_TEST 3, video_job_0, video_job_1, video_job_2
+  ld a,(video_jobs)
+  dec a ; take it back to the last of the existing entries
+  ld hl,video_job_table
+  call offset_word_table
+  call get_word
+  ASSERT_HL_EQUALS video_job_2
+
+  ; Test add video job - with three jobs
+  SETUP_VIDEO_JOB_TEST 3, video_job_0, video_job_1, video_job_2
+  ld hl,video_job_4
+  call add_video_job
+
+  ld a,(video_jobs)
+  dec a ; take it back to the last of the existing entries
+  ld hl,video_job_table
+  call offset_word_table
+  call get_word
+  ASSERT_HL_EQUALS video_job_4
+
+
+  ; Test add video job - with 0 jobs but filled table
+  SETUP_VIDEO_JOB_TEST 0, video_job_0, video_job_1, video_job_2
+  ld hl,video_job_4
+  call add_video_job
+
+  ld a,(video_jobs)
+  dec a ; take it back to the last of the existing entries
+  ld hl,video_job_table
+  call offset_word_table
+  call get_word
+  ASSERT_HL_EQUALS video_job_4
+
 
 
 ; ------- end of tests --------------------------------------------------------

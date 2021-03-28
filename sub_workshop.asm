@@ -57,12 +57,29 @@
 
 .ramsection "Video job table" slot 3
   video_jobs db
-  video_job_table dsb _sizeof_video_job*10 ; up to 10 video jobs
+  video_job_table dsb 2*10 ; up to 10 video jobs, ptrs to video jobs
 .ends
 
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  add_video_job:
+    ; HL: Video job to add to table
+    ld b,l
+    ld c,h
+    push bc
+      ld a,(video_jobs)
+      ld hl,video_job_table
+      call offset_word_table
+    pop bc
+    ld (hl),b
+    inc hl
+    ld (hl),c
+    ;
+    ld hl,video_jobs
+    inc (hl)
+  ret
+  
   process_video_job_table:
     ld a,(video_jobs)
     cp 0
