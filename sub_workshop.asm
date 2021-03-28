@@ -67,16 +67,21 @@
     ld a,(video_jobs)
     cp 0
     ret z
+    ld b,0
+    ld c,a
     -:
-      push bc
-        ld a,b
-        ld hl,video_job_table
-        call offset_word_table
-        call get_word
-        call run_video_job
-      pop bc
-    dec b
+        push bc
+          ld a,b
+          ld hl,video_job_table
+          call offset_word_table
+          call get_word
+          call run_video_job
+        pop bc
+      inc b
+      ld a,c
+      cp b
     jp nz,-
+    ;
     xor a
     ld (video_jobs),a
   ret
