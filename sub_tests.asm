@@ -145,6 +145,7 @@ test_bench:
   jp +
     .dstruct video_job_2 video_job 2, multicolor_c, multicolor_c_size, $1234
   +:
+  RESET_TEST_KERNEL
   ld hl,video_job_2
   call run_video_job
   ld a,(test_kernel_bank)
@@ -165,6 +166,22 @@ test_bench:
     fake_job_table_2:
       .dw video_job_0
   +:
+  RESET_TEST_KERNEL
+  ld a,(fake_index_2)
+  ld b,a
+  -:
+    push bc
+      ld a,b
+      dec a
+      ld hl,fake_job_table_2
+      call offset_word_table
+      call get_word
+      call run_video_job
+    pop bc
+  djnz -
+  ld hl,test_kernel_destination
+  call get_word
+  ASSERT_HL_EQUALS $1234
 
 
 ; ------- end of tests --------------------------------------------------------

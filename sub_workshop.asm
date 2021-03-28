@@ -22,12 +22,21 @@
   .endm
   .ramsection "Test kernel" slot 3
     ; For faking writes to vram.
-    test_kernel_source dw
-    test_kernel_bank db
-    test_kernel_destination dw
-    test_kernel_bytes_written dw
+    ; 7 bytes! - update RESET macro if this changes!
+      test_kernel_source dw
+      test_kernel_bank db
+      test_kernel_destination dw
+      test_kernel_bytes_written dw
   .ends
 
+.macro RESET_TEST_KERNEL
+  ld a,0
+  ld b,7 ; size of test kernel
+  ld hl,test_kernel_source
+  -:
+    ld (hl),a
+  djnz -
+.endm
 
 
 .macro SELECT_BANK_IN_REGISTER_A
