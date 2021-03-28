@@ -63,6 +63,11 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  initialize_video_job_table:
+    xor a
+    ld (video_jobs),a
+  ret
+  
   add_video_job:
     ; HL: Video job to add to table
     ld a,(video_jobs)

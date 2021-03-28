@@ -1,4 +1,23 @@
 
+    ;ld bc,CHARACTER_SIZE*7
+    ;ld de,SPRITE_BANK_START + CHARACTER_SIZE
+    ;ld hl,arthur_standing_0_tiles
+    ;call load_vram
+
+    ;ld bc,96*CHARACTER_SIZE
+    ;ld de,BACKGROUND_BANK_START
+    ;ld hl,mockup_background_tiles
+    ;call load_vram
+
+    ld bc,VISIBLE_NAME_TABLE_SIZE
+    ld de,NAME_TABLE_START
+    ld hl,mockup_background_tilemap
+    call load_vram
+
+
+
+
+
 Feature request:
 Add a tile loading que.
 - Add item to que
