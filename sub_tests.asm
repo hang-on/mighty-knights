@@ -100,7 +100,7 @@ jp +
     .db 0
   
   .dstruct video_job_0 instanceof video_job 2, multicolor_c, multicolor_c_size, $1234
-  .dstruct video_job_1 instanceof video_job 2, multicolor_c, multicolor_c_size, $1234
+  .dstruct video_job_1 instanceof video_job 2, multicolor_c, multicolor_c_size, $5678
   
   multicolor_c:
     .db $ff $00 $ff $00
@@ -158,6 +158,13 @@ test_bench:
   ld hl,test_kernel_source
   call get_word
   ASSERT_HL_EQUALS multicolor_c
+
+  jp +
+    fake_index_2:
+      .db 1
+    fake_job_table_2:
+      .dw video_job_0
+  +:
 
 
 ; ------- end of tests --------------------------------------------------------
