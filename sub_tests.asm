@@ -365,6 +365,37 @@ test_bench:
   call get_word
   ASSERT_HL_EQUALS video_job_0
 
+  jp +
+    .dstruct arthur_standing_0_job video_job 2, arthur_standing_0_tiles, CHARACTER_SIZE*7, SPRITE_BANK_START + CHARACTER_SIZE
+  +:
+  ; Test add video job - real arthur
+  SETUP_VIDEO_JOB_TEST 0
+  ld hl,arthur_standing_0_job
+  call add_video_job
+  ;
+  ld a,(video_jobs)
+  dec a ; take it back to the last of the existing entries
+  ld hl,video_job_table
+  call offset_word_table
+  call get_word
+  ASSERT_HL_EQUALS arthur_standing_0_job
+
+    ; Full test of arthur job
+  SETUP_VIDEO_JOB_TEST 1, arthur_standing_0_job
+  call process_video_job_table
+  ld a,(test_kernel_bank)
+  ASSERT_A_EQUALS 2
+  ld hl,test_kernel_destination
+  call get_word
+  ASSERT_HL_EQUALS SPRITE_BANK_START + CHARACTER_SIZE
+  ld hl,test_kernel_bytes_written
+  call get_word ;
+  ASSERT_HL_EQUALS CHARACTER_SIZE*7
+  ld hl,test_kernel_source
+  call get_word
+  ASSERT_HL_EQUALS arthur_standing_0_tiles
+
+
 ; ------- end of tests --------------------------------------------------------
 exit_with_succes:
   ld a,11
