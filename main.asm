@@ -45,8 +45,6 @@
   pause_flag db
   ;
   arthur instanceof actor
-  arthur_twin instanceof actor
-
 
 .ends
 .org 0
@@ -124,24 +122,18 @@
     ld b,demo_palette_end-demo_palette
     ld hl,demo_palette
     call load_cram
-    ;
-    jp +
-    .dstruct arthur_standing_0_job video_job 2, arthur_standing_0_tiles, CHARACTER_SIZE*7, SPRITE_BANK_START + CHARACTER_SIZE
-    .dstruct mockup_tiles_job video_job 2, mockup_background_tiles, 96*CHARACTER_SIZE, BACKGROUND_BANK_START
-    .dstruct mockup_tilemap_job video_job 2, mockup_background_tilemap, VISIBLE_NAME_TABLE_SIZE, NAME_TABLE_START
-    +:
-    INITIALIZE_ACTOR arthur, 0, 160, 70, arthur_standing_0
 
     call initialize_video_job_table
-
-    ld hl,arthur_standing_0_job
+    ;
+    ld hl,arthur_standing_0_tiles_job
     call add_video_job
     ld hl,mockup_tiles_job
     call add_video_job
     ld hl,mockup_tilemap_job
     call add_video_job
-
     call process_video_job_table
+    
+    INITIALIZE_ACTOR arthur, 0, 160, 70, arthur_standing_0
 
     .ifdef TEST_MODE
       jp test_bench
@@ -196,6 +188,11 @@
     .db $10 $0F $00 $00 $10 $08 $00 $07 $30 $08 $08 $07 $27 $18 $18 $00 $65 $00 $18 $00 $CF $00 $30 $00 $FF $00 $00 $00 $7F $00 $00 $00
     .db $C0 $00 $00 $00 $60 $00 $00 $80 $30 $C0 $C0 $00 $10 $E0 $E0 $00 $98 $00 $60 $00 $CC $00 $30 $00 $FC $00 $00 $00 $F8 $00 $00 $00
     .db $00 $00 $00 $00 $18 $00 $00 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00
+      arthur_standing_0_tiles_job:
+      .db 2,
+      .dw arthur_standing_0_tiles
+      .dw CHARACTER_SIZE*7
+      .dw SPRITE_BANK_START + CHARACTER_SIZE
 
   arthur_standing_0_layout:
     .db -24, -8, 1
@@ -209,7 +206,18 @@
 
   ; Mockup background of Village on Fire:
   .include "mockup_background_tilemap.asm"
+    mockup_tilemap_job:
+      .db 2
+      .dw mockup_background_tilemap
+      .dw VISIBLE_NAME_TABLE_SIZE
+      .dw NAME_TABLE_START
+
   .include "mockup_background_tiles.asm"
+    mockup_tiles_job:
+      .db 2
+      .dw mockup_background_tiles
+      .dw 96*CHARACTER_SIZE
+      .dw BACKGROUND_BANK_START
 
   adventure_awaits:
     .incbin "adventure_awaits_compr.psg"
