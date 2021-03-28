@@ -1,4 +1,21 @@
 
+Feature request:
+Add a tile loading que.
+- Add item to que
+- Remove item from que
+Que can hold 8 loads (5 actors + 3 misc)
+Items are pointers. Items are loads.
+Load struct:
+  source bank number
+  ptr. to source
+  bytes to load
+  ptr. to destination i vram
+
+  
+
+
+
+
    
      jp +
   batch_offset_input_0:

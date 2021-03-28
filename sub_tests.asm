@@ -79,10 +79,43 @@
   fake_sat_xc dsb 128
 .ends
 
+
+
+
+.bank 0 slot 0
 ; -----------------------------------------------------------------------------
 .section "tests" free
-test_bench:
 
+jp +
+  .struct load
+    bank db
+    source dw
+    size dw
+    destination dw
+  .endst
+  fake_load_que: ; FIXME: No fancy ques, just simple array of ptrs to loads
+    .dw load_0
+    .dw load_1
+    .dw $0000
+
+
+  .dstruct load_0 instanceof load 2, multicolor_c, multicolor_c_size, $1234
+  .dstruct load_1 instanceof load 2, multicolor_c, multicolor_c_size, $1234
+  
+  multicolor_c:
+    .db $ff $00 $ff $00
+    .db $00 $00 $c0 $c0
+    .db $00 $00 $c0 $c0
+    .db $00 $00 $c0 $c0
+    .db $00 $00 $c0 $c0
+    .db $00 $00 $c0 $c0
+    .db $00 $00 $c0 $c0
+    .db $00 $ff $00 $00
+  multicolor_c_size:
+    .dw 32
++:
+
+test_bench:
 
 
 
