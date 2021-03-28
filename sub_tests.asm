@@ -366,7 +366,7 @@ test_bench:
   ASSERT_HL_EQUALS video_job_0
 
   jp +
-    .dstruct arthur_standing_0_job video_job 2, arthur_standing_0_tiles, CHARACTER_SIZE*7, SPRITE_BANK_START + CHARACTER_SIZE
+    ;.dstruct arthur_standing_0_job video_job 2, arthur_standing_0_tiles, CHARACTER_SIZE*7, SPRITE_BANK_START + CHARACTER_SIZE
   +:
   ; Test add video job - real arthur
   SETUP_VIDEO_JOB_TEST 0

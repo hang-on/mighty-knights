@@ -8,7 +8,7 @@
 .equ DISABLED 0
 
 ; Remove comment to enable unit testing
-.equ TEST_MODE
+;.equ TEST_MODE
 .ifdef TEST_MODE
   .equ USE_TEST_KERNEL
 .endif
@@ -125,17 +125,30 @@
     ld hl,demo_palette
     call load_cram
     ;
-    ld bc,CHARACTER_SIZE*7
-    ld de,SPRITE_BANK_START + CHARACTER_SIZE
-    ld hl,arthur_standing_0_tiles
-    call load_vram
-
+    ;ld bc,CHARACTER_SIZE*7
+    ;ld de,SPRITE_BANK_START + CHARACTER_SIZE
+    ;ld hl,arthur_standing_0_tiles
+    ;call load_vram
+    jp +
+    .dstruct arthur_standing_0_job video_job 2, arthur_standing_0_tiles, CHARACTER_SIZE*7, SPRITE_BANK_START + CHARACTER_SIZE
+    .dstruct mockup_tiles_job video_job 2, mockup_background_tiles, 96*CHARACTER_SIZE, BACKGROUND_BANK_START
+    +:
     INITIALIZE_ACTOR arthur, 0, 160, 70, arthur_standing_0
 
-    ld bc,96*CHARACTER_SIZE
-    ld de,BACKGROUND_BANK_START
-    ld hl,mockup_background_tiles
-    call load_vram
+    ;ld bc,96*CHARACTER_SIZE
+    ;ld de,BACKGROUND_BANK_START
+    ;ld hl,mockup_background_tiles
+    ;call load_vram
+
+    xor a
+    ld (video_jobs),a
+
+    ld hl,arthur_standing_0_job
+    call add_video_job
+    ld hl,mockup_tiles_job
+    call add_video_job
+    call process_video_job_table
+
 
     ld bc,VISIBLE_NAME_TABLE_SIZE
     ld de,NAME_TABLE_START
