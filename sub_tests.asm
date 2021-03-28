@@ -87,20 +87,20 @@
 .section "tests" free
 
 jp +
-  .struct load
+  .struct video_job
     bank db
     source dw
     size dw
     destination dw
   .endst
-  fake_load_que: ; FIXME: No fancy ques, just simple array of ptrs to loads
-    .dw load_0
-    .dw load_1
-    .dw $0000
-
-
-  .dstruct load_0 instanceof load 2, multicolor_c, multicolor_c_size, $1234
-  .dstruct load_1 instanceof load 2, multicolor_c, multicolor_c_size, $1234
+  fake_video_job_table: 
+    .dw video_job_0
+    .dw video_job_1
+  fake_video_job_table_index:
+    .db 0
+  
+  .dstruct video_job_0 instanceof video_job 2, multicolor_c, multicolor_c_size, $1234
+  .dstruct video_job_1 instanceof video_job 2, multicolor_c, multicolor_c_size, $1234
   
   multicolor_c:
     .db $ff $00 $ff $00
@@ -116,7 +116,18 @@ jp +
 +:
 
 test_bench:
-
+  jp +
+    fake_index:
+      .db 0
+    fake_job_table:
+      .dw video_job_0
+      .dw video_job_1
+  +:
+  ld a,(fake_index)
+  ld hl,fake_job_table
+  call offset_word_table
+  call get_address
+  ASSERT_HL_EQUALS video_job_0
 
 
 ; ------- end of tests --------------------------------------------------------
