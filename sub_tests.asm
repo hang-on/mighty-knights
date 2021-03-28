@@ -183,6 +183,31 @@ test_bench:
   call get_word
   ASSERT_HL_EQUALS $1234
 
+  jp +
+    fake_video_jobs_3:
+      .db 2
+    fake_job_table_3:
+      .dw video_job_0
+      .dw video_job_1
+  +:
+  RESET_TEST_KERNEL
+  ld a,(fake_video_jobs_3)
+  ; todo: test if no jobs...
+  -:
+    push bc
+      ld a,b
+      ld hl,fake_job_table_3
+      call offset_word_table
+      call get_word
+      call run_video_job
+    pop bc
+  dec b
+  jp nz,-
+  ld hl,test_kernel_destination
+  call get_word
+  ASSERT_HL_EQUALS $5678
+
+
 
 ; ------- end of tests --------------------------------------------------------
 exit_with_succes:
