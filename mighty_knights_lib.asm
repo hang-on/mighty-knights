@@ -276,8 +276,8 @@
     jp nz,-
   ret
 
-  get_address:
-    ; In: Pointer in HL. Out: Address pointed to in HL.
+  get_word:
+    ; In: Pointer in HL. Out: Word pointed to in HL.
     ld a,(hl)
     push af
       inc hl
@@ -313,19 +313,29 @@
     ;        HL = Source address
     ; Exit:  DE = Next free byte in vram.
     ; Uses: AF, BC, DE, HL,
-    ld a,e
-    out (CONTROL_PORT),a
-    ld a,d
-    or VRAM_WRITE_COMMAND
-    out (CONTROL_PORT),a
-    -:
-      ld a,(hl)
-      out (DATA_PORT),a
+    .ifdef USE_TEST_KERNEL
+      push hl
+      pop ix ; save HL
+      ld hl,test_kernel_address
+      ld (hl),e
       inc hl
-      dec bc
-      ld a,c
-      or b
-    jp nz,-
+      ld (hl),d
+    
+    .else
+      ld a,e
+      out (CONTROL_PORT),a
+      ld a,d
+      or VRAM_WRITE_COMMAND
+      out (CONTROL_PORT),a
+      -:
+        ld a,(hl)
+        out (DATA_PORT),a
+        inc hl
+        dec bc
+        ld a,c
+        or b
+      jp nz,-
+    .endif
   ret
 
 

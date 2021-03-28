@@ -20,11 +20,43 @@
     call set_frame
 
   .endm
+  .ramsection "Test kernel" slot 3
+    test_kernel_bank db
+    test_kernel_address dw
+    test_kernel_bytes_written dw
+    test_kernel_data_written dw
+  .ends
+
+
+
+.macro SELECT_BANK_IN_REGISTER_A
+  ; Select a bank for slot 2, - put value in register A.
+  .ifdef USE_TEST_KERNEL
+    ld (test_kernel_bank),a
+  .else
+    ld (SLOT_2_CONTROL),a
+  .endif
+.endm
+
 
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
-  
-  
+; -----------------------------------------------------------------------------
+
+  run_video_job:
+    ; HL points to video job
+    push hl
+    pop ix
+    ld a,(ix+0)
+    SELECT_BANK_IN_REGISTER_A
+    ld l,(ix+1)
+    ld h,(ix+2)
+    ld c,(ix+3)
+    ld b,(ix+4)
+    ld e,(ix+5)
+    ld d,(ix+6)
+    call load_vram
+  ret
 
 
   move_bytes_from_string_to_stack:
@@ -160,7 +192,7 @@
     call get_frame
     ld b,(hl)
     inc hl
-    call get_address
+    call get_word
     push hl
     pop ix
     -:

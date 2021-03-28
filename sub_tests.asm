@@ -1,4 +1,4 @@
-.equ TEST_MODE
+
 
 .macro ASSERT_A_EQUALS
   cp \1
@@ -126,8 +126,37 @@ test_bench:
   ld a,(fake_index)
   ld hl,fake_job_table
   call offset_word_table
-  call get_address
+  call get_word
   ASSERT_HL_EQUALS video_job_0
+
+  jp +
+    fake_index_1:
+      .db 1
+    fake_job_table_1:
+      .dw video_job_0
+      .dw video_job_1
+  +:
+  ld a,(fake_index_1)
+  ld hl,fake_job_table_1
+  call offset_word_table
+  call get_word
+  ASSERT_HL_EQUALS video_job_1
+
+  jp +
+    .dstruct video_job_2 video_job 2, multicolor_c, multicolor_c_size, $1234
+  +:
+  ld hl,video_job_2
+  call run_video_job
+  ld a,(test_kernel_bank)
+  ASSERT_A_EQUALS 2
+  ld hl,test_kernel_address
+  call get_word
+  ASSERT_HL_EQUALS $1234
+  ld hl,test_kernel_bytes_written
+  call get_word ;more like get value, or ptr2value16
+  ;ASSERT_HL_EQUALS multicolor_c_size
+  ld hl,test_kernel_data_written
+  ;ASSERT_HL_EQUALS_STRING 32, multicolor_c
 
 
 ; ------- end of tests --------------------------------------------------------
