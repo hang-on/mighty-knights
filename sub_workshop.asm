@@ -30,12 +30,12 @@
   .ends
 
 .macro RESET_TEST_KERNEL
-  ld a,0
-  ld b,7 ; size of test kernel
   ld hl,test_kernel_source
-  -:
+  ld a,0
+  .rept 7
     ld (hl),a
-  djnz -
+    inc hl
+  .endr
 .endm
 
 
@@ -48,10 +48,39 @@
   .endif
 .endm
 
+.struct video_job
+  bank db
+  source dw
+  size dw
+  destination dw
+.endst
+
+.ramsection "Video job table" slot 3
+  video_jobs db
+  video_job_table dsb _sizeof_video_job*10 ; up to 10 video jobs
+.ends
 
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  process_video_job_table:
+    ld a,(video_jobs)
+    cp 0
+    ret z
+    -:
+      push bc
+        ld a,b
+        ld hl,video_job_table
+        call offset_word_table
+        call get_word
+        call run_video_job
+      pop bc
+    dec b
+    jp nz,-
+    xor a
+    ld (video_jobs),a
+  ret
+
 
   run_video_job:
     ; HL points to video job
