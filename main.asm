@@ -134,6 +134,8 @@
     call process_video_job_table
     
     INITIALIZE_ACTOR arthur, 0, 160, 70, arthur_standing_0
+    xor a
+    ld (temp_byte),a
 
     .ifdef TEST_MODE
       jp test_bench
@@ -165,6 +167,26 @@
     call PSGFrame
     call PSGSFXFrame
     call refresh_sat_handler
+
+    ; gonzo test
+    ld hl,temp_byte
+    ld a,(hl)
+    inc (hl)
+    cp 128
+    jp nc,+
+      ld a,0
+      ld hl,arthur_walking_0
+      call set_frame
+      ld hl,arthur_walking_0_tiles_job
+      call add_video_job
+      jp ++
+    +:
+      ld a,0
+      ld hl,arthur_standing_0
+      call set_frame
+      ld hl,arthur_standing_0_tiles_job
+      call add_video_job
+    ++:
 
     ld hl,arthur
     call draw_actor
@@ -210,6 +232,19 @@
       .dw arthur_walking_0_tiles
       .dw CHARACTER_SIZE*8
       .dw SPRITE_BANK_START + CHARACTER_SIZE
+      arthur_walking_0_layout:
+        .db -24, -8, 1
+        .db -24, 0, 2
+        .db -16, -8, 3
+        .db -16, 0, 4
+        .db -8, -8, 5
+        .db -8, 0, 6
+        .db -16, 8, 7
+        .db -8, 8, 8
+      .dstruct arthur_walking_0 frame 8,arthur_walking_0_layout
+
+
+
   arthur_walking_1_and_3_tiles:
     .include "bank_2/arthur_walking_1_and_3_tiles.asm"
       arthur_walking_1_3_tiles_job:
