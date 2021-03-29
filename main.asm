@@ -182,9 +182,9 @@
       jp ++
     +:
       ld a,0
-      ld hl,arthur_standing_0
+      ld hl,arthur_walking_1_and_3
       call set_frame
-      ld hl,arthur_standing_0_tiles_job
+      ld hl,arthur_walking_1_and_3_tiles_job
       call add_video_job
     ++:
 
@@ -247,11 +247,21 @@
 
   arthur_walking_1_and_3_tiles:
     .include "bank_2/arthur_walking_1_and_3_tiles.asm"
-      arthur_walking_1_3_tiles_job:
+      arthur_walking_1_and_3_tiles_job:
       .db 2,
       .dw arthur_walking_1_and_3_tiles
       .dw CHARACTER_SIZE*7
       .dw SPRITE_BANK_START + CHARACTER_SIZE
+            arthur_walking_1_and_3_layout:
+        .db -24, -8, 1
+        .db -24, 0, 2
+        .db -16, -8, 3
+        .db -16, 0, 4
+        .db -8, -8, 5
+        .db -8, 0, 6
+        .db -8, 8, 7
+      .dstruct arthur_walking_1_and_3 frame 7,arthur_walking_1_and_3_layout
+
   arthur_walking_2_tiles:
     .include "bank_2/arthur_walking_2_tiles.asm"
       arthur_walking_2_tiles_job:
