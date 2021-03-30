@@ -178,7 +178,7 @@
   ret
   clean_buffer:                       ; Data for a clean sat Y buffer.
     .rept HARDWARE_SPRITES
-      .db $00
+      .db 192
     .endr
 .ends
 ; -----------------------------------------------------------------------------

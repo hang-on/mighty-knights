@@ -219,14 +219,6 @@
     ld hl,arthur
     call draw_actor
 
-
-    ; finalize sprites
-    ld a,(sat_buffer_index)
-    ld hl,sat_buffer_y
-    call offset_byte_table
-    ld a,$d0
-    ld (hl),a
-
   jp main_loop
 .ends
 .bank 2 slot 2
