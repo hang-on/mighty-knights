@@ -44,7 +44,7 @@
   hline_counter db
   pause_flag db
   ;
-  arthur instanceof actor
+  cody instanceof actor
 
 .ends
 .org 0
@@ -125,15 +125,13 @@
 
     call initialize_video_job_table
     ;
-    ld hl,arthur_standing_0_tiles_job
-    call add_video_job
     ld hl,mockup_tiles_job
     call add_video_job
     ld hl,mockup_tilemap_job
     call add_video_job
     call process_video_job_table
     
-    INITIALIZE_ACTOR arthur, 0, 160, 70, arthur_standing_0
+    INITIALIZE_ACTOR cody, 0, 160, 70, cody_walking_0
     xor a
     ld (temp_byte),a
 
@@ -216,7 +214,7 @@
     inc (hl)
     inc (hl)
 
-    ld hl,arthur
+    ld hl,cody
     call draw_actor
 
   jp main_loop
@@ -229,29 +227,6 @@
     .db $00 $20 $12 $08 $06 $15 $2A $3F $13 $0B $0F $0C $38 $25 $3B $1B
     .db $23 $10 $12 $18 $06 $15 $2A $3F $13 $0B $0F $0C $38 $26 $27 $2F
     demo_palette_end:
-
-  arthur_standing_0_tiles:
-    .db $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $27 $18 $18 $00 $27 $18 $1B $00 $67 $18 $1B $00 $40 $3E $3C $01
-    .db $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $E0 $00 $00 $00 $F0 $00 $C0 $00 $F0 $00 $E0 $00 $10 $00 $00 $E0
-    .db $DE $18 $3F $18 $86 $00 $7F $00 $9A $18 $7F $18 $D9 $78 $5F $58 $E1 $3D $23 $21 $61 $03 $01 $1D $30 $01 $00 $0E $10 $00 $00 $0F
-    .db $F0 $A0 $A0 $A0 $F0 $E0 $E0 $E0 $70 $60 $E0 $60 $30 $00 $C0 $00 $E0 $C0 $C0 $C0 $E0 $C0 $C0 $C0 $60 $80 $00 $00 $40 $00 $00 $80
-    .db $10 $0F $00 $00 $10 $08 $00 $07 $30 $08 $08 $07 $27 $18 $18 $00 $65 $00 $18 $00 $CF $00 $30 $00 $FF $00 $00 $00 $7F $00 $00 $00
-    .db $C0 $00 $00 $00 $60 $00 $00 $80 $30 $C0 $C0 $00 $10 $E0 $E0 $00 $98 $00 $60 $00 $CC $00 $30 $00 $FC $00 $00 $00 $F8 $00 $00 $00
-    .db $00 $00 $00 $00 $18 $00 $00 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00 $24 $18 $18 $00
-      arthur_standing_0_tiles_job:
-      .db 2,
-      .dw arthur_standing_0_tiles
-      .dw CHARACTER_SIZE*7
-      .dw SPRITE_BANK_START + CHARACTER_SIZE
-      arthur_standing_0_layout:
-        .db -24, -8, 1
-        .db -24, 0, 2
-        .db -16, -8, 3
-        .db -16, 0, 4
-        .db -8, -8, 5
-        .db -8, 0, 6
-        .db -32, -8, 7
-      .dstruct arthur_standing_0 frame 7,arthur_standing_0_layout
 
   layout_2x4:
     .db -32, -8, 1
@@ -270,23 +245,22 @@
   cody_walking_2_tiles:
     .include "bank_2/cody_walking_2_tiles.asm"
 
-  cody_walking_0_tiles_job:
-  .db 2,
-  .dw cody_walking_0_tiles
-  .dw CHARACTER_SIZE*8
-  .dw SPRITE_BANK_START + CHARACTER_SIZE
-
-  cody_walking_1_and_3_tiles_job:
-  .db 2,
-  .dw cody_walking_1_and_3_tiles
-  .dw CHARACTER_SIZE*8
-  .dw SPRITE_BANK_START + CHARACTER_SIZE
+  .equ PLAYER_TILE_BANK 2
+  .equ PLAYER_FIRST_TILE SPRITE_BANK_START + CHARACTER_SIZE
   
+  .macro PLAYER_VIDEO_JOB ARGS TILES, AMOUNT
+    .db PLAYER_TILE_BANK
+    .dw TILES
+    .dw CHARACTER_SIZE*AMOUNT
+    .dw PLAYER_FIRST_TILE
+  .endm
+  
+  cody_walking_0_tiles_job:
+    PLAYER_VIDEO_JOB cody_walking_0_tiles, 8
+  cody_walking_1_and_3_tiles_job:
+    PLAYER_VIDEO_JOB cody_walking_1_and_3_tiles, 8
   cody_walking_2_tiles_job:
-  .db 2,
-  .dw cody_walking_2_tiles
-  .dw CHARACTER_SIZE*8
-  .dw SPRITE_BANK_START + CHARACTER_SIZE
+    PLAYER_VIDEO_JOB cody_walking_2_tiles, 8
 
   .dstruct cody_walking_0 frame 8,layout_2x4
   .dstruct cody_walking_1_and_3 frame 8,layout_2x4
