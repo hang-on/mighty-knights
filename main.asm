@@ -253,6 +253,17 @@
         .db -32, -8, 7
       .dstruct arthur_standing_0 frame 7,arthur_standing_0_layout
 
+  layout_2x4:
+    .db -32, -8, 1
+    .db -32, 0, 2
+    .db -24, -8, 3
+    .db -24, 0, 4
+    .db -16, -8, 5
+    .db -16, 0, 6
+    .db -8, -8, 7
+    .db -8, 0, 8
+
+
   cody_walking_0_tiles:
     .include "bank_2/cody_walking_0_tiles.asm"
       cody_walking_0_tiles_job:
@@ -260,16 +271,7 @@
       .dw cody_walking_0_tiles
       .dw CHARACTER_SIZE*8
       .dw SPRITE_BANK_START + CHARACTER_SIZE
-      cody_walking_0_layout:
-        .db -32, -8, 1
-        .db -32, 0, 2
-        .db -24, -8, 3
-        .db -24, 0, 4
-        .db -16, -8, 5
-        .db -16, 0, 6
-        .db -8, -8, 7
-        .db -8, 0, 8
-      .dstruct cody_walking_0 frame 8,cody_walking_0_layout
+      .dstruct cody_walking_0 frame 8,layout_2x4
 
 
 
@@ -280,17 +282,7 @@
       .dw cody_walking_1_and_3_tiles
       .dw CHARACTER_SIZE*8
       .dw SPRITE_BANK_START + CHARACTER_SIZE
-      cody_walking_1_and_3_layout:
-        .db -32, -8, 1
-        .db -32, 0, 2
-        .db -24, -8, 3
-        .db -24, 0, 4
-        .db -16, -8, 5
-        .db -16, 0, 6
-        .db -8, -8, 7
-        .db -8, 0, 8
-      .dstruct cody_walking_1_and_3 frame 8,cody_walking_1_and_3_layout
-        ; fixeme: layouts are dupes.
+      .dstruct cody_walking_1_and_3 frame 8,layout_2x4
   cody_walking_2_tiles:
     .include "bank_2/cody_walking_2_tiles.asm"
       cody_walking_2_tiles_job:
@@ -298,16 +290,7 @@
       .dw cody_walking_2_tiles
       .dw CHARACTER_SIZE*8
       .dw SPRITE_BANK_START + CHARACTER_SIZE
-      cody_walking_2_layout:
-        .db -32, -8, 1
-        .db -32, 0, 2
-        .db -24, -8, 3
-        .db -24, 0, 4
-        .db -16, -8, 5
-        .db -16, 0, 6
-        .db -8, -8, 7
-        .db -8, 0, 8
-      .dstruct cody_walking_2 frame 8,cody_walking_2_layout
+      .dstruct cody_walking_2 frame 8,layout_2x4
 
 
   ; Mockup background of Village on Fire:
