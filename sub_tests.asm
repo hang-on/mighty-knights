@@ -96,6 +96,18 @@
       .dw cody_walking_2
       .db 10    
       .dw cody_walking_1_and_3
+ 
+     fake_anim_script_no_loop:
+      .db 3                       ; Max frame
+      .db FALSE                    ; Looping
+      .db 10                      ; Ticks to display frame
+      .dw cody_walking_0          ; Frame
+      .db 10    
+      .dw cody_walking_1_and_3
+      .db 10    
+      .dw cody_walking_2
+      .db 10    
+      .dw cody_walking_1_and_3
   +:
 
   test_bench:
@@ -132,8 +144,23 @@
   call get_next_frame
   ASSERT_A_EQUALS 1
 
+  jp +  
+    ; Fake RAM structure.
+    .dstruct anim_3_0 animation 3, 0, fake_anim_script
+  +:
+  ; Test get next frame when looping
+  ld hl,anim_3_0
+  call get_next_frame
+  ASSERT_A_EQUALS 0
 
-
+  jp +  
+    ; Fake RAM structure.
+    .dstruct anim_3_0_noloop animation 3, 0, fake_anim_script_no_loop
+  +:
+  ; Test get next frame when looping
+  ld hl,anim_3_0_noloop
+  call get_next_frame
+  ASSERT_A_EQUALS 3
 
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:

@@ -72,7 +72,15 @@
     pop af
     cp b
     jp nz,+
-      ; if frame = max frame...
+      ; This is last frame...
+      inc hl ;now points to looping true/false
+      ld a,(hl)
+      cp TRUE
+      jp z, reset_frame
+        ld a,b
+        jp ++
+      reset_frame:
+        xor a
       jp ++
     +:
       inc a
