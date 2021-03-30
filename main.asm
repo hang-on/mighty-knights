@@ -166,53 +166,57 @@
     call PSGSFXFrame
     call refresh_sat_handler
 
-    ; gonzo test
-    ld hl,temp_byte
-    ld a,(hl)
-    cp 192
-    jp c,+
-      ld a,0
-      ld hl,cody_walking_0
-      call set_frame
-      ld hl,cody_walking_0_tiles_job
-      call add_video_job
-      jp +++
-    +:
-    ld a,(temp_byte)
-    cp 128
-    jp c,+
-      ld a,0
-      ld hl,cody_walking_1_and_3
-      call set_frame
-      ld hl,cody_walking_1_and_3_tiles_job
-      call add_video_job
-      jp +++
-    +:
-    ld a,(temp_byte)
-    cp 64
-    jp c,+
-      ld a,0
-      ld hl,cody_walking_2
-      call set_frame
-      ld hl,cody_walking_2_tiles_job
-      call add_video_job
-      jp +++
-    +:
-      ld a,0
-      ld hl,cody_walking_1_and_3
-      call set_frame
-      ld hl,cody_walking_1_and_3_tiles_job
-      call add_video_job    
-    +++:
-    ld hl,temp_byte
-    inc (hl)
-    inc (hl)
-    inc (hl)
-    inc (hl)
-    inc (hl)
-    inc (hl)
-    inc (hl)
-    inc (hl)
+
+  jp skip_gonzo
+      ; gonzo test (kan evt. laves til en std. rythm)
+      ld hl,temp_byte
+      ld a,(hl)
+      cp 192
+      jp c,+
+        ld a,0
+        ld hl,cody_walking_0
+        call set_frame
+        ld hl,cody_walking_0_tiles_job
+        call add_video_job
+        jp +++
+      +:
+      ld a,(temp_byte)
+      cp 128
+      jp c,+
+        ld a,0
+        ld hl,cody_walking_1_and_3
+        call set_frame
+        ld hl,cody_walking_1_and_3_tiles_job
+        call add_video_job
+        jp +++
+      +:
+      ld a,(temp_byte)
+      cp 64
+      jp c,+
+        ld a,0
+        ld hl,cody_walking_2
+        call set_frame
+        ld hl,cody_walking_2_tiles_job
+        call add_video_job
+        jp +++
+      +:
+        ld a,0
+        ld hl,cody_walking_1_and_3
+        call set_frame
+        ld hl,cody_walking_1_and_3_tiles_job
+        call add_video_job    
+      +++:
+      ld hl,temp_byte
+      inc (hl)
+      inc (hl)
+      inc (hl)
+      inc (hl)
+      inc (hl)
+      inc (hl)
+      inc (hl)
+      inc (hl)
+  skip_gonzo:
+
 
     ld hl,cody
     call draw_actor
