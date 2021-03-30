@@ -6,6 +6,8 @@
 .include "sms_constants.asm"
 .equ ENABLED $ff
 .equ DISABLED 0
+.equ TRUE $ff
+.equ FALSE 0
 
 ; Remove comment to enable unit testing
 .equ TEST_MODE

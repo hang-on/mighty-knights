@@ -109,7 +109,20 @@ jp +
 +:
 
 test_bench:
-
+  jp +
+    .dstruct fake_anim animation 0, 0, fake_anim_script
+    fake_anim_script:
+      .db 3                       ; Max frame
+      .db TRUE                    ; Looping
+      .db 10                      ; Ticks to display frame
+      .dw cody_walking_0          ; Frame
+      .db 10    
+      .dw cody_walking_1_and_3
+      .db 10    
+      .dw cody_walking_2
+      .db 10    
+      .dw cody_walking_1_and_3
+  +:
 
 
 ; ------- end of tests --------------------------------------------------------

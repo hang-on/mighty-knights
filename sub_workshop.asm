@@ -51,8 +51,6 @@
 .struct animation ; placeholder p.t.
   current_frame db
   timer db
-  frames_total db
-  looping db
   script dw
 .endst
 
