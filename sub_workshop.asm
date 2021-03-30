@@ -57,6 +57,22 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  tick_animation:
+    ; Tick (decrement timer) animation in HL
+    ; Return new timer value of $ff for time up!
+    ; HL: Animation struct
+    ld de,animation.timer
+    add hl,de
+    ld a,(hl)
+    cp 0
+    jp nz,+
+      ld a,$ff
+      jp ++
+    +:
+      dec a
+    ++:
+  ret
+
 
   move_bytes_from_string_to_stack:
     ; HL = ptr to string

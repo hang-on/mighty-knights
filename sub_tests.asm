@@ -74,43 +74,17 @@
   .endr
 .endm
 
-.ramsection "Fake RAM stuff" slot 3
+.ramsection "Fake VRAM stuff" slot 3
   fake_sat_y dsb 64
   fake_sat_xc dsb 128
 .ends
-
 
 .bank 0 slot 0
 ; -----------------------------------------------------------------------------
 .section "tests" free
 
-jp +
-
-  fake_video_job_table: 
-    .dw video_job_0
-    .dw video_job_1
-  fake_video_job_table_index:
-    .db 0
-  
-  .dstruct video_job_0 instanceof video_job 2, multicolor_c, multicolor_c_size, $1234
-  .dstruct video_job_1 instanceof video_job 2, multicolor_c, multicolor_c_size, $5678
-  
-  multicolor_c:
-    .db $ff $00 $ff $00
-    .db $00 $00 $c0 $c0
-    .db $00 $00 $c0 $c0
-    .db $00 $00 $c0 $c0
-    .db $00 $00 $c0 $c0
-    .db $00 $00 $c0 $c0
-    .db $00 $00 $c0 $c0
-    .db $00 $ff $00 $00
-  multicolor_c_size:
-    .dw 32
-+:
-
-test_bench:
   jp +
-    .dstruct fake_anim animation 0, 0, fake_anim_script
+    ; Data for testing the animations
     fake_anim_script:
       .db 3                       ; Max frame
       .db TRUE                    ; Looping
@@ -124,21 +98,31 @@ test_bench:
       .dw cody_walking_1_and_3
   +:
 
+  test_bench:
 
-; ------- end of tests --------------------------------------------------------
-exit_with_succes:
-  ld a,11
-  ld b,BORDER_COLOR
-  call set_register
--:
-  nop
-jp -
+  jp +  
+    ; Fake RAM structure.
+    .dstruct anim_0_10 animation 0, 10, fake_anim_script
+  +:
+  ld hl,anim_0_10
+  call tick_animation
+  ASSERT_A_EQUALS 9
 
-exit_with_failure:
-  ld a,8
-  ld b,BORDER_COLOR
-  call set_register
--:
-  nop
-jp -
+
+  ; ------- end of tests --------------------------------------------------------
+  exit_with_succes:
+    ld a,11
+    ld b,BORDER_COLOR
+    call set_register
+  -:
+    nop
+  jp -
+
+  exit_with_failure:
+    ld a,8
+    ld b,BORDER_COLOR
+    call set_register
+  -:
+    nop
+  jp -
 .ends
