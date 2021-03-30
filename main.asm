@@ -174,9 +174,9 @@
     cp 192
     jp c,+
       ld a,0
-      ld hl,arthur_walking_0
+      ld hl,cody_walking_0
       call set_frame
-      ld hl,arthur_walking_0_tiles_job
+      ld hl,cody_walking_0_tiles_job
       call add_video_job
       jp +++
     +:
@@ -184,9 +184,9 @@
     cp 128
     jp c,+
       ld a,0
-      ld hl,arthur_walking_1_and_3
+      ld hl,cody_walking_1_and_3
       call set_frame
-      ld hl,arthur_walking_1_and_3_tiles_job
+      ld hl,cody_walking_1_and_3_tiles_job
       call add_video_job
       jp +++
     +:
@@ -194,16 +194,16 @@
     cp 64
     jp c,+
       ld a,0
-      ld hl,arthur_walking_2
+      ld hl,cody_walking_2
       call set_frame
-      ld hl,arthur_walking_2_tiles_job
+      ld hl,cody_walking_2_tiles_job
       call add_video_job
       jp +++
     +:
       ld a,0
-      ld hl,arthur_walking_1_and_3
+      ld hl,cody_walking_1_and_3
       call set_frame
-      ld hl,arthur_walking_1_and_3_tiles_job
+      ld hl,cody_walking_1_and_3_tiles_job
       call add_video_job    
     +++:
     ld hl,temp_byte
@@ -261,57 +261,61 @@
         .db -32, -8, 7
       .dstruct arthur_standing_0 frame 7,arthur_standing_0_layout
 
-  arthur_walking_0_tiles:
-    .include "bank_2/arthur_walking_0_tiles.asm"
-      arthur_walking_0_tiles_job:
+  cody_walking_0_tiles:
+    .include "bank_2/cody_walking_0_tiles.asm"
+      cody_walking_0_tiles_job:
       .db 2,
-      .dw arthur_walking_0_tiles
-      .dw CHARACTER_SIZE*6
+      .dw cody_walking_0_tiles
+      .dw CHARACTER_SIZE*8
       .dw SPRITE_BANK_START + CHARACTER_SIZE
-      arthur_walking_0_layout:
-        .db -24, -8, 1
-        .db -16, -8, 2
-        .db -16, 0, 3
-        .db -8, -8, 4
-        .db -8, 0, 5
-        ;.db -32, -8, 6
-      .dstruct arthur_walking_0 frame 5,arthur_walking_0_layout
+      cody_walking_0_layout:
+        .db -32, -8, 1
+        .db -32, 0, 2
+        .db -24, -8, 3
+        .db -24, 0, 4
+        .db -16, -8, 5
+        .db -16, 0, 6
+        .db -8, -8, 7
+        .db -8, 0, 8
+      .dstruct cody_walking_0 frame 8,cody_walking_0_layout
 
 
 
-  arthur_walking_1_and_3_tiles:
-    .include "bank_2/arthur_walking_1_and_3_tiles.asm"
-      arthur_walking_1_and_3_tiles_job:
+  cody_walking_1_and_3_tiles:
+    .include "bank_2/cody_walking_1_and_3_tiles.asm"
+      cody_walking_1_and_3_tiles_job:
       .db 2,
-      .dw arthur_walking_1_and_3_tiles
-      .dw CHARACTER_SIZE*7
+      .dw cody_walking_1_and_3_tiles
+      .dw CHARACTER_SIZE*8
       .dw SPRITE_BANK_START + CHARACTER_SIZE
-      arthur_walking_1_and_3_layout:
-        .db -24, -8, 1
-        .db -24, 0, 2
-        .db -16, -8, 3
-        .db -16, 0, 4
-        .db -8, -8, 5
-        .db -8, 0, 6
-       ; .db -32, -8, 7
-      .dstruct arthur_walking_1_and_3 frame 6,arthur_walking_1_and_3_layout
-
-  arthur_walking_2_tiles:
-    .include "bank_2/arthur_walking_2_tiles.asm"
-      arthur_walking_2_tiles_job:
+      cody_walking_1_and_3_layout:
+        .db -32, -8, 1
+        .db -32, 0, 2
+        .db -24, -8, 3
+        .db -24, 0, 4
+        .db -16, -8, 5
+        .db -16, 0, 6
+        .db -8, -8, 7
+        .db -8, 0, 8
+      .dstruct cody_walking_1_and_3 frame 8,cody_walking_1_and_3_layout
+        ; fixeme: layouts are dupes.
+  cody_walking_2_tiles:
+    .include "bank_2/cody_walking_2_tiles.asm"
+      cody_walking_2_tiles_job:
       .db 2,
-      .dw arthur_walking_2_tiles
-      .dw CHARACTER_SIZE*6
+      .dw cody_walking_2_tiles
+      .dw CHARACTER_SIZE*8
       .dw SPRITE_BANK_START + CHARACTER_SIZE
-      arthur_walking_2_layout:
-        .db -24, -8, 1
-        .db -16, -8, 2
-        .db -16, 0, 3
-        .db -8, -8, 4
-        .db -8, 0, 5
-        ;.db -32, -8, 6
-      .dstruct arthur_walking_2 frame 5,arthur_walking_2_layout
-
+      cody_walking_2_layout:
+        .db -32, -8, 1
+        .db -32, 0, 2
+        .db -24, -8, 3
+        .db -24, 0, 4
+        .db -16, -8, 5
+        .db -16, 0, 6
+        .db -8, -8, 7
+        .db -8, 0, 8
+      .dstruct cody_walking_2 frame 8,cody_walking_2_layout
 
 
   ; Mockup background of Village on Fire:
