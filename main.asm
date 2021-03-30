@@ -219,6 +219,14 @@
     ld hl,arthur
     call draw_actor
 
+
+    ; finalize sprites
+    ld a,(sat_buffer_index)
+    ld hl,sat_buffer_y
+    call offset_byte_table
+    ld a,$d0
+    ld (hl),a
+
   jp main_loop
 .ends
 .bank 2 slot 2
@@ -258,18 +266,16 @@
       arthur_walking_0_tiles_job:
       .db 2,
       .dw arthur_walking_0_tiles
-      .dw CHARACTER_SIZE*8
+      .dw CHARACTER_SIZE*6
       .dw SPRITE_BANK_START + CHARACTER_SIZE
       arthur_walking_0_layout:
         .db -24, -8, 1
-        .db -24, 0, 2
-        .db -16, -8, 3
-        .db -16, 0, 4
-        .db -8, -8, 5
-        .db -8, 0, 6
-        .db -16, 8, 7
-        .db -8, 8, 8
-      .dstruct arthur_walking_0 frame 8,arthur_walking_0_layout
+        .db -16, -8, 2
+        .db -16, 0, 3
+        .db -8, -8, 4
+        .db -8, 0, 5
+        ;.db -32, -8, 6
+      .dstruct arthur_walking_0 frame 5,arthur_walking_0_layout
 
 
 
@@ -287,25 +293,24 @@
         .db -16, 0, 4
         .db -8, -8, 5
         .db -8, 0, 6
-        .db -8, 8, 7
-      .dstruct arthur_walking_1_and_3 frame 7,arthur_walking_1_and_3_layout
+       ; .db -32, -8, 7
+      .dstruct arthur_walking_1_and_3 frame 6,arthur_walking_1_and_3_layout
 
   arthur_walking_2_tiles:
     .include "bank_2/arthur_walking_2_tiles.asm"
       arthur_walking_2_tiles_job:
       .db 2,
       .dw arthur_walking_2_tiles
-      .dw CHARACTER_SIZE*8
+      .dw CHARACTER_SIZE*6
       .dw SPRITE_BANK_START + CHARACTER_SIZE
       arthur_walking_2_layout:
         .db -24, -8, 1
-        .db -24, 0, 2
-        .db -16, -8, 3
-        .db -16, 0, 4
-        .db -8, -8, 5
-        .db -8, 0, 6
-        .db -8, 8, 7
-      .dstruct arthur_walking_2 frame 7,arthur_walking_2_layout
+        .db -16, -8, 2
+        .db -16, 0, 3
+        .db -8, -8, 4
+        .db -8, 0, 5
+        ;.db -32, -8, 6
+      .dstruct arthur_walking_2 frame 5,arthur_walking_2_layout
 
 
 
