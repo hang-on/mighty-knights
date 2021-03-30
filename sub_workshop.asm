@@ -57,6 +57,29 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  get_next_frame:
+    ; HL: Animation struct
+    ; return next frame in A
+    ld a,(hl) ; current frame
+    push af
+    pop ix
+    inc hl
+    inc hl
+    call get_word ; now HL points to te script
+    ld a,(hl) ; get max frame
+    ld b,a
+    push ix
+    pop af
+    cp b
+    jp nz,+
+      ; if frame = max frame...
+      jp ++
+    +:
+      inc a
+    ++:
+  ret
+  
+  .equ ANIM_TIMER_UP $ff
   tick_animation:
     ; Tick (decrement timer) animation in HL
     ; Return new timer value of $ff for time up!

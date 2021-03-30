@@ -100,6 +100,7 @@
 
   test_bench:
 
+  ; Test tick 10 to 9.
   jp +  
     ; Fake RAM structure.
     .dstruct anim_0_10 animation 0, 10, fake_anim_script
@@ -107,6 +108,31 @@
   ld hl,anim_0_10
   call tick_animation
   ASSERT_A_EQUALS 9
+
+  ; Test tick 1 to 0.
+  jp +  
+    ; Fake RAM structure.
+    .dstruct anim_0_1 animation 0, 1, fake_anim_script
+  +:
+  ld hl,anim_0_1
+  call tick_animation
+  ASSERT_A_EQUALS 0
+
+  ; Test tick 0 to ANIM_TIMER_UP.
+  jp +  
+    ; Fake RAM structure.
+    .dstruct anim_0_0 animation 0, 0, fake_anim_script
+  +:
+  ld hl,anim_0_0
+  call tick_animation
+  ASSERT_A_EQUALS ANIM_TIMER_UP
+
+  ; Test get next frame
+  ld hl,anim_0_0
+  call get_next_frame
+  ASSERT_A_EQUALS 1
+
+
 
 
   ; ------- end of tests --------------------------------------------------------
