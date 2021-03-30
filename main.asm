@@ -263,35 +263,34 @@
     .db -8, -8, 7
     .db -8, 0, 8
 
-
   cody_walking_0_tiles:
     .include "bank_2/cody_walking_0_tiles.asm"
-      cody_walking_0_tiles_job:
-      .db 2,
-      .dw cody_walking_0_tiles
-      .dw CHARACTER_SIZE*8
-      .dw SPRITE_BANK_START + CHARACTER_SIZE
-      .dstruct cody_walking_0 frame 8,layout_2x4
-
-
-
   cody_walking_1_and_3_tiles:
     .include "bank_2/cody_walking_1_and_3_tiles.asm"
-      cody_walking_1_and_3_tiles_job:
-      .db 2,
-      .dw cody_walking_1_and_3_tiles
-      .dw CHARACTER_SIZE*8
-      .dw SPRITE_BANK_START + CHARACTER_SIZE
-      .dstruct cody_walking_1_and_3 frame 8,layout_2x4
   cody_walking_2_tiles:
     .include "bank_2/cody_walking_2_tiles.asm"
-      cody_walking_2_tiles_job:
-      .db 2,
-      .dw cody_walking_2_tiles
-      .dw CHARACTER_SIZE*8
-      .dw SPRITE_BANK_START + CHARACTER_SIZE
-      .dstruct cody_walking_2 frame 8,layout_2x4
 
+  cody_walking_0_tiles_job:
+  .db 2,
+  .dw cody_walking_0_tiles
+  .dw CHARACTER_SIZE*8
+  .dw SPRITE_BANK_START + CHARACTER_SIZE
+
+  cody_walking_1_and_3_tiles_job:
+  .db 2,
+  .dw cody_walking_1_and_3_tiles
+  .dw CHARACTER_SIZE*8
+  .dw SPRITE_BANK_START + CHARACTER_SIZE
+  
+  cody_walking_2_tiles_job:
+  .db 2,
+  .dw cody_walking_2_tiles
+  .dw CHARACTER_SIZE*8
+  .dw SPRITE_BANK_START + CHARACTER_SIZE
+
+  .dstruct cody_walking_0 frame 8,layout_2x4
+  .dstruct cody_walking_1_and_3 frame 8,layout_2x4
+  .dstruct cody_walking_2 frame 8,layout_2x4
 
   ; Mockup background of Village on Fire:
   .include "mockup_background_tilemap.asm"
