@@ -57,6 +57,27 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  get_ticks_and_frame_pointer:
+  ; Return scripted ticks and pointer of current frame
+  ; IN: HL = animation struct.
+  ; Out A = Tick, HL = Pointer to next frame
+    ld a,(hl)
+    ld c,a
+    inc hl
+    inc hl
+    call get_word
+    inc hl
+    inc hl
+    ld a,c
+    ld b,3 ; tick = 1 byte + ptr = 1 word
+    call offset_custom_table
+    ld a,(hl)
+    inc hl
+    ld b,a
+    call get_word
+    ld a,b
+  ret
+
   get_next_frame:
     ; HL: Animation struct
     ; return next frame in A

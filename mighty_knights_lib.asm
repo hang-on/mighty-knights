@@ -278,6 +278,7 @@
 
   get_word:
     ; In: Pointer in HL. Out: Word pointed to in HL.
+    ; Uses A, HL
     ld a,(hl)
     push af
       inc hl

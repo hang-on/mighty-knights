@@ -162,6 +162,28 @@
   call get_next_frame
   ASSERT_A_EQUALS 3
 
+  jp +  
+    ; Fake RAM structure.
+    .dstruct anim_1_0 animation 1, 0, fake_anim_script
+  +:
+  ; Test get data for frame 1
+  ld hl,anim_1_0
+  call get_ticks_and_frame_pointer
+  ASSERT_A_EQUALS 10
+  ASSERT_HL_EQUALS cody_walking_1_and_3
+
+  jp +  
+    ; Fake RAM structure.
+    .dstruct anim_2_0 animation 2, 0, fake_anim_script
+  +:
+  ; Test get data for frame 2
+  ld hl,anim_2_0
+  call get_ticks_and_frame_pointer
+  ASSERT_A_EQUALS 10
+  ASSERT_HL_EQUALS cody_walking_2
+
+
+
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:
     ld a,11
