@@ -48,23 +48,42 @@
   .endif
 .endm
 
-
-
-.struct animation ; placeholder p.t.
+.struct animation
+  ; Keeps track of current frame and the timer that counts down to
+  ; when the current frame expires. Also points to the script that
+  ; maps the frames and durations in the animation. 
   current_frame db
   timer db
   script dw
 .endst
+  ; Example_anim_script of a two-frame walking animation.
+  ; my_anim_script:
+  ;  .db 1                       ; Max frame (= 2 frames in total, 0-2)
+  ;  .db TRUE                    ; Loop when last frame expires?
+  ;  .db 10,                     ; Ticks to display frame.
+  ;  .dw cody_walking_0          ; Frame.
+  ;  .db 10                      ; etc...
+  ;  .dw cody_walking_2
 
 .struct frame
-  size db
-  layout dw ; FIXME: Add a ptr to tiles?
+  ; Referenced by draw_actor, it controls how the current frame is manifested
+  ; as offset y, x and char data, in the SAT buffer each frame.
+  size db                       ; Amount of tiles / chars.
+  layout dw                     ; Map with y,x-offsets and chars.
 .endst
+  ; Example frame struct and layout.
+  ; .dstruct cody_walking_0 frame 4,layout_2x2
+  ;  layout_2x2:
+  ;  .db -32, -8, 1
+  ;  .db -32, 0, 2
+  ;  .db -24, -8, 3
+  ;  .db -24, 0, 4
 
 .struct frame_video_job
-  ; For each frame in current animation, a three-byte entry.
-  perform_video_job db 
-  video_job dw
+  ; For each frame in current animation, a three-byte entry. Can be used when
+  ; a new frame is set, to load new tiles during the next vblank.
+  perform_video_job db          ; TRUE or FALSE.
+  video_job dw                  ; If TRUE, then add the job pointed to here.
 .endst
 
 .ramsection "Animation control matrix" slot 3
@@ -128,51 +147,51 @@
   ret
 
   get_next_frame:
-    ; HL: Animation struct
-    ; return next frame in A (number only, use get tick and pointer to retrieve that)
-    ld a,(hl) ; current frame
-    push af
+    ; Use the current frame and script of with a given animation to determine
+    ; the next frame of that animation. 
+    ; IN: HL = Animation struct
+    ; OUT: A = next frame index.
+    ld a,(hl)             ; Get current frame as per animation struct.
+    push af               ; Save it in ix.
     pop ix
-    inc hl
-    inc hl
-    call get_word ; now HL points to te script
-    ld a,(hl) ; get max frame
-    ld b,a
-    push ix
+    inc hl                ; Forward HL past the animation timer to the script.
+    inc hl                ; HL now points to the animation script item.
+    call get_word         ; Make HL point to the actual script.
+    ld a,(hl)             ; Get max frame from script.
+    ld b,a                ; Save it in b.
+    push ix               ; Retrieve current frame from ix. 
     pop af
-    cp b
-    jp nz,+
-      ; This is last frame...
-      inc hl ;now points to looping true/false
-      ld a,(hl)
-      cp TRUE
-      jp z, reset_frame
-        ld a,b      ; set the current frame as the next frame
-        jp ++
-      reset_frame:
-        xor a       ; loop back to frame 0.
-      jp ++
-    +:
-      inc a
-    ++:
-  ret
+    cp b                  ; Is current frame == max frame?
+    jp z,+                ; Yes? - Jump forward to handle loop or still.
+      inc a               ; No? - Just increment the frame counter.
+      ret                 ; And return.
+    +:               
+      ; This is last (max) frame, what to do...?
+      inc hl              ; Point HL to looping (true/false).
+      ld a,(hl)           ; Get loop state.
+      cp TRUE             ; Should we loop back to frame 0?
+      jp z, +
+        ld a,b            ; No - set the current frame as the next frame.
+        ret               ; This keeps the animation still at the last frame.
+      +:
+        xor a             ; Yes - loop back to frame 0.
+        ret               ; And return.
   
   .equ ANIM_TIMER_UP $ff
   tick_animation:
-    ; Tick (decrement timer) animation in HL
-    ; Return new timer value of $ff for time up!
-    ; HL: Animation struct
-    ld de,animation.timer
-    add hl,de
-    ld a,(hl)
-    cp 0
-    jp nz,+
-      ld a,$ff
-      jp ++
+    ; Tick (decrement timer) of a given animation.
+    ; IN: HL = Pointer to animation table item.
+    ; OUT: A = New timer value or $ff for time up!
+    ld de,animation.timer   ; Offset HL to animation timer.
+    add hl,de               ;
+    ld a,(hl)               ; Get current timer value.
+    cp 0                    ; Is it 0?
+    jp nz,+                 
+      ld a,$ff              ; Timer is expired. Return special value.
+      ret                   ; And return.
     +:
-      dec a
-    ++:
-  ret
+      dec a                 ; Timer not expired. Just decrement it.
+  ret                       ; And return.
 
 
   move_bytes_from_string_to_stack:
