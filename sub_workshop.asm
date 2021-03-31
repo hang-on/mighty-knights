@@ -126,9 +126,11 @@
   ret
   
   get_ticks_and_frame_pointer:
-  ; Return scripted ticks and pointer of current frame
-  ; IN: HL = animation struct.
-  ; Out A = Tick, HL = Pointer to next frame
+  ; Use the current_frame property of a given animation struct to look up
+  ; it's associated script and return the scripted ticks and pointer to 
+  ; frame struct. Used when setting new frame.
+  ; IN: HL = Animation struct.
+  ; OUT: A = Tick, HL = Pointer to frame.
     ld a,(hl)
     ld c,a
     inc hl
