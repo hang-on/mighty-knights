@@ -110,9 +110,10 @@
     pop af
   ret
 
-  initialize_animation: ; FIXME: This should be an entry to the animation table?
+  initialize_animation:
+    ; Reset current frame and ticks to 0, and 
     ; IN: HL = Pointer to animation.
-    ;     DE = Pointer to script.
+    ;     DE = Pointer to script
     ; OUT: Nothing
     xor a
     ld (hl),a
@@ -131,21 +132,21 @@
   ; frame struct. Used when setting new frame.
   ; IN: HL = Animation struct.
   ; OUT: A = Tick, HL = Pointer to frame.
-    ld a,(hl)
-    ld c,a
-    inc hl
-    inc hl
-    call get_word
-    inc hl
-    inc hl
-    ld a,c
-    ld b,3 ; tick = 1 byte + ptr = 1 word
-    call offset_custom_table
-    ld a,(hl)
-    inc hl
-    ld b,a
-    call get_word
-    ld a,b
+    ld a,(hl)                   ; Get current frame from anim. struct.
+    ld c,a                      ; Save it in c.
+    inc hl                      ; Forward to pointer to script.
+    inc hl                      ; ...
+    call get_word               ; Load script pointer into HL.
+    inc hl                      ; Forward past the script header.
+    inc hl                      ; ...
+    ld a,c                      ; Retrieve current frame. 
+    ld b,3                      ; This script section consists of 3 byte items.
+    call offset_custom_table    ; Offset to script item for current frame.
+    ld a,(hl)                   ; Read ticks into A.
+    inc hl                      ; Foward to frame pointer.
+    ld b,a                      ; Save the ticks in B.
+    call get_word               ; Load script pointer into HL.
+    ld a,b                      ; Return ticks to A.
   ret
 
   get_next_frame:
