@@ -112,17 +112,23 @@
 
   initialize_animation:
     ; Reset current frame and ticks to 0, and 
-    ; IN: HL = Pointer to animation.
-    ;     DE = Pointer to script
+    ; IN: HL = Pointer to init. string.
+    ;     DE = Pointer to animation
     ; OUT: Nothing
-    xor a
-    ld (hl),a
+    ld a,(hl)
+    ld (de),a
     inc hl
-    ld (hl),a
+    inc de
+    ld a,(hl)
+    ld (de),a
     inc hl
-    ld (hl),e
+    inc de
+    ld a,(hl)
+    ld (de),a
     inc hl
-    ld (hl),d
+    inc de
+    ld a,(hl)
+    ld (de),a
 
   ret
   

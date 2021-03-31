@@ -140,8 +140,13 @@
       jp test_bench
     .endif
 
-    ld hl,cody_animation
-    ld de,cody_walking_anim_script
+    jp +
+      cody_anim_init:
+      .db 0, 10
+      .dw cody_walking_anim_script
+    +:
+    ld hl,cody_anim_init
+    ld de,cody_animation
     call initialize_animation
 
 
@@ -206,7 +211,7 @@
  ; ----------------------------------------------------------------------------
 .section "Demo assets" free
 ; -----------------------------------------------------------------------------
-  .dstruct cody_walking animation 0, 0, cody_walking_anim_script
+  .dstruct cody_walking animation 0, 10, cody_walking_anim_script
   
   cody_walking_anim_script:
     .db 3                       ; Max frame
