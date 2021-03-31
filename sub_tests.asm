@@ -97,7 +97,7 @@
       .db 10    
       .dw cody_walking_1_and_3
  
-     fake_anim_script_no_loop:
+    fake_anim_script_no_loop:
       .db 3                       ; Max frame
       .db FALSE                    ; Looping
       .db 10                      ; Ticks to display frame
@@ -108,9 +108,51 @@
       .dw cody_walking_2
       .db 10    
       .dw cody_walking_1_and_3
+
+    fake_frame_video_job_list:          
+      .db TRUE                        ; Perform video job?
+      .dw cody_walking_0_tiles_job    ; Pointer to video job or $0000 if FALSE
+      .db TRUE
+      .dw cody_walking_1_and_3_tiles_job
+      .db TRUE
+      .dw cody_walking_2_tiles_job
+      .db TRUE
+      .dw cody_walking_1_and_3_tiles_job
+
+    fake_frame_video_job_list_no_jobs:          
+      .db FALSE                        ; Perform video job?
+      .dw cody_walking_0_tiles_job    ; Pointer to video job or $0000 if FALSE
+      .db FALSE
+      .dw cody_walking_1_and_3_tiles_job
+      .db FALSE
+      .dw cody_walking_2_tiles_job
+      .db FALSE
+      .dw $0000
   +:
 
   test_bench:
+
+  ; Test false and zeroes
+  ld hl,fake_frame_video_job_list_no_jobs
+  ld a,3
+  call get_frame_video_job
+  ASSERT_A_EQUALS FALSE
+  ASSERT_HL_EQUALS $0000
+
+  ; Test false 
+  ld hl,fake_frame_video_job_list_no_jobs
+  ld a,0
+  call get_frame_video_job
+  ASSERT_A_EQUALS FALSE
+  ASSERT_HL_EQUALS cody_walking_0_tiles_job
+
+  ; Test video job info for frame 0
+  ld hl,fake_frame_video_job_list
+  ld a,0
+  call get_frame_video_job
+  ASSERT_A_EQUALS TRUE
+
+
 
   ; Test tick 10 to 9.
   jp +  

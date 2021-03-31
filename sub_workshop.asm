@@ -54,9 +54,45 @@
   script dw
 .endst
 
+.struct frame_video_job
+  ; For each frame in current animation, a three-byte entry.
+  perform_video_job db 
+  video_job dw
+.endst
+
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  get_frame_video_job:
+    ; Given a frame video job list and a frame number, get the information
+    ; regarding video job for this frame
+    ; IN: HL = Pointer to frame video job list
+    ;     A = frame number
+    ; OUT: A = Video job TRUE / FALSE, HL = Video job or undefined
+    ld b,_sizeof_frame_video_job
+    call offset_custom_table
+    ld a,(HL)
+    push af ; preserve the TRUE/FALSE
+      inc hl
+      call get_word
+    pop af
+  ret
+
+  initialize_animation:
+    ; IN: HL = Pointer to animation.
+    ;     DE = Pointer to script.
+    ; OUT: Nothing
+    xor a
+    ld (hl),a
+    inc hl
+    ld (hl),a
+    inc hl
+    ld (hl),e
+    inc hl
+    ld (hl),d
+
+  ret
+  
   get_ticks_and_frame_pointer:
   ; Return scripted ticks and pointer of current frame
   ; IN: HL = animation struct.
@@ -80,7 +116,7 @@
 
   get_next_frame:
     ; HL: Animation struct
-    ; return next frame in A
+    ; return next frame in A (number only, use get tick and pointer to retrieve that)
     ld a,(hl) ; current frame
     push af
     pop ix
@@ -98,10 +134,10 @@
       ld a,(hl)
       cp TRUE
       jp z, reset_frame
-        ld a,b
+        ld a,b      ; set the current frame as the next frame
         jp ++
       reset_frame:
-        xor a
+        xor a       ; loop back to frame 0.
       jp ++
     +:
       inc a
@@ -299,10 +335,15 @@
   size db
   layout dw ; FIXME: Add a ptr to tiles?
 .endst
+
+
+
 .ramsection "Animation control tables" slot 3
   animation_table dsb _sizeof_animation*ACTOR_MAX
   frame_table dsb _sizeof_frame*ACTOR_MAX
+  frame_video_job_table dsb _sizeof_frame_video_job*ACTOR_MAX
 .ends
+
 .section "Drawing and animating actors" free
   get_frame:
     ; IN: A = Index
