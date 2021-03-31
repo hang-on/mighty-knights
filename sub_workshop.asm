@@ -67,7 +67,8 @@
   video_job dw
 .endst
 
-.ramsection "Animation control tables" slot 3
+.ramsection "Animation control matrix" slot 3
+  ; Animation, frame and video jobs are rows indexed by columns of actor index.
   animation_table dsb _sizeof_animation*ACTOR_MAX
   frame_table dsb _sizeof_frame*ACTOR_MAX
   frame_video_job_table dsb _sizeof_frame_video_job*ACTOR_MAX

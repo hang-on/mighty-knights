@@ -173,7 +173,7 @@
     call refresh_sat_handler
 
 
-
+    ; FIXME: This needs to loop through all possible animations.
     ld hl,cody_animation
     call tick_animation
     ld (cody_animation.timer),a
@@ -185,12 +185,12 @@
       ld hl,cody_animation
       call get_ticks_and_frame_pointer
       ld (cody_animation.timer),a
-      ld a,0 ; hardcoded index in frame table
+      ld a,0 ; hardcoded index in frame table (must be same as anim. index? - parallel)
       call set_frame
       
       ld a,(cody_animation.current_frame)
-      ld hl,cody_walking_frame_video_job_list
-      call get_frame_video_job
+      ld hl,cody_walking_frame_video_job_list ; FIXME: Where do we know this from?
+      call get_frame_video_job                ; Parallel 
       cp TRUE
       jp nz,+
         call add_video_job

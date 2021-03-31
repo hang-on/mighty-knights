@@ -1,3 +1,35 @@
+Documentation of the animation system.
+3 structs, all three organized in parallel tables.
+Actually, this creates a kind of matrix with the actor index.
+  animation
+    Keeping the frames together, and managing current frame, and counting
+    down to next frame.
+    - current frame
+        The frame currently displaying.
+    - timer
+        ticks left of the current frame (from x to zero)
+    - script
+        A special data format for structuring the animation:
+          max_frame (from 0 to max frame) -- header
+          looping (true / false)          -- header
+            3 byte items for each frame in animation:
+              Ticks to display frame (byte)
+              Pointer to frame struct (word)
+          
+  frame
+    Referenced by draw_actor to put the tiles in the SAT buffer.
+    - size 
+        Number of tiles
+    - layout from origin
+        For all tiles in frame, offset y, x and the char(tile) number
+  
+  frame_video_job
+    Can be used when a new frame is set, to load new tiles.  
+    - perform video job (byte)
+        Load new tiles, true or false. Adds a video job to the que.
+    - video_job (word)
+        If above is true, then treat this a pointer to the video job.
+
 jp +
 
     xor a
