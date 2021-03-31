@@ -140,16 +140,17 @@
       jp test_bench
     .endif
 
-    jp +
-      cody_anim_init:
-      .db 0, 10
-      .dw cody_walking_anim_script
-    +:
-    ld hl,cody_anim_init
-    ld de,cody_animation
-    call initialize_animation
+    call init_animation_table
+    call get_animation_table_index
+    ;     --- A now holds the current table index
+    ld hl,cody_walking
+    call set_animation
 
-
+    ld hl,cody_walking
+    ld de,cody_animation ; should be item in table
+    ld bc,_sizeof_animation
+    ldir
+    
     ei
     halt
     halt

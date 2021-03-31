@@ -88,6 +88,7 @@
 
 .ramsection "Animation control matrix" slot 3
   ; Animation, frame and video jobs are rows indexed by columns of actor index.
+  animation_table_index db
   animation_table dsb _sizeof_animation*ACTOR_MAX
   frame_table dsb _sizeof_frame*ACTOR_MAX
   frame_video_job_table dsb _sizeof_frame_video_job*ACTOR_MAX
@@ -95,6 +96,30 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  init_animation_table:
+    xor a
+    ld (animation_table_index),a
+  ret
+
+  get_animation_table_index:
+    ld a,(animation_table_index)
+  ret
+
+  set_animation:
+    ; IN: A = Animation table index.
+    ;     HL = Pointer to animation struct.
+    ; TODO: Test to see if limit reached, then abort!
+    ex de,hl
+    ld b,_sizeof_animation
+    ld hl,animation_table
+    call offset_custom_table
+    ex de,hl
+    ld bc,_sizeof_animation
+    ldir
+    ld hl,get_animation_table_index
+    inc (hl)
+  ret
+
   get_frame_video_job:
     ; Given a frame video job list and a frame number, get the information
     ; regarding video job for this frame
@@ -108,28 +133,6 @@
       inc hl
       call get_word
     pop af
-  ret
-
-  initialize_animation:
-    ; Reset current frame and ticks to 0, and 
-    ; IN: HL = Pointer to init. string.
-    ;     DE = Pointer to animation
-    ; OUT: Nothing
-    ld a,(hl)
-    ld (de),a
-    inc hl
-    inc de
-    ld a,(hl)
-    ld (de),a
-    inc hl
-    inc de
-    ld a,(hl)
-    ld (de),a
-    inc hl
-    inc de
-    ld a,(hl)
-    ld (de),a
-
   ret
   
   get_ticks_and_frame_pointer:
