@@ -180,6 +180,12 @@
 
 
     ; FIXME: This needs to loop through all possible animations.
+    ld a,(animation_table_index)
+    cp 0
+    jp z,_skip_anims
+
+    ld hl,animation_table
+
     ld hl,cody_animation
     call tick_animation
     ld (cody_animation.timer),a
@@ -201,6 +207,8 @@
       jp nz,+
         call add_video_job
     +:
+
+  _skip_anims:
 
 
     ld hl,cody

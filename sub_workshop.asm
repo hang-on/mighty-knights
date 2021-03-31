@@ -116,7 +116,7 @@
     ex de,hl
     ld bc,_sizeof_animation
     ldir
-    ld hl,get_animation_table_index
+    ld hl,animation_table_index
     inc (hl)
   ret
 
