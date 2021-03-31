@@ -48,10 +48,17 @@
   .endif
 .endm
 
+
+
 .struct animation ; placeholder p.t.
   current_frame db
   timer db
   script dw
+.endst
+
+.struct frame
+  size db
+  layout dw ; FIXME: Add a ptr to tiles?
 .endst
 
 .struct frame_video_job
@@ -60,6 +67,11 @@
   video_job dw
 .endst
 
+.ramsection "Animation control tables" slot 3
+  animation_table dsb _sizeof_animation*ACTOR_MAX
+  frame_table dsb _sizeof_frame*ACTOR_MAX
+  frame_video_job_table dsb _sizeof_frame_video_job*ACTOR_MAX
+.ends
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
@@ -78,7 +90,7 @@
     pop af
   ret
 
-  initialize_animation:
+  initialize_animation: ; FIXME: This should be an entry to the animation table?
     ; IN: HL = Pointer to animation.
     ;     DE = Pointer to script.
     ; OUT: Nothing
@@ -331,18 +343,7 @@
 ; FIXME: have a animation processing per frame - the anim controls
 ; the frames, not directly set (so chance init actor macro).
 
-.struct frame
-  size db
-  layout dw ; FIXME: Add a ptr to tiles?
-.endst
 
-
-
-.ramsection "Animation control tables" slot 3
-  animation_table dsb _sizeof_animation*ACTOR_MAX
-  frame_table dsb _sizeof_frame*ACTOR_MAX
-  frame_video_job_table dsb _sizeof_frame_video_job*ACTOR_MAX
-.ends
 
 .section "Drawing and animating actors" free
   get_frame:

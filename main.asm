@@ -10,7 +10,7 @@
 .equ FALSE 0
 
 ; Remove comment to enable unit testing
-.equ TEST_MODE
+;.equ TEST_MODE
 .ifdef TEST_MODE
   .equ USE_TEST_KERNEL
 .endif
@@ -47,6 +47,7 @@
   pause_flag db
   ;
   cody instanceof actor
+  cody_animation instanceof animation ; eventually put in table
 
 .ends
 .org 0
@@ -134,12 +135,15 @@
     call process_video_job_table
     
     INITIALIZE_ACTOR cody, 0, 160, 70, cody_walking_0
-    xor a
-    ld (temp_byte),a
 
     .ifdef TEST_MODE
       jp test_bench
     .endif
+
+    ld hl,cody_animation
+    ld de,cody_walking_anim_script
+    call initialize_animation
+
 
     ei
     halt
@@ -169,55 +173,28 @@
     call refresh_sat_handler
 
 
-  jp skip_gonzo
-      ; gonzo test (kan evt. laves til en std. rythm)
-      ld hl,temp_byte
-      ld a,(hl)
-      cp 192
-      jp c,+
-        ld a,0
-        ld hl,cody_walking_0
-        call set_frame
-        ld hl,cody_walking_0_tiles_job
+
+    ld hl,cody_animation
+    call tick_animation
+    ld (cody_animation.timer),a
+    cp ANIM_TIMER_UP
+    jp nz,+
+      ld hl,cody_animation
+      call get_next_frame
+      ld (cody_animation.current_frame),a ; next frame
+      ld hl,cody_animation
+      call get_ticks_and_frame_pointer
+      ld (cody_animation.timer),a
+      ld a,0 ; hardcoded index in frame table
+      call set_frame
+      
+      ld a,(cody_animation.current_frame)
+      ld hl,cody_walking_frame_video_job_list
+      call get_frame_video_job
+      cp TRUE
+      jp nz,+
         call add_video_job
-        jp +++
-      +:
-      ld a,(temp_byte)
-      cp 128
-      jp c,+
-        ld a,0
-        ld hl,cody_walking_1_and_3
-        call set_frame
-        ld hl,cody_walking_1_and_3_tiles_job
-        call add_video_job
-        jp +++
-      +:
-      ld a,(temp_byte)
-      cp 64
-      jp c,+
-        ld a,0
-        ld hl,cody_walking_2
-        call set_frame
-        ld hl,cody_walking_2_tiles_job
-        call add_video_job
-        jp +++
-      +:
-        ld a,0
-        ld hl,cody_walking_1_and_3
-        call set_frame
-        ld hl,cody_walking_1_and_3_tiles_job
-        call add_video_job    
-      +++:
-      ld hl,temp_byte
-      inc (hl)
-      inc (hl)
-      inc (hl)
-      inc (hl)
-      inc (hl)
-      inc (hl)
-      inc (hl)
-      inc (hl)
-  skip_gonzo:
+    +:
 
 
     ld hl,cody
@@ -229,6 +206,31 @@
  ; ----------------------------------------------------------------------------
 .section "Demo assets" free
 ; -----------------------------------------------------------------------------
+  .dstruct cody_walking animation 0, 0, cody_walking_anim_script
+  
+  cody_walking_anim_script:
+    .db 3                       ; Max frame
+    .db TRUE                    ; Looping
+    .db 10                      ; Ticks to display frame
+    .dw cody_walking_0          ; Frame
+    .db 10    
+    .dw cody_walking_1_and_3
+    .db 10    
+    .dw cody_walking_2
+    .db 10    
+    .dw cody_walking_1_and_3 
+
+  cody_walking_frame_video_job_list:          
+    .db TRUE                        ; Perform video job?
+    .dw cody_walking_0_tiles_job    ; Pointer to video job or $0000 if FALSE
+    .db TRUE
+    .dw cody_walking_1_and_3_tiles_job
+    .db TRUE
+    .dw cody_walking_2_tiles_job
+    .db TRUE
+    .dw cody_walking_1_and_3_tiles_job
+  
+  
   demo_palette:
     .db $00 $20 $12 $08 $06 $15 $2A $3F $13 $0B $0F $0C $38 $25 $3B $1B
     .db $23 $10 $12 $18 $06 $15 $2A $3F $13 $0B $0F $0C $38 $26 $27 $2F
