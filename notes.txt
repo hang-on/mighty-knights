@@ -1,5 +1,18 @@
 
+  .macro INITIALIZE_ACTOR
+    ld hl,init_data_\@
+    ld de,\1
+    ld bc,3
+    ldir
+    jp +
+      init_data_\@:
+        .db \2 \3 \4 
+    +:
+    ld a,\2
+    ld hl,\5
+    call set_frame
 
+  .endm
 
       ;
     ld hl,mockup_tiles_job
