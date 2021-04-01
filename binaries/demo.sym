@@ -3,7 +3,7 @@
 
 [labels]
 00:0025 PSGInit
-00:07fd PSGStop
+00:07ee PSGStop
 00:0618 PSGSFXStop
 00:0663 _skip_chn2
 00:0688 _skip_chn3
@@ -72,6 +72,12 @@
 00:c0e3 PSGSFXLoopFlag
 00:c0e4 PSGSFXSubstringLen
 00:c0e5 PSGSFXSubstringRetAddr
+00:c0e7 vjobs
+00:c0e8 vjob_table
+00:06fe initialize_vjobs
+00:0703 add_vjob
+00:071e process_vjobs
+00:0741 run_vjob
 00:c000 sat_buffer_y
 00:c040 sat_buffer_xc
 00:c0c0 sat_buffer_index
@@ -82,9 +88,9 @@
 00:0413 refresh_sat_handler
 00:043b clean_buffer
 00:c0f8 vdp_registers
-00:07c1 initialize_vdp_registers
-00:07d7 set_display
-00:07ed set_register
+00:07b2 initialize_vdp_registers
+00:07c8 set_display
+00:07de set_register
 00:0693 clear_vram
 00:06a7 get_word
 00:06af load_cram
@@ -94,12 +100,6 @@
 00:06de offset_custom_table
 00:06e9 setup_vram_write
 00:06f2 wait_for_vblank
-00:c0e7 vjobs
-00:c0e8 vjob_table
-00:06fe initialize_vjobs
-00:0703 add_vjob
-00:071e process_vjobs
-00:0741 run_vjob
 00:c103 temp_byte
 00:c104 temp_word
 00:c105 vblank_counter
@@ -108,8 +108,8 @@
 00:0000 boot
 00:0021 initial_memory_control_register_values
 00:0760 init
-00:07a1 vdp_register_init
-00:07ac main_loop
+00:0792 vdp_register_init
+00:079d main_loop
 02:8000 demo_palette
 02:8020 demo_palette_end
 02:8020 layout_2x4
@@ -196,6 +196,12 @@
 00000001 _sizeof_PSGSFXLoopFlag
 00000001 _sizeof_PSGSFXSubstringLen
 00000002 _sizeof_PSGSFXSubstringRetAddr
+00000001 _sizeof_vjobs
+00000010 _sizeof_vjob_table
+00000005 _sizeof_initialize_vjobs
+0000001b _sizeof_add_vjob
+00000023 _sizeof_process_vjobs
+0000001f _sizeof_run_vjob
 00000040 _sizeof_sat_buffer_y
 00000080 _sizeof_sat_buffer_xc
 00000001 _sizeof_sat_buffer_index
@@ -218,12 +224,6 @@
 0000000b _sizeof_offset_custom_table
 00000009 _sizeof_setup_vram_write
 0000000c _sizeof_wait_for_vblank
-00000001 _sizeof_vjobs
-00000010 _sizeof_vjob_table
-00000005 _sizeof_initialize_vjobs
-0000001b _sizeof_add_vjob
-00000023 _sizeof_process_vjobs
-0000001f _sizeof_run_vjob
 00000001 _sizeof_temp_byte
 00000001 _sizeof_temp_word
 00000001 _sizeof_vblank_counter
@@ -231,7 +231,7 @@
 00000001 _sizeof_pause_flag
 00000021 _sizeof_boot
 00000004 _sizeof_initial_memory_control_register_values
-00000041 _sizeof_init
+00000032 _sizeof_init
 0000000b _sizeof_vdp_register_init
 00000015 _sizeof_main_loop
 00000020 _sizeof_demo_palette

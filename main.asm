@@ -125,12 +125,6 @@
     call load_cram
 
     call initialize_vjobs
-    ;
-    ld hl,mockup_tiles_job
-    call add_vjob
-    ld hl,mockup_tilemap_job
-    call add_vjob
-    call process_vjobs
     
     .ifdef TEST_MODE
       jp test_bench
@@ -196,7 +190,7 @@
 
   .equ PLAYER_TILE_BANK 2
   .equ PLAYER_FIRST_TILE SPRITE_BANK_START + CHARACTER_SIZE
-  .macro PLAYER_VIDEO_JOB ARGS TILES, AMOUNT
+  .macro PLAYER_VJOB ARGS TILES, AMOUNT
     .db PLAYER_TILE_BANK
     .dw TILES
     .dw CHARACTER_SIZE*AMOUNT
@@ -204,11 +198,11 @@
   .endm
   
   cody_walking_0_tiles_job:
-    PLAYER_VIDEO_JOB cody_walking_0_tiles, 8
+    PLAYER_VJOB cody_walking_0_tiles, 8
   cody_walking_1_and_3_tiles_job:
-    PLAYER_VIDEO_JOB cody_walking_1_and_3_tiles, 8
+    PLAYER_VJOB cody_walking_1_and_3_tiles, 8
   cody_walking_2_tiles_job:
-    PLAYER_VIDEO_JOB cody_walking_2_tiles, 8
+    PLAYER_VJOB cody_walking_2_tiles, 8
 
   ; Mockup background of Village on Fire:
   .include "mockup_background_tilemap.asm"

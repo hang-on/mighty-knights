@@ -33,6 +33,106 @@
   push iy
 .endm
 ; -----------------------------------------------------------------------------
+.macro SELECT_BANK_IN_REGISTER_A
+; -----------------------------------------------------------------------------
+  ; Select a bank for slot 2, - put value in register A.
+  .ifdef USE_TEST_KERNEL
+    ld (test_kernel_bank),a
+  .else
+    ld (SLOT_2_CONTROL),a
+  .endif
+.endm
+
+
+
+; -----------------------------------------------------------------------------
+; Handling vram loading via a video job (vjob) format
+; -----------------------------------------------------------------------------
+
+  .equ VJOB_MAX 8 ; amount of video jobs the table can hold 
+
+.struct vjob
+  bank db
+  source dw
+  size dw
+  destination dw
+.endst
+
+.ramsection "Vjob RAM" slot 3
+  vjobs db
+  vjob_table dsb 2*VJOB_MAX 
+.ends
+
+.section "Video jobs" free
+  initialize_vjobs:
+    ; Does not take any parameters
+    xor a
+    ld (vjobs),a
+  ret
+  
+  add_vjob:
+    ; HL: Video job to add to table
+    ld a,(vjobs)
+    cp VJOB_MAX
+    ret z                       ; Protect against overflow..
+    ;
+    ld b,l
+    ld c,h
+    push bc
+      ld a,(vjobs)
+      ld hl,vjob_table
+      call offset_word_table
+    pop bc
+    ld (hl),b
+    inc hl
+    ld (hl),c
+    ;
+    ld hl,vjobs
+    inc (hl)
+  ret
+  
+  process_vjobs:
+    ; Does not take any parameters
+    ld a,(vjobs)
+    cp 0
+    ret z
+    ld b,0
+    ld c,a
+    -:
+        push bc
+          ld a,b
+          ld hl,vjob_table
+          call offset_word_table
+          call get_word
+          call run_vjob
+        pop bc
+      inc b
+      ld a,c
+      cp b
+    jp nz,-
+    ;
+    xor a
+    ld (vjobs),a
+  ret
+
+  run_vjob:
+    ; HL: Pointer to video job to run.
+    push hl
+    pop ix
+    ld a,(ix+0)
+    SELECT_BANK_IN_REGISTER_A
+    ld l,(ix+1)
+    ld h,(ix+2)
+    ld c,(ix+3)
+    ld b,(ix+4)
+    ld e,(ix+5)
+    ld d,(ix+6)
+    call load_vram
+  ret
+.ends
+
+
+; -----------------------------------------------------------------------------
 ; SAT Handler
 ; -----------------------------------------------------------------------------
 .equ PRIORITY_SPRITES 6         ; Number of tiles not part of asc/desc flicker.

@@ -1,3 +1,14 @@
+
+
+
+      ;
+    ld hl,mockup_tiles_job
+    call add_vjob
+    ld hl,mockup_tilemap_job
+    call add_vjob
+    call process_vjobs
+
+  
    .section "Drawing and animating actors" free
   get_frame:
     ; IN: A = Index
