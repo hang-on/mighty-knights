@@ -47,6 +47,7 @@
   pause_flag db
   ;
   cody instanceof actor
+  cody_twin instanceof actor
 
 .ends
 .org 0
@@ -134,7 +135,9 @@
     call process_video_job_table
     
     INITIALIZE_ACTOR cody, 0, 160, 70, cody_walking_0
-    
+    INITIALIZE_ACTOR cody_twin, 1, 110, 110, cody_walking_0
+
+
 
     .ifdef TEST_MODE
       jp test_bench
@@ -142,18 +145,17 @@
 
     call init_animation_table
     
-    ld a,(animation_table_index)
+    ld a,0
     ld hl,cody_walking
     call set_animation
     
-    ld a,(animation_table_index)
+    ld a,0
     ld hl,cody_walking_frame_video_job_list
     call set_frame_video_job_list
     
     ld hl,animation_table_index
     inc (hl)
-    
-    
+
     ei
     halt
     halt
@@ -220,6 +222,8 @@
 
 
     ld hl,cody
+    call draw_actor
+    ld hl,cody_twin
     call draw_actor
 
   jp main_loop
