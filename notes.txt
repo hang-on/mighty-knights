@@ -1,3 +1,427 @@
+   .section "Drawing and animating actors" free
+  get_frame:
+    ; IN: A = Index
+    ; OUT: HL = pointer to frame item.
+    ld hl,frame_table
+    ld b,_sizeof_frame
+    call offset_custom_table
+  ret
+
+  set_frame:
+    ; Copy an frame struct item into the table at index.
+    ; IN: A = Index, HL = frame struct
+    push hl
+      ld hl,frame_table
+      ld b,_sizeof_frame
+      call offset_custom_table
+      ex de,hl
+    pop hl
+    ld bc,_sizeof_frame
+    ldir
+  ret
+
+  draw_actor:
+    ; Put the current frame of a given actor into the SAT buffer. 
+    ; HL = Pointer to actor struct
+    ld a,(hl) ; get id
+    inc hl
+    ld d,(hl)
+    inc hl
+    ld e,(hl)
+    call get_frame
+    ld b,(hl)
+    inc hl
+    call get_word
+    push hl
+    pop ix
+    -:
+      call add_sprite
+      inc ix
+      inc ix
+      inc ix
+    djnz -    
+  ret
+.ends
+
+
+
+
+  ; Test false and zeroes
+  ld hl,fake_frame_video_job_list_no_jobs
+  ld a,3
+  call get_frame_video_job
+  ASSERT_A_EQUALS FALSE
+  ASSERT_HL_EQUALS $0000
+
+  ; Test false 
+  ld hl,fake_frame_video_job_list_no_jobs
+  ld a,0
+  call get_frame_video_job
+  ASSERT_A_EQUALS FALSE
+  ASSERT_HL_EQUALS cody_walking_0_tiles_job
+
+  ; Test video job info for frame 0
+  ld hl,fake_frame_video_job_list
+  ld a,0
+  call get_frame_video_job
+  ASSERT_A_EQUALS TRUE
+
+
+
+  ; Test tick 10 to 9.
+  jp +  
+    ; Fake RAM structure.
+    .dstruct anim_0_10 animation 0, 10, fake_anim_script
+  +:
+  ld hl,anim_0_10
+  call tick_animation
+  ASSERT_A_EQUALS 9
+
+  ; Test tick 1 to 0.
+  jp +  
+    ; Fake RAM structure.
+    .dstruct anim_0_1 animation 0, 1, fake_anim_script
+  +:
+  ld hl,anim_0_1
+  call tick_animation
+  ASSERT_A_EQUALS 0
+
+  ; Test tick 0 to ANIM_TIMER_UP.
+  jp +  
+    ; Fake RAM structure.
+    .dstruct anim_0_0 animation 0, 0, fake_anim_script
+  +:
+  ld hl,anim_0_0
+  call tick_animation
+  ASSERT_A_EQUALS ANIM_TIMER_UP
+
+  ; Test get next frame
+  ld hl,anim_0_0
+  call get_next_frame
+  ASSERT_A_EQUALS 1
+
+  jp +  
+    ; Fake RAM structure.
+    .dstruct anim_3_0 animation 3, 0, fake_anim_script
+  +:
+  ; Test get next frame when looping
+  ld hl,anim_3_0
+  call get_next_frame
+  ASSERT_A_EQUALS 0
+
+  jp +  
+    ; Fake RAM structure.
+    .dstruct anim_3_0_noloop animation 3, 0, fake_anim_script_no_loop
+  +:
+  ; Test get next frame when looping
+  ld hl,anim_3_0_noloop
+  call get_next_frame
+  ASSERT_A_EQUALS 3
+
+  jp +  
+    ; Fake RAM structure.
+    .dstruct anim_1_0 animation 1, 0, fake_anim_script
+  +:
+  ; Test get data for frame 1
+  ld hl,anim_1_0
+  call get_ticks_and_frame_pointer
+  ASSERT_A_EQUALS 10
+  ASSERT_HL_EQUALS cody_walking_1_and_3
+
+  jp +  
+    ; Fake RAM structure.
+    .dstruct anim_2_0 animation 2, 0, fake_anim_script
+  +:
+  ; Test get data for frame 2
+  ld hl,anim_2_0
+  call get_ticks_and_frame_pointer
+  ASSERT_A_EQUALS 10
+  ASSERT_HL_EQUALS cody_walking_2
+
+
+   
+    jp +
+    ; Data for testing the animations
+    fake_anim_script:
+      .db 3                       ; Max frame
+      .db TRUE                    ; Looping
+      .db 10                      ; Ticks to display frame
+      .dw cody_walking_0          ; Frame
+      .db 10    
+      .dw cody_walking_1_and_3
+      .db 10    
+      .dw cody_walking_2
+      .db 10    
+      .dw cody_walking_1_and_3
+ 
+    fake_anim_script_no_loop:
+      .db 3                       ; Max frame
+      .db FALSE                    ; Looping
+      .db 10                      ; Ticks to display frame
+      .dw cody_walking_0          ; Frame
+      .db 10    
+      .dw cody_walking_1_and_3
+      .db 10    
+      .dw cody_walking_2
+      .db 10    
+      .dw cody_walking_1_and_3
+
+    fake_frame_video_job_list:          
+      .db TRUE                        ; Perform video job?
+      .dw cody_walking_0_tiles_job    ; Pointer to video job or $0000 if FALSE
+      .db TRUE
+      .dw cody_walking_1_and_3_tiles_job
+      .db TRUE
+      .dw cody_walking_2_tiles_job
+      .db TRUE
+      .dw cody_walking_1_and_3_tiles_job
+
+    fake_frame_video_job_list_no_jobs:          
+      .db FALSE                        ; Perform video job?
+      .dw cody_walking_0_tiles_job    ; Pointer to video job or $0000 if FALSE
+      .db FALSE
+      .dw cody_walking_1_and_3_tiles_job
+      .db FALSE
+      .dw cody_walking_2_tiles_job
+      .db FALSE
+      .dw $0000
+  +:
+
+      .dstruct cody_walking animation 0, 10, cody_walking_anim_script
+  
+  cody_walking_anim_script:
+    .db 3                       ; Max frame
+    .db TRUE                    ; Looping
+    .db 10                      ; Ticks to display frame
+    .dw cody_walking_0          ; Frame
+    .db 10    
+    .dw cody_walking_1_and_3
+    .db 10    
+    .dw cody_walking_2
+    .db 10    
+    .dw cody_walking_1_and_3 
+
+  cody_walking_frame_video_job_list:          
+    .db TRUE                        ; Perform video job?
+    .dw cody_walking_0_tiles_job    ; Pointer to video job or $0000 if FALSE
+    .db TRUE
+    .dw cody_walking_1_and_3_tiles_job
+    .db TRUE
+    .dw cody_walking_2_tiles_job
+    .db TRUE
+    .dw cody_walking_1_and_3_tiles_job
+    
+    ; FIXME: This needs to loop through all possible animations.
+    ld a,(animation_table_index)
+    cp 0
+    jp z,_skip_anims
+
+    .macro PROCESS_ANIMATION
+      .redefine _OFFSET = \1*_sizeof_animation
+      ld hl,animation_table+_OFFSET
+      call tick_animation
+      ld (animation_table + _OFFSET+ animation.timer),a
+      cp ANIM_TIMER_UP
+      jp nz,+
+        ld hl,animation_table + _OFFSET
+        call get_next_frame
+        ld (animation_table + _OFFSET + animation.current_frame),a ; next frame
+        ld hl,animation_table + _OFFSET
+        call get_ticks_and_frame_pointer
+        ld (animation_table + _OFFSET + animation.timer),a
+        ld a,\1 ; hardcoded index in frame table (must be same as anim. index? - parallel)
+        call set_frame
+        
+        ld hl,frame_video_job_table
+        call get_word
+        ld a,(animation_table + _OFFSET + animation.current_frame)
+        call get_frame_video_job                ; Parallel 
+        cp TRUE
+        jp nz,+
+          call add_video_job
+      +:
+
+    .endm
+
+    PROCESS_ANIMATION 0
+
+  _skip_anims:
+
+
+    ld hl,cody
+    call draw_actor
+    ld hl,cody_twin
+    call draw_actor
+
+  
+  
+  init_animation_table:
+    xor a
+    ld (animation_table_index),a
+  ret
+
+  set_frame_video_job_list:
+    ; Put a pointer to a video job list into the frame video jobs table.
+    ; IN: HL = Pointer to video job list
+    ;     A = animation table index
+    ex de,hl
+    ld hl,frame_video_job_table
+    call offset_word_table
+    ld (hl),e
+    inc hl
+    ld (hl),d
+  
+  ret
+
+
+  set_animation:
+    ; IN: A = Animation table index.
+    ;     HL = Pointer to animation struct.
+    ; TODO: Test to see if limit reached, then abort!
+    ex de,hl
+    ld b,_sizeof_animation
+    ld hl,animation_table
+    call offset_custom_table
+    ex de,hl
+    ld bc,_sizeof_animation
+    ldir
+
+  ret
+
+  get_frame_video_job:
+    ; Given a frame video job list and a frame number, get the information
+    ; regarding video job for this frame
+    ; IN: HL = Pointer to frame video job list
+    ;     A = frame number
+    ; OUT: A = Video job TRUE / FALSE, HL = Video job or undefined
+    ld b,_sizeof_frame_video_job
+    call offset_custom_table
+    ld a,(HL)
+    push af ; preserve the TRUE/FALSE
+      inc hl
+      call get_word
+    pop af
+  ret
+  
+  get_ticks_and_frame_pointer:
+  ; Use the current_frame property of a given animation struct to look up
+  ; it's associated script and return the scripted ticks and pointer to 
+  ; frame struct. Used when setting new frame.
+  ; IN: HL = Animation struct.
+  ; OUT: A = Tick, HL = Pointer to frame.
+    ld a,(hl)                   ; Get current frame from anim. struct.
+    ld c,a                      ; Save it in c.
+    inc hl                      ; Forward to pointer to script.
+    inc hl                      ; ...
+    call get_word               ; Load script pointer into HL.
+    inc hl                      ; Forward past the script header.
+    inc hl                      ; ...
+    ld a,c                      ; Retrieve current frame. 
+    ld b,3                      ; This script section consists of 3 byte items.
+    call offset_custom_table    ; Offset to script item for current frame.
+    ld a,(hl)                   ; Read ticks into A.
+    inc hl                      ; Foward to frame pointer.
+    ld b,a                      ; Save the ticks in B.
+    call get_word               ; Load script pointer into HL.
+    ld a,b                      ; Return ticks to A.
+  ret
+
+  get_next_frame:
+    ; Use the current frame and script of with a given animation to determine
+    ; the next frame of that animation. 
+    ; IN: HL = Animation struct
+    ; OUT: A = next frame index.
+    ld a,(hl)             ; Get current frame as per animation struct.
+    push af               ; Save it in ix.
+    pop ix
+    inc hl                ; Forward HL past the animation timer to the script.
+    inc hl                ; HL now points to the animation script item.
+    call get_word         ; Make HL point to the actual script.
+    ld a,(hl)             ; Get max frame from script.
+    ld b,a                ; Save it in b.
+    push ix               ; Retrieve current frame from ix. 
+    pop af
+    cp b                  ; Is current frame == max frame?
+    jp z,+                ; Yes? - Jump forward to handle loop or still.
+      inc a               ; No? - Just increment the frame counter.
+      ret                 ; And return.
+    +:               
+      ; This is last (max) frame, what to do...?
+      inc hl              ; Point HL to looping (true/false).
+      ld a,(hl)           ; Get loop state.
+      cp TRUE             ; Should we loop back to frame 0?
+      jp z, +
+        ld a,b            ; No - set the current frame as the next frame.
+        ret               ; This keeps the animation still at the last frame.
+      +:
+        xor a             ; Yes - loop back to frame 0.
+        ret               ; And return.
+  
+  .equ ANIM_TIMER_UP $ff
+  tick_animation:
+    ; Tick (decrement timer) of a given animation.
+    ; IN: HL = Pointer to animation table item.
+    ; OUT: A = New timer value or $ff for time up!
+    ld de,animation.timer   ; Offset HL to animation timer.
+    add hl,de               ;
+    ld a,(hl)               ; Get current timer value.
+    cp 0                    ; Is it 0?
+    jp nz,+                 
+      ld a,$ff              ; Timer is expired. Return special value.
+      ret                   ; And return.
+    +:
+      dec a                 ; Timer not expired. Just decrement it.
+  ret                       ; And return.
+
+
+
+.struct animation
+  ; Keeps track of current frame and the timer that counts down to
+  ; when the current frame expires. Also points to the script that
+  ; maps the frames and durations in the animation. 
+  current_frame db
+  timer db
+  script dw
+.endst
+  ; Example_anim_script of a two-frame walking animation.
+  ; my_anim_script:
+  ;  .db 1                       ; Max frame (= 2 frames in total, 0-2)
+  ;  .db TRUE                    ; Loop when last frame expires?
+  ;  .db 10,                     ; Ticks to display frame.
+  ;  .dw cody_walking_0          ; Frame.
+  ;  .db 10                      ; etc...
+  ;  .dw cody_walking_2
+
+.struct frame
+  ; Referenced by draw_actor, it controls how the current frame is manifested
+  ; as offset y, x and char data, in the SAT buffer each frame.
+  size db                       ; Amount of tiles / chars.
+  layout dw                     ; Map with y,x-offsets and chars.
+.endst
+  ; Example frame struct and layout.
+  ; .dstruct cody_walking_0 frame 4,layout_2x2
+  ;  layout_2x2:
+  ;  .db -32, -8, 1
+  ;  .db -32, 0, 2
+  ;  .db -24, -8, 3
+  ;  .db -24, 0, 4
+
+.struct frame_video_job
+  ; For each frame in current animation, a three-byte entry. Can be used when
+  ; a new frame is set, to load new tiles during the next vblank.
+  perform_video_job db          ; TRUE or FALSE.
+  video_job dw                  ; If TRUE, then add the job pointed to here.
+.endst
+
+.ramsection "Animation control matrix" slot 3
+  ; Animation, frame and video jobs are rows indexed by columns of actor index.
+  animation_table_index db
+  animation_table dsb _sizeof_animation*ACTOR_MAX
+  frame_table dsb _sizeof_frame*ACTOR_MAX
+  frame_video_job_table dsb 2*ACTOR_MAX
+.ends
+
+
 ----------------
 .REDEFINE IF $0F
 ----------------

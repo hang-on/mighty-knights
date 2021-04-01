@@ -46,8 +46,6 @@
   hline_counter db
   pause_flag db
   ;
-  cody instanceof actor
-  cody_twin instanceof actor
 
 .ends
 .org 0
@@ -134,27 +132,10 @@
     call add_video_job
     call process_video_job_table
     
-    INITIALIZE_ACTOR cody, 0, 160, 70, cody_walking_0
-    INITIALIZE_ACTOR cody_twin, 1, 110, 110, cody_walking_0
-
-
-
     .ifdef TEST_MODE
       jp test_bench
     .endif
 
-    call init_animation_table
-    
-    ld a,0
-    ld hl,cody_walking
-    call set_animation
-    
-    ld a,0
-    ld hl,cody_walking_frame_video_job_list
-    call set_frame_video_job_list
-    
-    ld hl,animation_table_index
-    inc (hl)
 
     ei
     halt
@@ -184,79 +165,13 @@
     call refresh_sat_handler
 
 
-    ; FIXME: This needs to loop through all possible animations.
-    ld a,(animation_table_index)
-    cp 0
-    jp z,_skip_anims
-
-    .macro PROCESS_ANIMATION
-      .redefine _OFFSET = \1*_sizeof_animation
-      ld hl,animation_table+_OFFSET
-      call tick_animation
-      ld (animation_table + _OFFSET+ animation.timer),a
-      cp ANIM_TIMER_UP
-      jp nz,+
-        ld hl,animation_table + _OFFSET
-        call get_next_frame
-        ld (animation_table + _OFFSET + animation.current_frame),a ; next frame
-        ld hl,animation_table + _OFFSET
-        call get_ticks_and_frame_pointer
-        ld (animation_table + _OFFSET + animation.timer),a
-        ld a,\1 ; hardcoded index in frame table (must be same as anim. index? - parallel)
-        call set_frame
-        
-        ld hl,frame_video_job_table
-        call get_word
-        ld a,(animation_table + _OFFSET + animation.current_frame)
-        call get_frame_video_job                ; Parallel 
-        cp TRUE
-        jp nz,+
-          call add_video_job
-      +:
-
-    .endm
-
-    PROCESS_ANIMATION 0
-
-  _skip_anims:
-
-
-    ld hl,cody
-    call draw_actor
-    ld hl,cody_twin
-    call draw_actor
-
   jp main_loop
 .ends
 .bank 2 slot 2
  ; ----------------------------------------------------------------------------
 .section "Demo assets" free
 ; -----------------------------------------------------------------------------
-  .dstruct cody_walking animation 0, 10, cody_walking_anim_script
-  
-  cody_walking_anim_script:
-    .db 3                       ; Max frame
-    .db TRUE                    ; Looping
-    .db 10                      ; Ticks to display frame
-    .dw cody_walking_0          ; Frame
-    .db 10    
-    .dw cody_walking_1_and_3
-    .db 10    
-    .dw cody_walking_2
-    .db 10    
-    .dw cody_walking_1_and_3 
 
-  cody_walking_frame_video_job_list:          
-    .db TRUE                        ; Perform video job?
-    .dw cody_walking_0_tiles_job    ; Pointer to video job or $0000 if FALSE
-    .db TRUE
-    .dw cody_walking_1_and_3_tiles_job
-    .db TRUE
-    .dw cody_walking_2_tiles_job
-    .db TRUE
-    .dw cody_walking_1_and_3_tiles_job
-  
-  
   demo_palette:
     .db $00 $20 $12 $08 $06 $15 $2A $3F $13 $0B $0F $0C $38 $25 $3B $1B
     .db $23 $10 $12 $18 $06 $15 $2A $3F $13 $0B $0F $0C $38 $26 $27 $2F
@@ -294,10 +209,6 @@
     PLAYER_VIDEO_JOB cody_walking_1_and_3_tiles, 8
   cody_walking_2_tiles_job:
     PLAYER_VIDEO_JOB cody_walking_2_tiles, 8
-
-  .dstruct cody_walking_0 frame 8,layout_2x4
-  .dstruct cody_walking_1_and_3 frame 8,layout_2x4
-  .dstruct cody_walking_2 frame 8,layout_2x4
 
   ; Mockup background of Village on Fire:
   .include "mockup_background_tilemap.asm"

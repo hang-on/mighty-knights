@@ -52,7 +52,7 @@
   ;.endr
 .endm
 
-.macro ASSERT_HL_EQUALS_STRING ARGS LEN, STRING
+.macro ASSERT_HL_POINTS_TO_STRING ARGS LEN, STRING
   ; Parameters: Pointer to string, string length. 
   ld de,STRING                ; Comparison string in DE
   .rept LEN                   ; Loop through given number of bytes.
@@ -65,7 +65,6 @@
     inc de                    ; Point to next comparison byte.
   .endr
 .endm
-
 
 
 .macro CLEAN_STACK
@@ -83,148 +82,9 @@
 ; -----------------------------------------------------------------------------
 .section "tests" free
 
-  jp +
-    ; Data for testing the animations
-    fake_anim_script:
-      .db 3                       ; Max frame
-      .db TRUE                    ; Looping
-      .db 10                      ; Ticks to display frame
-      .dw cody_walking_0          ; Frame
-      .db 10    
-      .dw cody_walking_1_and_3
-      .db 10    
-      .dw cody_walking_2
-      .db 10    
-      .dw cody_walking_1_and_3
- 
-    fake_anim_script_no_loop:
-      .db 3                       ; Max frame
-      .db FALSE                    ; Looping
-      .db 10                      ; Ticks to display frame
-      .dw cody_walking_0          ; Frame
-      .db 10    
-      .dw cody_walking_1_and_3
-      .db 10    
-      .dw cody_walking_2
-      .db 10    
-      .dw cody_walking_1_and_3
-
-    fake_frame_video_job_list:          
-      .db TRUE                        ; Perform video job?
-      .dw cody_walking_0_tiles_job    ; Pointer to video job or $0000 if FALSE
-      .db TRUE
-      .dw cody_walking_1_and_3_tiles_job
-      .db TRUE
-      .dw cody_walking_2_tiles_job
-      .db TRUE
-      .dw cody_walking_1_and_3_tiles_job
-
-    fake_frame_video_job_list_no_jobs:          
-      .db FALSE                        ; Perform video job?
-      .dw cody_walking_0_tiles_job    ; Pointer to video job or $0000 if FALSE
-      .db FALSE
-      .dw cody_walking_1_and_3_tiles_job
-      .db FALSE
-      .dw cody_walking_2_tiles_job
-      .db FALSE
-      .dw $0000
-  +:
 
   test_bench:
   
-
-
-  ; Test false and zeroes
-  ld hl,fake_frame_video_job_list_no_jobs
-  ld a,3
-  call get_frame_video_job
-  ASSERT_A_EQUALS FALSE
-  ASSERT_HL_EQUALS $0000
-
-  ; Test false 
-  ld hl,fake_frame_video_job_list_no_jobs
-  ld a,0
-  call get_frame_video_job
-  ASSERT_A_EQUALS FALSE
-  ASSERT_HL_EQUALS cody_walking_0_tiles_job
-
-  ; Test video job info for frame 0
-  ld hl,fake_frame_video_job_list
-  ld a,0
-  call get_frame_video_job
-  ASSERT_A_EQUALS TRUE
-
-
-
-  ; Test tick 10 to 9.
-  jp +  
-    ; Fake RAM structure.
-    .dstruct anim_0_10 animation 0, 10, fake_anim_script
-  +:
-  ld hl,anim_0_10
-  call tick_animation
-  ASSERT_A_EQUALS 9
-
-  ; Test tick 1 to 0.
-  jp +  
-    ; Fake RAM structure.
-    .dstruct anim_0_1 animation 0, 1, fake_anim_script
-  +:
-  ld hl,anim_0_1
-  call tick_animation
-  ASSERT_A_EQUALS 0
-
-  ; Test tick 0 to ANIM_TIMER_UP.
-  jp +  
-    ; Fake RAM structure.
-    .dstruct anim_0_0 animation 0, 0, fake_anim_script
-  +:
-  ld hl,anim_0_0
-  call tick_animation
-  ASSERT_A_EQUALS ANIM_TIMER_UP
-
-  ; Test get next frame
-  ld hl,anim_0_0
-  call get_next_frame
-  ASSERT_A_EQUALS 1
-
-  jp +  
-    ; Fake RAM structure.
-    .dstruct anim_3_0 animation 3, 0, fake_anim_script
-  +:
-  ; Test get next frame when looping
-  ld hl,anim_3_0
-  call get_next_frame
-  ASSERT_A_EQUALS 0
-
-  jp +  
-    ; Fake RAM structure.
-    .dstruct anim_3_0_noloop animation 3, 0, fake_anim_script_no_loop
-  +:
-  ; Test get next frame when looping
-  ld hl,anim_3_0_noloop
-  call get_next_frame
-  ASSERT_A_EQUALS 3
-
-  jp +  
-    ; Fake RAM structure.
-    .dstruct anim_1_0 animation 1, 0, fake_anim_script
-  +:
-  ; Test get data for frame 1
-  ld hl,anim_1_0
-  call get_ticks_and_frame_pointer
-  ASSERT_A_EQUALS 10
-  ASSERT_HL_EQUALS cody_walking_1_and_3
-
-  jp +  
-    ; Fake RAM structure.
-    .dstruct anim_2_0 animation 2, 0, fake_anim_script
-  +:
-  ; Test get data for frame 2
-  ld hl,anim_2_0
-  call get_ticks_and_frame_pointer
-  ASSERT_A_EQUALS 10
-  ASSERT_HL_EQUALS cody_walking_2
 
 
 
