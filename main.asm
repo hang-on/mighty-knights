@@ -188,29 +188,37 @@
 
     ; FIXME: This needs to loop through all possible animations.
     ld a,(animation_table_index)
-    ld hl,animation_table
+    cp 0
+    jp z,_skip_anims
 
-    call tick_animation
-    ld (animation_table + animation.timer),a
-    cp ANIM_TIMER_UP
-    jp nz,+
-      ld hl,animation_table
-      call get_next_frame
-      ld (animation_table + animation.current_frame),a ; next frame
-      ld hl,animation_table
-      call get_ticks_and_frame_pointer
-      ld (animation_table + animation.timer),a
-      ld a,0 ; hardcoded index in frame table (must be same as anim. index? - parallel)
-      call set_frame
-      
-      ld hl,frame_video_job_table
-      call get_word
-      ld a,(animation_table + animation.current_frame)
-      call get_frame_video_job                ; Parallel 
-      cp TRUE
+    .macro PROCESS_ANIMATION
+      .redefine _OFFSET = \1*_sizeof_animation
+      ld hl,animation_table+_OFFSET
+      call tick_animation
+      ld (animation_table + _OFFSET+ animation.timer),a
+      cp ANIM_TIMER_UP
       jp nz,+
-        call add_video_job
-    +:
+        ld hl,animation_table + _OFFSET
+        call get_next_frame
+        ld (animation_table + _OFFSET + animation.current_frame),a ; next frame
+        ld hl,animation_table + _OFFSET
+        call get_ticks_and_frame_pointer
+        ld (animation_table + _OFFSET + animation.timer),a
+        ld a,\1 ; hardcoded index in frame table (must be same as anim. index? - parallel)
+        call set_frame
+        
+        ld hl,frame_video_job_table
+        call get_word
+        ld a,(animation_table + _OFFSET + animation.current_frame)
+        call get_frame_video_job                ; Parallel 
+        cp TRUE
+        jp nz,+
+          call add_video_job
+      +:
+
+    .endm
+
+    PROCESS_ANIMATION 0
 
   _skip_anims:
 

@@ -1,3 +1,20 @@
+----------------
+.REDEFINE IF $0F
+----------------
+
+Assigns a new value or a string to an old definition. If the
+definition doesn't exist, .REDEFINE performs .DEFINE's work.
+
+When used with .REPT REDEFINE helps creating tables:
+
+.DEFINE CNT 0
+
+.REPT 256
+.DB CNT
+.REDEFINE CNT CNT+1
+.ENDR
+
+
 Documentation of the animation system.
 3 structs, all three organized in parallel tables.
 Actually, this creates a kind of matrix with the actor index.
