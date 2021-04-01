@@ -101,9 +101,19 @@
     ld (animation_table_index),a
   ret
 
-  get_animation_table_index:
-    ld a,(animation_table_index)
+  set_frame_video_job_list:
+    ; Put a pointer to a video job list into the frame video jobs table.
+    ; IN: HL = Pointer to video job list
+    ;     A = animation table index
+    ex de,hl
+    ld hl,frame_video_job_table
+    call offset_word_table
+    ld (hl),e
+    inc hl
+    ld (hl),d
+  
   ret
+
 
   set_animation:
     ; IN: A = Animation table index.
@@ -116,8 +126,7 @@
     ex de,hl
     ld bc,_sizeof_animation
     ldir
-    ld hl,animation_table_index
-    inc (hl)
+
   ret
 
   get_frame_video_job:

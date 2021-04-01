@@ -47,7 +47,6 @@
   pause_flag db
   ;
   cody instanceof actor
-  cody_animation instanceof animation ; eventually put in table
 
 .ends
 .org 0
@@ -135,28 +134,25 @@
     call process_video_job_table
     
     INITIALIZE_ACTOR cody, 0, 160, 70, cody_walking_0
+    
 
     .ifdef TEST_MODE
       jp test_bench
     .endif
 
     call init_animation_table
-    call get_animation_table_index
-    ;     --- A now holds the current table index
+    
+    ld a,(animation_table_index)
     ld hl,cody_walking
     call set_animation
+    
+    ld a,(animation_table_index)
     ld hl,cody_walking_frame_video_job_list
-    ex de,hl
-    ld hl,frame_video_job_table
-    ; hardtarget slot 0
-    ld (hl),e
-    inc hl
-    ld (hl),d
-
-    ld hl,cody_walking
-    ld de,cody_animation ; should be item in table
-    ld bc,_sizeof_animation
-    ldir
+    call set_frame_video_job_list
+    
+    ld hl,animation_table_index
+    inc (hl)
+    
     
     ei
     halt
