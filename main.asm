@@ -145,6 +145,13 @@
     ;     --- A now holds the current table index
     ld hl,cody_walking
     call set_animation
+    ld hl,cody_walking_frame_video_job_list
+    ex de,hl
+    ld hl,frame_video_job_table
+    ; hardtarget slot 0
+    ld (hl),e
+    inc hl
+    ld (hl),d
 
     ld hl,cody_walking
     ld de,cody_animation ; should be item in table
@@ -181,27 +188,24 @@
 
     ; FIXME: This needs to loop through all possible animations.
     ld a,(animation_table_index)
-    cp 0
-    jp z,_skip_anims
-
     ld hl,animation_table
 
-    ld hl,cody_animation
     call tick_animation
-    ld (cody_animation.timer),a
+    ld (animation_table + animation.timer),a
     cp ANIM_TIMER_UP
     jp nz,+
-      ld hl,cody_animation
+      ld hl,animation_table
       call get_next_frame
-      ld (cody_animation.current_frame),a ; next frame
-      ld hl,cody_animation
+      ld (animation_table + animation.current_frame),a ; next frame
+      ld hl,animation_table
       call get_ticks_and_frame_pointer
-      ld (cody_animation.timer),a
+      ld (animation_table + animation.timer),a
       ld a,0 ; hardcoded index in frame table (must be same as anim. index? - parallel)
       call set_frame
       
-      ld a,(cody_animation.current_frame)
-      ld hl,cody_walking_frame_video_job_list ; FIXME: Where do we know this from?
+      ld hl,frame_video_job_table
+      call get_word
+      ld a,(animation_table + animation.current_frame)
       call get_frame_video_job                ; Parallel 
       cp TRUE
       jp nz,+

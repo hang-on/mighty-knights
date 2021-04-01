@@ -91,7 +91,7 @@
   animation_table_index db
   animation_table dsb _sizeof_animation*ACTOR_MAX
   frame_table dsb _sizeof_frame*ACTOR_MAX
-  frame_video_job_table dsb _sizeof_frame_video_job*ACTOR_MAX
+  frame_video_job_table dsb 2*ACTOR_MAX
 .ends
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
