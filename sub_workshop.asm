@@ -1,6 +1,6 @@
   .equ ACTOR_MAX 5 ;***
   
-  .equ VIDEO_JOB_MAX 8 ; amount of video jobs the table can hold 
+  .equ VJOB_MAX 8 ; amount of video jobs the table can hold 
   .struct actor
     id db
     y db
@@ -61,47 +61,47 @@
 ; -----------------------------------------------------------------------------
 ; Handling vram loading via a video job format
 ; -----------------------------------------------------------------------------
-.struct video_job
+.struct vjob
   bank db
   source dw
   size dw
   destination dw
 .endst
-.ramsection "Video job RAM" slot 3
-  video_jobs db
-  video_job_table dsb 2*VIDEO_JOB_MAX ; up to 10 video jobs, ptrs to video jobs
+.ramsection "Vjob RAM" slot 3
+  vjobs db
+  vjob_table dsb 2*VJOB_MAX ; up to 10 video jobs, ptrs to video jobs
 .ends
 .section "Video jobs" free
-  initialize_video_job_table:
+  initialize_vjob_table:
     ; Does not take any parameters
     xor a
-    ld (video_jobs),a
+    ld (vjobs),a
   ret
   
-  add_video_job:
+  add_vjob:
     ; HL: Video job to add to table
-    ld a,(video_jobs)
-    cp VIDEO_JOB_MAX
+    ld a,(vjobs)
+    cp VJOB_MAX
     ret z                       ; Protect against overflow..
     ;
     ld b,l
     ld c,h
     push bc
-      ld a,(video_jobs)
-      ld hl,video_job_table
+      ld a,(vjobs)
+      ld hl,vjob_table
       call offset_word_table
     pop bc
     ld (hl),b
     inc hl
     ld (hl),c
     ;
-    ld hl,video_jobs
+    ld hl,vjobs
     inc (hl)
   ret
   
-  process_video_job_table:
+  process_vjob_table:
     ; Does not take any parameters
-    ld a,(video_jobs)
+    ld a,(vjobs)
     cp 0
     ret z
     ld b,0
@@ -109,10 +109,10 @@
     -:
         push bc
           ld a,b
-          ld hl,video_job_table
+          ld hl,vjob_table
           call offset_word_table
           call get_word
-          call run_video_job
+          call run_vjob
         pop bc
       inc b
       ld a,c
@@ -120,10 +120,10 @@
     jp nz,-
     ;
     xor a
-    ld (video_jobs),a
+    ld (vjobs),a
   ret
 
-  run_video_job:
+  run_vjob:
     ; HL: Pointer to video job to run.
     push hl
     pop ix
