@@ -72,7 +72,7 @@
   vjob_table dsb 2*VJOB_MAX ; up to 10 video jobs, ptrs to video jobs
 .ends
 .section "Video jobs" free
-  initialize_vjob_table:
+  initialize_vjobs:
     ; Does not take any parameters
     xor a
     ld (vjobs),a
@@ -99,7 +99,7 @@
     inc (hl)
   ret
   
-  process_vjob_table:
+  process_vjobs:
     ; Does not take any parameters
     ld a,(vjobs)
     cp 0

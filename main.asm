@@ -124,13 +124,13 @@
     ld hl,demo_palette
     call load_cram
 
-    call initialize_vjob_table
+    call initialize_vjobs
     ;
     ld hl,mockup_tiles_job
     call add_vjob
     ld hl,mockup_tilemap_job
     call add_vjob
-    call process_vjob_table
+    call process_vjobs
     
     .ifdef TEST_MODE
       jp test_bench
@@ -156,7 +156,7 @@
     ; -------------------------------------------------------------------------
     ; Begin vblank critical code (DRAW).
     call load_sat
-    call process_vjob_table
+    call process_vjobs
     ;
     ; -------------------------------------------------------------------------
     ; Begin general updating (UPDATE).
