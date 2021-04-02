@@ -26,7 +26,7 @@
 .endm
 
 .equ ACM_SLOTS 8
-.ramsection "Animation Control Matrix (ACM)" slot 3
+.ramsection "Animation Control Matrix (ACM)" slot 3 align 256 
   acm_enabled dsb ACM_SLOTS
   acm_frame dsb ACM_SLOTS
   acm_timer dsb ACM_SLOTS
@@ -37,7 +37,16 @@
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
 
-
+  initialize_acm:
+    ; Turn off all animation slots in the matrix.
+    ld a,FALSE
+    ld b,ACM_SLOTS
+    ld hl,acm_enabled
+    -:
+      ld (hl),a
+      inc hl
+    djnz -
+  ret
 
 
 .ends

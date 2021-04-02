@@ -84,7 +84,7 @@
 
 
   test_bench:
-  
+    call initialize_acm
 
 
 
