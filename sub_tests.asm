@@ -318,7 +318,16 @@
     call get_word
     ASSERT_HL_EQUALS cody_walking_0_vjob
 
-
+    ; Test adding a vjob if the current frame requires it.
+    LOAD_ACM fake_acm_data
+    CLEAR_VJOBS
+    ld a,2
+    call add_vjob_if_required
+    ld a,(vjobs)
+    ASSERT_A_EQUALS 0
+    ld hl,vjob_table
+    call get_word
+    ASSERT_HL_EQUALS $0000
 
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:
