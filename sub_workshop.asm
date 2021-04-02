@@ -36,6 +36,24 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  tick_enabled_animations:
+      ld hl,acm_enabled
+      ld de,acm_timer
+    .rept ACM_SLOTS
+      ld a,(hl)
+      cp TRUE
+      jp nz,+
+        ld a,(de)
+        cp 0
+        jp z,+
+          dec a
+          ld (de),a
+      +:
+      inc hl
+      inc de
+    .endr
+  ret
+  
   is_animation_enabled:
     ; IN:  A = Slot number in ACM
     ; OUT: A = TRUE or FALSE.
@@ -58,6 +76,17 @@
     ld hl,acm_timer
     call offset_byte_table
     ld a,(hl)
+  ret
+
+  is_animation_looping:
+    ; IN:  A = Slot number in ACM
+    ; OUT: A = TRUE or FALSE.
+    ld hl,acm_pointer             ; HL = Start of pointer table.
+    call offset_word_table        ; HL = Item holding ptr. to animation file.
+    call get_word                 ; HL = Start (at t.o.c.) of animation file. 
+    call get_word                 ; HL = Header section in animation file.
+    inc hl                        ; Go past max frame to looping (bool).
+    ld a,(hl)                     ; Load into A and return.
   ret
 
 

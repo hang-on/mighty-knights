@@ -83,13 +83,13 @@
 .section "Test data" free
   fake_acm_data:
     ; acm_enabled:
-    .db TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE       
+    .db TRUE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE       
     ; acm_frame:
-    .db 0 0 1 0 0 0 0 0
+    .db 0 0 1 0 0 0 0 8
     ; acm_timer:
-    .db 9 0 0 0 0 0 0 0
+    .db 9 0 0 0 0 0 0 9
     ; acm_pointer:
-    .dw cody_walking $0000 cody_walking $0000 $0000 $0000 $0000 $0000
+    .dw cody_walking $0000 dummy_anim dummy_anim $0000 $0000 $0000 $0000
   fake_acm_data_end:
 
   .macro LOAD_ACM
@@ -163,6 +163,29 @@
       .db 1                       
       .dw layout_2x4              
 
+
+  ; Animation file:
+  dummy_anim:
+    ; Table of contents:
+    .dw @header, @frame_0, @frame_1
+     @header:
+      .db 1                       ; Max frame.
+      .db FALSE                   ; Looping.
+    @frame_0:
+      .db 5                       ; Duration.
+      .db FALSE                   ; Require vjob?
+      .dw $0000                   ; Pointer to vjob.
+      .db 8                       ; Size.
+      .db 10                      ; Index of first tile.
+      .dw layout_2x4              ; Pointer to layout.
+    @frame_1:
+      .db 7                      
+      .db FALSE                    
+      .dw $0000 
+      .db 8                       
+      .db 18                       
+      .dw layout_2x4              
+
 .ends
 
 .section "tests" free
@@ -198,6 +221,24 @@
     call get_timer
     ASSERT_A_EQUALS 0
 
+    ; Test getting data from the animation file:
+    LOAD_ACM fake_acm_data
+    ld a,0
+    call is_animation_looping
+    ASSERT_A_EQUALS TRUE
+
+    ; Test btach ticking of enabled animations
+    LOAD_ACM fake_acm_data
+    call tick_enabled_animations
+    ld a,0
+    call get_timer
+    ASSERT_A_EQUALS 8
+    ld a,2
+    call get_timer
+    ASSERT_A_EQUALS 0
+    ld a,7
+    call get_timer
+    ASSERT_A_EQUALS 9 
 
 
   ; ------- end of tests --------------------------------------------------------
