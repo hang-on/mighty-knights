@@ -36,6 +36,28 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  is_animation_at_max_frame:
+    ; IN:  A = Slot number in ACM
+    ; OUT: A = TRUE or FALSE.
+    ld (temp_byte),a              ; Save the slot number.
+    ld hl,acm_pointer             ; HL = Start of pointer table.
+    call offset_word_table        ; HL = Item holding ptr. to animation file.
+    call get_word                 ; HL = Start (at t.o.c.) of animation file. 
+    call get_word                 ; HL = Header section in animation file.
+    ld a,(hl)                     ; Load max frame into A.
+    push af                       ; Save max frame.
+      ld a,(temp_byte)            ; Get current frame of animation.
+      call get_frame
+      ld b,a                      ; Save it in B.
+    pop af                        ; Retrieve the max frame.
+    cp b                          ; Is current frame == max frame?
+    jp nz,+
+      ld a,TRUE
+      ret
+    +:
+      ld a,FALSE
+  ret
+
   tick_enabled_animations:
       ld hl,acm_enabled
       ld de,acm_timer

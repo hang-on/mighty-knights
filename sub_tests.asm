@@ -240,6 +240,16 @@
     call get_timer
     ASSERT_A_EQUALS 9 
 
+    ; Test max frame
+    LOAD_ACM fake_acm_data
+    ld a,0
+    call is_animation_at_max_frame
+    ASSERT_A_EQUALS FALSE
+    ld a,2
+    call is_animation_at_max_frame
+    ASSERT_A_EQUALS TRUE
+
+    
 
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:
