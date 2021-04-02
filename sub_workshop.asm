@@ -45,6 +45,7 @@
   ret
 
   set_animation:
+    ; 
     ; IN: A = Slot.
     ;     HL = Animation label
     .equ ERROR_SLOT_ENABLED $ff

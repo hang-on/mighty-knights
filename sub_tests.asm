@@ -479,6 +479,9 @@
     ld a,1
     call get_timer
     ASSERT_A_EQUALS 10
+    ld a,1
+    call is_vjob_required
+    ASSERT_A_EQUALS TRUE
 
 
   ; ------- end of tests --------------------------------------------------------
