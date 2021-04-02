@@ -36,6 +36,30 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  is_animation_enabled:
+    ; IN:  A = Slot number in ACM
+    ; OUT: A = TRUE or FALSE.
+    ld hl,acm_enabled
+    call offset_byte_table
+    ld a,(hl)
+  ret
+
+  get_frame:
+    ; IN:  A = Slot number in ACM
+    ; OUT: A = Number of the frame currently playing (0..x).
+    ld hl,acm_frame
+    call offset_byte_table
+    ld a,(hl)
+  ret
+
+  get_timer:
+    ; IN:  A = Slot number in ACM
+    ; OUT: A = The time remaining for the current frame.
+    ld hl,acm_timer
+    call offset_byte_table
+    ld a,(hl)
+  ret
+
 
   initialize_acm:
     ; Turn off all animation slots in the matrix.

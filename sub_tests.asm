@@ -81,15 +81,24 @@
 .bank 0 slot 0
 ; -----------------------------------------------------------------------------
 .section "Test data" free
-  fake_acm:
+  fake_acm_data:
     ; acm_enabled:
-    .db FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE       
+    .db TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE       
     ; acm_frame:
-    .db 0 0 0 0 0 0 0 0
+    .db 0 0 1 0 0 0 0 0
     ; acm_timer:
-    .db 0 0 0 0 0 0 0 0
+    .db 9 0 0 0 0 0 0 0
     ; acm_pointer:
-    .dw $0000 $0000 $0000 $0000 $0000 $0000 $0000 $0000
+    .dw cody_walking $0000 cody_walking $0000 $0000 $0000 $0000 $0000
+  fake_acm_data_end:
+
+  .macro LOAD_ACM
+    ld hl,\1
+    ld de,acm_enabled
+    ld bc,fake_acm_data_end-fake_acm_data
+    ldir
+  .endm
+
 
   .equ PLAYER_TILE_BANK 2
   .equ PLAYER_FIRST_TILE SPRITE_BANK_START + CHARACTER_SIZE
@@ -161,6 +170,33 @@
 
   test_bench:
     call initialize_acm
+
+    ; Test to get ENABLED staus from the anim in slot 0.
+    LOAD_ACM fake_acm_data
+    ld a,0
+    call is_animation_enabled
+    ASSERT_A_EQUALS TRUE
+
+    ; Test to get DISABLED staus from the anim in slot 1.
+    LOAD_ACM fake_acm_data
+    ld a,1
+    call is_animation_enabled
+    ASSERT_A_EQUALS FALSE
+
+    ; Test simple getters:
+    LOAD_ACM fake_acm_data
+    ld a,0
+    call get_frame
+    ASSERT_A_EQUALS 0
+    ld a,2
+    call get_frame
+    ASSERT_A_EQUALS 1
+    ld a,0
+    call get_timer
+    ASSERT_A_EQUALS 9
+    ld a,2
+    call get_timer
+    ASSERT_A_EQUALS 0
 
 
 
