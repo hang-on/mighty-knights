@@ -476,6 +476,9 @@
     ld a,1
     call get_animation_label
     ASSERT_HL_EQUALS cody_walking
+    ld a,1
+    call get_timer
+    ASSERT_A_EQUALS 10
 
 
   ; ------- end of tests --------------------------------------------------------

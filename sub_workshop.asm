@@ -46,15 +46,12 @@
 
   set_animation:
     ; IN: A = Slot.
-    ;     HL = Pointer to animation
+    ;     HL = Animation label
     .equ ERROR_SLOT_ENABLED $ff
     .equ OPERATION_SUCCESFUL $00
     ld (temp_byte),a
-    ld c,l
-    ld b,h
-    push bc
+    push hl                     ; Save the label for later.
     pop ix
-
     call is_animation_enabled
     cp TRUE
     jp nz,+
@@ -64,14 +61,17 @@
     +:
       ld a,(temp_byte)
       ld hl,acm_pointer
-      call offset_word_table
-      push ix
+      call offset_word_table    ; HL points to the label/pointer item.
+      push ix                   ; Retrieve the animation label.
       pop bc
       ld (hl),c
       inc hl
       ld (hl),b
-    
-    ld a,OPERATION_SUCCESFUL
+      ; Use the animation label to fill the other fields in the slot.
+      ld a,(temp_byte)          ; This behavior is similar to when an animation
+      ld b,FRAME_RESET          ; loops back to the first frame (0).
+      call set_new_frame
+      ld a,OPERATION_SUCCESFUL
   ret
   
 
