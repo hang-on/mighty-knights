@@ -483,6 +483,47 @@
     call is_vjob_required
     ASSERT_A_EQUALS TRUE
 
+    ld a,0
+    call get_layout
+    ASSERT_A_EQUALS 8
+    ld a,b
+    ASSERT_A_EQUALS 1
+    ASSERT_HL_EQUALS layout_2x4
+    ld a,(hl)
+    ASSERT_A_EQUALS -32
+    ASSERT_HL_POINTS_TO_STRING 8,layout_2x4
+
+
+
+    .macro CLEAR_SAT_BUFFER
+      ld a,0
+      ld hl,sat_buffer_y
+      .rept 64
+        ld (hl),a
+        inc hl
+      .endr
+      ld hl,sat_buffer_xc
+      .rept 128
+        ld (hl),a
+        inc hl
+      .endr
+    .endm
+
+    jp +
+      .dstruct fake_actor actor 0, 100, 100
+    +:
+    CLEAR_SAT_BUFFER
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
+    jp +
+      offset_fake_actor:
+        .db 68 68 76 76 84 84 92 92
+    +:
+    ld a,0  ; use frame currently displaying in slot 0.
+    ld hl,fake_actor
+    call draw_actor
+    ld hl,sat_buffer_y
+    ;ASSERT_HL_POINTS_TO_STRING 8, offset_fake_actor
 
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:

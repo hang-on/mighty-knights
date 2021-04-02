@@ -36,6 +36,39 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  draw_actor:
+    ; IN: A = animation slot to use for drawing (giving the actor a 'skin').
+    ;    HL = Actor.
+    ld hl,sat_buffer_y
+
+  ret
+
+  get_layout:
+    ; Look up animation file to get layout of current frame
+    ; IN: A = animation slot number in ACM.
+    ; OUT: HL = Base address of layout.
+    ;      A = Size of layout (in tiles).
+    ;      B = Index of first char.
+    ld (temp_byte),a
+    ld hl,acm_label               ; HL = Start of pointer table.
+    call offset_word_table        ; HL = Item holding ptr. to animation file.
+    call get_word                 ; HL = Start (at t.o.c.) of animation file. 
+    push hl                       ; Save base address of t.o.c.
+      ld a,(temp_byte)
+      call get_frame
+    pop hl
+    inc a                         ; Index past header.
+    call offset_word_table
+    call get_word                 ; Now HL is at the base of the current frame      
+    push hl
+    pop ix
+    ld a,(ix+4)                     ; Size    
+    ld b,(ix+5)                     ; First char
+    ld l,(ix+6)
+    ld h,(ix+7)
+  ret
+
+
   get_animation_label:
     ; Get the label of the animation file connected to the given slot.
     ; IN:  A = Slot number in ACM
