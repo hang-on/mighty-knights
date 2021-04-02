@@ -42,7 +42,39 @@
     call tick_enabled_animations
 
     .rept ACM_SLOTS index COUNT
+      ld a,COUNT
+      call is_animation_enabled
+      cp TRUE
+      jp nz,++++
+        ld a,COUNT
+        call get_timer
+        cp 0
+        jp nz,++++
+          ; OK, animation is enabled and time is up. What to do..?
+          ld a,COUNT
+          call is_animation_at_max_frame
+          cp TRUE
+          jp z,+
+            ; Not at max frame, just increment the current frame
+            ; and reset timer
+            ld a,COUNT
+            call inc_frame
+            ld a,COUNT
+            call reset_timer
+            ; FIXME: Also load vjobs!
+            jp ++++
+          +:
+            ; Do stuff that either loops or disables animation.
+            ld a,COUNT
+            call is_animation_looping
+            cp TRUE
+            jp nz,++
+              ; Looping, just go back to frame 0 and reset timer, load vjobs.
+              jp ++++
 
+            ++:
+              ; Not looping, just disable animation
+      ++++:
     .endr
   ret
 
@@ -107,6 +139,19 @@
     ld a,(hl)                     ; This is where the duration is stored
   ret
 
+  reset_timer:
+    ; Reset timer to duration specified in file.
+    ; IN: A = animation slot number in ACM.
+    ld (temp_byte),a
+    call get_duration
+    push af
+      ld a,(temp_byte)
+      ld hl,acm_timer
+      call offset_byte_table
+    pop af
+    ld (hl),a
+  ret
+
   disable_animation:
     ; IN:  A = Slot number in ACM
     ld hl,acm_enabled
@@ -169,6 +214,15 @@
     ld hl,acm_frame
     call offset_byte_table
     ld a,(hl)
+  ret
+
+  inc_frame:
+    ; IN:  A = Slot number in ACM
+    ld hl,acm_frame
+    call offset_byte_table
+    ld a,(hl)
+    inc a
+    ld (hl),a
   ret
 
   get_timer:

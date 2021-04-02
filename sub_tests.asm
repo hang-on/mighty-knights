@@ -6,6 +6,12 @@
   nop
 .endm
 
+.macro ASSERT_A_EQUALS_NOT
+  cp \1
+  jp z,exit_with_failure
+  nop
+.endm
+
 .macro ASSERT_HL_EQUALS ; (value)
   push de
   push af
@@ -103,6 +109,17 @@
     ; acm_pointer:
     .dw cody_walking $0000 dummy_anim dummy_anim $0000 $0000 $0000 $0000
   fake_acm_data_2_end:
+
+  fake_acm_data_3: ;(includes the looping dummy anim)
+    ; acm_enabled:
+    .db TRUE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, TRUE       
+    ; acm_frame:
+    .db 0 0 0 0 0 0 0 1
+    ; acm_timer:
+    .db 9 0 1 3 0 0 0 1
+    ; acm_pointer:
+    .dw cody_walking $0000 dummy_anim dummy_anim $0000 $0000 $0000 looping_dummy_anim
+
 
   .macro LOAD_ACM
     ld hl,\1
@@ -206,6 +223,27 @@
       .db 8                       
       .db 18                       
       .dw layout_2x4              
+
+  looping_dummy_anim:
+    ; Table of contents:
+    .dw @header, @frame_0, @frame_1
+     @header:
+      .db 1                       ; Max frame.
+      .db TRUE                   ; Looping.
+    @frame_0:
+      .db 3                       ; Duration.
+      .db FALSE                   ; Require vjob?
+      .dw $0000                   ; Pointer to vjob.
+      .db 8                       ; Size.
+      .db 10                      ; Index of first tile.
+      .dw layout_2x4              ; Pointer to layout.
+    @frame_1:
+      .db 3                      
+      .db FALSE                    
+      .dw $0000 
+      .db 8                       
+      .db 18                       
+      .dw layout_2x4      
 
 .ends
 
@@ -345,7 +383,7 @@
     LOAD_ACM fake_acm_data_2
     CLEAR_VJOBS
     call process_animations
-      ; Are timers handles as expected?
+      ; Are timers handled as expected?
       ld a,0
       call get_timer
       ASSERT_A_EQUALS 8
@@ -355,6 +393,36 @@
       +:
       ld hl,acm_timer
       ASSERT_HL_POINTS_TO_STRING ACM_SLOTS timers_ticked_once
+
+    ; Test incrementing frame
+    LOAD_ACM fake_acm_data_2
+    CLEAR_VJOBS
+    call process_animations
+    ld a,2
+    call get_frame
+    ASSERT_A_EQUALS 1
+    
+    ; Test looping, part one
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
+    call process_animations
+    ld a,7
+    call get_frame
+    ASSERT_A_EQUALS_NOT 2
+
+    ; Further testing incrementing frame
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
+    call process_animations
+    ld a,2
+    call get_frame
+    ASSERT_A_EQUALS 1
+    ld a,2
+    call get_duration
+    ASSERT_A_EQUALS 7
+    ld a,2
+    call get_timer
+    ASSERT_A_EQUALS 7
 
 
   ; ------- end of tests --------------------------------------------------------
