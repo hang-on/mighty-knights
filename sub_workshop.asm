@@ -55,13 +55,10 @@
           call is_animation_at_max_frame
           cp TRUE
           jp z,+
-            ; Not at max frame, just increment the current frame
-            ; and reset timer
+            ; Not at max frame >> frame forward all inclusive...
             ld a,COUNT
-            call inc_frame
-            ld a,COUNT
-            call reset_timer
-            ; FIXME: Also load vjobs!
+            ld b,FRAME_FORWARD
+            call set_new_frame
             jp ++++
           +:
             ; Do stuff that either loops or disables animation.
@@ -70,12 +67,46 @@
             cp TRUE
             jp nz,++
               ; Looping, just go back to frame 0 and reset timer, load vjobs.
+              ld a,COUNT
+              ld b,FRAME_RESET
+              call set_new_frame
               jp ++++
-
             ++:
               ; Not looping, just disable animation
       ++++:
     .endr
+  ret
+
+  .equ FRAME_FORWARD $ff
+  .equ FRAME_RESET 0
+  
+  set_new_frame:
+    ; IN: A = Slot number.
+    ;     B = Frame number or command (FRAME_FORWARD or FRAME_RESET (=0)).
+    ld (temp_byte),a
+    ld a,b
+    cp FRAME_FORWARD
+    jp z,@inc_frame
+      ; Not frame forward. Then just set frame to the given number.
+      push af
+        ld a,(temp_byte)
+        ld hl,acm_frame
+        call offset_byte_table
+      pop af
+      ld (hl),a
+      jp +
+    @inc_frame:
+      ld a,(temp_byte)
+      ld hl,acm_frame
+      call offset_byte_table
+      ld a,(hl)
+      inc a
+      ld (hl),a
+    +:
+    ld a,(temp_byte)
+    call reset_timer
+    ld a,(temp_byte)
+    call add_vjob_if_required
   ret
 
   add_vjob_if_required:
@@ -216,14 +247,7 @@
     ld a,(hl)
   ret
 
-  inc_frame:
-    ; IN:  A = Slot number in ACM
-    ld hl,acm_frame
-    call offset_byte_table
-    ld a,(hl)
-    inc a
-    ld (hl),a
-  ret
+
 
   get_timer:
     ; IN:  A = Slot number in ACM

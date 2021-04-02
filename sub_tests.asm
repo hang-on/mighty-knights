@@ -424,6 +424,13 @@
     call get_timer
     ASSERT_A_EQUALS 7
 
+  ; Test looping, part two
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
+    call process_animations
+    ld a,7
+    call get_frame
+    ASSERT_A_EQUALS 0
 
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:
