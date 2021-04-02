@@ -80,6 +80,82 @@
 
 .bank 0 slot 0
 ; -----------------------------------------------------------------------------
+.section "Test data" free
+  fake_acm:
+    ; acm_enabled:
+    .db FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE       
+    ; acm_frame:
+    .db 0 0 0 0 0 0 0 0
+    ; acm_timer:
+    .db 0 0 0 0 0 0 0 0
+    ; acm_pointer:
+    .dw $0000 $0000 $0000 $0000 $0000 $0000 $0000 $0000
+
+  .equ PLAYER_TILE_BANK 2
+  .equ PLAYER_FIRST_TILE SPRITE_BANK_START + CHARACTER_SIZE
+  .macro PLAYER_VJOB ARGS TILES, AMOUNT
+    .db PLAYER_TILE_BANK
+    .dw TILES
+    .dw CHARACTER_SIZE*AMOUNT
+    .dw PLAYER_FIRST_TILE
+  .endm
+  
+  cody_walking_0_vjob:
+    PLAYER_VJOB cody_walking_0_tiles, 8
+  cody_walking_1_and_3_vjob:
+    PLAYER_VJOB cody_walking_1_and_3_tiles, 8
+  cody_walking_2_vjob:
+    PLAYER_VJOB cody_walking_2_tiles, 8  
+  
+  layout_2x4:
+    ; Y and X offsets to apply to the origin of an actor.
+    .db -32, -8
+    .db -32, 0
+    .db -24, -8
+    .db -24, 0
+    .db -16, -8
+    .db -16, 0
+    .db -8, -8
+    .db -8, 0
+
+  ; Animation file:
+  cody_walking:
+    ; Table of contents:
+    .dw @header, @frame_0, @frame_1, @frame_2, @frame_3
+    @header:
+      .db 3                       ; Max frame.
+      .db TRUE                    ; Looping.
+    @frame_0:
+      .db 10                      ; Duration.
+      .db TRUE                    ; Require vjob?
+      .dw cody_walking_0_vjob     ; Pointer to vjob.
+      .db 8                       ; Size.
+      .db 1                       ; Index of first tile.
+      .dw layout_2x4              ; Pointer to layout.
+    @frame_1:
+      .db 10                      
+      .db TRUE                    
+      .dw cody_walking_1_and_3_vjob 
+      .db 8                       
+      .db 1                       
+      .dw layout_2x4              
+    @frame_2:
+      .db 10                      
+      .db TRUE                    
+      .dw cody_walking_2_vjob 
+      .db 8                       
+      .db 1                       
+      .dw layout_2x4              
+    @frame_3:
+      .db 10                      
+      .db TRUE                    
+      .dw cody_walking_1_and_3_vjob 
+      .db 8                       
+      .db 1                       
+      .dw layout_2x4              
+
+.ends
+
 .section "tests" free
 
 

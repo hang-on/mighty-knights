@@ -171,15 +171,7 @@
     .db $23 $10 $12 $18 $06 $15 $2A $3F $13 $0B $0F $0C $38 $26 $27 $2F
     demo_palette_end:
 
-  layout_2x4:
-    .db -32, -8, 1
-    .db -32, 0, 2
-    .db -24, -8, 3
-    .db -24, 0, 4
-    .db -16, -8, 5
-    .db -16, 0, 6
-    .db -8, -8, 7
-    .db -8, 0, 8
+
 
   cody_walking_0_tiles:
     .include "bank_2/cody_walking_0_tiles.asm"
@@ -188,21 +180,7 @@
   cody_walking_2_tiles:
     .include "bank_2/cody_walking_2_tiles.asm"
 
-  .equ PLAYER_TILE_BANK 2
-  .equ PLAYER_FIRST_TILE SPRITE_BANK_START + CHARACTER_SIZE
-  .macro PLAYER_VJOB ARGS TILES, AMOUNT
-    .db PLAYER_TILE_BANK
-    .dw TILES
-    .dw CHARACTER_SIZE*AMOUNT
-    .dw PLAYER_FIRST_TILE
-  .endm
-  
-  cody_walking_0_tiles_job:
-    PLAYER_VJOB cody_walking_0_tiles, 8
-  cody_walking_1_and_3_tiles_job:
-    PLAYER_VJOB cody_walking_1_and_3_tiles, 8
-  cody_walking_2_tiles_job:
-    PLAYER_VJOB cody_walking_2_tiles, 8
+
 
   ; Mockup background of Village on Fire:
   .include "mockup_background_tilemap.asm"

@@ -124,18 +124,14 @@
 00:07a6 main_loop
 02:8000 demo_palette
 02:8020 demo_palette_end
-02:8020 layout_2x4
-02:8038 cody_walking_0_tiles
-02:8138 cody_walking_1_and_3_tiles
-02:8238 cody_walking_2_tiles
-02:8338 cody_walking_0_tiles_job
-02:833f cody_walking_1_and_3_tiles_job
-02:8346 cody_walking_2_tiles_job
-02:834d mockup_background_tilemap
-02:894d mockup_tilemap_job
-02:8954 mockup_background_tiles
-02:9554 mockup_tiles_job
-02:955b adventure_awaits
+02:8020 cody_walking_0_tiles
+02:8120 cody_walking_1_and_3_tiles
+02:8220 cody_walking_2_tiles
+02:8320 mockup_background_tilemap
+02:8920 mockup_tilemap_job
+02:8927 mockup_background_tiles
+02:9527 mockup_tiles_job
+02:952e adventure_awaits
 
 [definitions]
 00000011 _sizeof_PSGInit
@@ -260,13 +256,9 @@
 00000015 _sizeof_main_loop
 00000020 _sizeof_demo_palette
 00000000 _sizeof_demo_palette_end
-00000018 _sizeof_layout_2x4
 00000100 _sizeof_cody_walking_0_tiles
 00000100 _sizeof_cody_walking_1_and_3_tiles
 00000100 _sizeof_cody_walking_2_tiles
-00000007 _sizeof_cody_walking_0_tiles_job
-00000007 _sizeof_cody_walking_1_and_3_tiles_job
-00000007 _sizeof_cody_walking_2_tiles_job
 00000600 _sizeof_mockup_background_tilemap
 00000007 _sizeof_mockup_tilemap_job
 00000c00 _sizeof_mockup_background_tiles
