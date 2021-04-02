@@ -25,6 +25,13 @@
   .endr
 .endm
 
+.equ ACM_SLOTS 8
+.ramsection "Animation Control Matrix (ACM)" slot 3
+  acm_enabled dsb ACM_SLOTS
+  acm_frame dsb ACM_SLOTS
+  acm_timer dsb ACM_SLOTS
+  acm_pointer dsb ACM_SLOTS*2
+.ends
 
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
