@@ -37,23 +37,25 @@
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
   draw_actor:
-    ; IN: A = animation slot to use for drawing (giving the actor a 'skin').
-    ;    HL = Actor.
-    push hl
-    pop iy
-    call get_layout       ; Sets A, B and HL...
-    push hl
+    ; An actor can take different forms depending on which animation it is
+    ; linked with. This is set (and thus can vary) on a frame-by-frame basis.
+    ; draw_actor uses "add_sprite" to move sprites into the SAT buffer.
+    ; IN: A  = Animation slot to use for drawing.
+    ;     HL = Actor.
+    inc hl                ; Move past index.
+    ld d,(hl)             ; Get actor origin Y into D. 
+    inc hl
+    ld e,(hl)             ; Get actor origin X into D.
+    call get_layout       ; Sets A (first char), B (num. chars) and HL (label).
+    push hl               ; Add sprite needs the offset data in IX.
     pop ix
-    ld c,a                ; save index of first char
-    ld d,(iy+actor.y)
-    ld e,(iy+actor.x)
+    ld c,a                ; Save index of first char.
     -:
-      call add_sprite    ; Does not alter b and c! 
-      inc c
+      call add_sprite     ; This does not alter B and C! 
+      inc c               ; Next char
+      inc ix              ; Next y,x-offset pair.
       inc ix
-      inc ix
-    djnz -
-
+    djnz -                ; Loop through all chars in frame.
   ret
 
   get_layout:
