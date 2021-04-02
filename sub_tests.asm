@@ -281,6 +281,19 @@
     call get_duration
     ASSERT_A_EQUALS 10
 
+    ; Test getting info about current frame from file
+    LOAD_ACM fake_acm_data
+    ld a,0
+    call is_vjob_required
+    ASSERT_A_EQUALS TRUE
+    ld a,2
+    call is_vjob_required
+    ASSERT_A_EQUALS FALSE
+
+
+
+
+
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:
     ld a,11

@@ -36,6 +36,27 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+
+  is_vjob_required::
+    ; Look up animation file to check whether a vjob is required for the 
+    ; current frame.
+    ; IN: A = animation slot number in ACM.
+    ; OUT: A = TRUE/FALSE
+    ld (temp_byte),a
+    ld hl,acm_pointer             ; HL = Start of pointer table.
+    call offset_word_table        ; HL = Item holding ptr. to animation file.
+    call get_word                 ; HL = Start (at t.o.c.) of animation file. 
+    push hl                       ; Save base address of t.o.c.
+      ld a,(temp_byte)
+      call get_frame
+    pop hl
+    inc a                         ; Index past header.
+    call offset_word_table
+    call get_word                 ; Now HL is at the base of the current frame      
+    inc hl                        ; Move past duration byte.
+    ld a,(hl)                     ; Read true or false, and return it in A.
+  ret
+
   get_duration:
     ; Look up animation file to get duration of current frame
     ; IN: A = animation slot number in ACM.
