@@ -99,6 +99,15 @@
     ldir
   .endm
 
+  .macro CLEAR_VJOBS
+    ld a,0
+    ld hl,vjobs
+    .rept 1+(2*VJOB_MAX)
+      ld (hl),a
+      inc hl
+    .endr
+  .endm
+
 
   .equ PLAYER_TILE_BANK 2
   .equ PLAYER_FIRST_TILE SPRITE_BANK_START + CHARACTER_SIZE
@@ -290,7 +299,24 @@
     call is_vjob_required
     ASSERT_A_EQUALS FALSE
 
+    ; Test adding a vjob if the current frame requires it.
+    LOAD_ACM fake_acm_data
+    CLEAR_VJOBS
+    ld a,2
+    call add_vjob_if_required
+    ld a,(vjobs)
+    ASSERT_A_EQUALS 0
 
+    ; Test adding a vjob if the current frame requires it.
+    LOAD_ACM fake_acm_data
+    CLEAR_VJOBS
+    ld a,0
+    call add_vjob_if_required
+    ld a,(vjobs)
+    ASSERT_A_EQUALS 1
+    ld hl,vjob_table
+    call get_word
+    ASSERT_HL_EQUALS cody_walking_0_vjob
 
 
 
