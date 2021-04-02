@@ -91,11 +91,23 @@
     ; acm_pointer:
     .dw cody_walking $0000 dummy_anim dummy_anim $0000 $0000 $0000 $0000
   fake_acm_data_end:
+  .equ FULL_ACM fake_acm_data_end-fake_acm_data 
+
+  fake_acm_data_2:
+    ; acm_enabled:
+    .db TRUE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE       
+    ; acm_frame:
+    .db 0 0 1 0 0 0 0 8
+    ; acm_timer:
+    .db 9 0 1 3 0 0 0 9
+    ; acm_pointer:
+    .dw cody_walking $0000 dummy_anim dummy_anim $0000 $0000 $0000 $0000
+  fake_acm_data_2_end:
 
   .macro LOAD_ACM
     ld hl,\1
     ld de,acm_enabled
-    ld bc,fake_acm_data_end-fake_acm_data
+    ld bc,FULL_ACM
     ldir
   .endm
 
@@ -328,6 +340,22 @@
     ld hl,vjob_table
     call get_word
     ASSERT_HL_EQUALS $0000
+
+    ; Roll out the big batch tests:
+    LOAD_ACM fake_acm_data_2
+    CLEAR_VJOBS
+    call process_animations
+      ; Are timers handles as expected?
+      ld a,0
+      call get_timer
+      ASSERT_A_EQUALS 8
+      jp +
+        timers_ticked_once:
+          .db 8 0 0 2 0 0 0 9
+      +:
+      ld hl,acm_timer
+      ASSERT_HL_POINTS_TO_STRING ACM_SLOTS timers_ticked_once
+
 
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:

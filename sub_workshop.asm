@@ -36,6 +36,16 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  process_animations:      
+    .redefine COUNT 0
+    ld a,COUNT
+    call tick_enabled_animations
+
+    .rept ACM_SLOTS index COUNT
+
+    .endr
+  ret
+
   add_vjob_if_required:
     ; IN: A = animation slot number in ACM.
     ld (temp_byte),a
