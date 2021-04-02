@@ -39,7 +39,20 @@
   draw_actor:
     ; IN: A = animation slot to use for drawing (giving the actor a 'skin').
     ;    HL = Actor.
-    ld hl,sat_buffer_y
+    push hl
+    pop iy
+    call get_layout       ; Sets A, B and HL...
+    push hl
+    pop ix
+    ld c,a                ; save index of first char
+    ld d,(iy+actor.y)
+    ld e,(iy+actor.x)
+    -:
+      call add_sprite    ; Does not alter b and c! 
+      inc c
+      inc ix
+      inc ix
+    djnz -
 
   ret
 
@@ -47,8 +60,8 @@
     ; Look up animation file to get layout of current frame
     ; IN: A = animation slot number in ACM.
     ; OUT: HL = Base address of layout.
-    ;      A = Size of layout (in tiles).
-    ;      B = Index of first char.
+    ;      B = Size of layout (in tiles).
+    ;      A = Index of first char.
     ld (temp_byte),a
     ld hl,acm_label               ; HL = Start of pointer table.
     call offset_word_table        ; HL = Item holding ptr. to animation file.
@@ -62,8 +75,8 @@
     call get_word                 ; Now HL is at the base of the current frame      
     push hl
     pop ix
-    ld a,(ix+4)                     ; Size    
-    ld b,(ix+5)                     ; First char
+    ld b,(ix+4)                     ; Size    
+    ld a,(ix+5)                     ; First char
     ld l,(ix+6)
     ld h,(ix+7)
   ret

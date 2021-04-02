@@ -485,9 +485,9 @@
 
     ld a,0
     call get_layout
-    ASSERT_A_EQUALS 8
-    ld a,b
     ASSERT_A_EQUALS 1
+    ld a,b
+    ASSERT_A_EQUALS 8
     ASSERT_HL_EQUALS layout_2x4
     ld a,(hl)
     ASSERT_A_EQUALS -32
@@ -497,6 +497,7 @@
 
     .macro CLEAR_SAT_BUFFER
       ld a,0
+      ld (sat_buffer_index),a
       ld hl,sat_buffer_y
       .rept 64
         ld (hl),a
@@ -512,18 +513,36 @@
     jp +
       .dstruct fake_actor actor 0, 100, 100
     +:
-    CLEAR_SAT_BUFFER
-    LOAD_ACM fake_acm_data_3
-    CLEAR_VJOBS
     jp +
       offset_fake_actor:
         .db 68 68 76 76 84 84 92 92
+      offset_fake_actor_xc:
+        .db 92, 1, 100, 2, 92, 3, 100, 4
     +:
+
+    ; Test sat y buffer.
+    CLEAR_SAT_BUFFER
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
     ld a,0  ; use frame currently displaying in slot 0.
     ld hl,fake_actor
     call draw_actor
     ld hl,sat_buffer_y
-    ;ASSERT_HL_POINTS_TO_STRING 8, offset_fake_actor
+    ASSERT_HL_POINTS_TO_STRING 8, offset_fake_actor
+
+  ; Test sat xc buffer.
+    CLEAR_SAT_BUFFER
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
+    ld a,0  ; use frame currently displaying in slot 0.
+    ld hl,fake_actor
+    call draw_actor
+    ld hl,sat_buffer_xc
+    ld a,(hl)
+    ASSERT_A_EQUALS 92
+    ASSERT_HL_POINTS_TO_STRING 6, offset_fake_actor_xc
+
+
 
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:

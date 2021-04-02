@@ -153,9 +153,10 @@
 ; -----------------------------------------------------------------------------   
   add_sprite:
     ; Add a sprite of size = 1 character to the SAT.
-    ; Entry: D = Y origin.
+    ; Entry: C = Char.
+    ;        D = Y origin.
     ;        E = X origin.
-    ;        IX = Pointer to offset + tile block.
+    ;        IX = Pointer to offset pair Y,X
     ; Exit: None
     ; Uses: A, DE, HL, IX (Warning: Do not use B!, as it is used by 
     ; add_meta_sprite).
@@ -178,12 +179,11 @@
     ld hl,sat_buffer_xc
     call offset_word_table
     ;
-    ld a,e                ; Get the x-pos.
-    add a,(ix+1)             ; Write it to the buffer.
+    ld a,e                  ; Get the x-pos.
+    add a,(ix+1)            ; Write it to the buffer.
     ld (hl),a
-    ld a,(ix+2)
     inc hl
-    ld (hl),a             ; Write it to the buffer
+    ld (hl),c             ; Write the char (it should still be there)
     ;
     ld hl,sat_buffer_index
     inc (hl)
