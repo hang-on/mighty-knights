@@ -37,6 +37,7 @@
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
   get_animation_label:
+    ; Get the label of the animation file connected to the given slot.
     ; IN:  A = Slot number in ACM
     ; OUT: HL = Label of animation file linked to the given slot.
     ld hl,acm_pointer
@@ -45,7 +46,8 @@
   ret
 
   set_animation:
-    ; 
+    ; Setup a given animation in a specified slot in the ACM. If the slot is 
+    ; not disabled, do nothing and return with an error.
     ; IN: A = Slot.
     ;     HL = Animation label
     .equ ERROR_SLOT_ENABLED $ff
