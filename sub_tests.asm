@@ -249,7 +249,37 @@
     call is_animation_at_max_frame
     ASSERT_A_EQUALS TRUE
 
-    
+    ; Test disable non-looping animation at max frame:
+    LOAD_ACM fake_acm_data
+    ld a,2
+    call is_animation_at_max_frame
+    cp TRUE
+    jp nz,+
+      ld a,2
+      call is_animation_looping
+      cp FALSE
+      jp nz,+
+        ld a,2
+        call disable_animation
+    +:
+    ld a,2
+    call is_animation_enabled
+    ASSERT_A_EQUALS FALSE
+
+    ; Test getting info about current frame from file
+    LOAD_ACM fake_acm_data
+    ld a,0
+    call get_duration
+    ASSERT_A_EQUALS 10
+
+    ; Test getting info about current frame from file
+    LOAD_ACM fake_acm_data
+    ld a,2
+    call get_duration
+    ASSERT_A_EQUALS 7
+    ld a,0
+    call get_duration
+    ASSERT_A_EQUALS 10
 
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:

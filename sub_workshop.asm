@@ -36,6 +36,32 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  get_duration:
+    ; Look up animation file to get duration of current frame
+    ; IN: A = animation slot number in ACM.
+    ; OUT: A = duration of current frame.
+    ld (temp_byte),a
+    ld hl,acm_pointer             ; HL = Start of pointer table.
+    call offset_word_table        ; HL = Item holding ptr. to animation file.
+    call get_word                 ; HL = Start (at t.o.c.) of animation file. 
+    push hl                       ; Save base address of t.o.c.
+      ld a,(temp_byte)
+      call get_frame
+    pop hl
+    inc a                         ; Index past header.
+    call offset_word_table
+    call get_word                 ; Now HL is at the base of the current frame      
+    ld a,(hl)                     ; This is where the duration is stored
+  ret
+
+  disable_animation:
+    ; IN:  A = Slot number in ACM
+    ld hl,acm_enabled
+    call offset_byte_table
+    ld a,FALSE
+    ld (hl),a
+  ret
+  
   is_animation_at_max_frame:
     ; IN:  A = Slot number in ACM
     ; OUT: A = TRUE or FALSE.
