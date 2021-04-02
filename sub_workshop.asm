@@ -30,7 +30,7 @@
   acm_enabled dsb ACM_SLOTS
   acm_frame dsb ACM_SLOTS
   acm_timer dsb ACM_SLOTS
-  acm_pointer dsb ACM_SLOTS*2
+  acm_label dsb ACM_SLOTS*2
 .ends
 
 ; -----------------------------------------------------------------------------
@@ -40,7 +40,7 @@
     ; Get the label of the animation file connected to the given slot.
     ; IN:  A = Slot number in ACM
     ; OUT: HL = Label of animation file linked to the given slot.
-    ld hl,acm_pointer
+    ld hl,acm_label
     call offset_word_table
     call get_word
   ret
@@ -63,7 +63,7 @@
       ret
     +:
       ld a,(temp_byte)
-      ld hl,acm_pointer
+      ld hl,acm_label
       call offset_word_table    ; HL points to the label/pointer item.
       push ix                   ; Retrieve the animation label.
       pop bc
@@ -76,8 +76,6 @@
       call set_new_frame
       ld a,OPERATION_SUCCESFUL
   ret
-  
-
 
   process_animations:      
     .redefine COUNT 0
@@ -157,7 +155,7 @@
   add_vjob_if_required:
     ; IN: A = animation slot number in ACM.
     ld (temp_byte),a
-    ld hl,acm_pointer             ; HL = Start of pointer table.
+    ld hl,acm_label             ; HL = Start of pointer table.
     call offset_word_table        ; HL = Item holding ptr. to animation file.
     call get_word                 ; HL = Start (at t.o.c.) of animation file. 
     push hl                       ; Save base address of t.o.c.
@@ -183,7 +181,7 @@
     ; IN: A = animation slot number in ACM.
     ; OUT: A = TRUE/FALSE
     ld (temp_byte),a
-    ld hl,acm_pointer             ; HL = Start of pointer table.
+    ld hl,acm_label             ; HL = Start of pointer table.
     call offset_word_table        ; HL = Item holding ptr. to animation file.
     call get_word                 ; HL = Start (at t.o.c.) of animation file. 
     push hl                       ; Save base address of t.o.c.
@@ -202,7 +200,7 @@
     ; IN: A = animation slot number in ACM.
     ; OUT: A = duration of current frame.
     ld (temp_byte),a
-    ld hl,acm_pointer             ; HL = Start of pointer table.
+    ld hl,acm_label             ; HL = Start of pointer table.
     call offset_word_table        ; HL = Item holding ptr. to animation file.
     call get_word                 ; HL = Start (at t.o.c.) of animation file. 
     push hl                       ; Save base address of t.o.c.
@@ -240,7 +238,7 @@
     ; IN:  A = Slot number in ACM
     ; OUT: A = TRUE or FALSE.
     ld (temp_byte),a              ; Save the slot number.
-    ld hl,acm_pointer             ; HL = Start of pointer table.
+    ld hl,acm_label             ; HL = Start of pointer table.
     call offset_word_table        ; HL = Item holding ptr. to animation file.
     call get_word                 ; HL = Start (at t.o.c.) of animation file. 
     call get_word                 ; HL = Header section in animation file.
@@ -305,7 +303,7 @@
   is_animation_looping:
     ; IN:  A = Slot number in ACM
     ; OUT: A = TRUE or FALSE.
-    ld hl,acm_pointer             ; HL = Start of pointer table.
+    ld hl,acm_label             ; HL = Start of pointer table.
     call offset_word_table        ; HL = Item holding ptr. to animation file.
     call get_word                 ; HL = Start (at t.o.c.) of animation file. 
     call get_word                 ; HL = Header section in animation file.

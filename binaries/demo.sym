@@ -107,7 +107,7 @@
 00:c100 acm_enabled
 00:c108 acm_frame
 00:c110 acm_timer
-00:c118 acm_pointer
+00:c118 acm_label
 00:0a05 get_animation_label
 00:0a0f set_animation
 00:0a3a process_animations
@@ -115,7 +115,7 @@
 00:0c60 set_new_frame@inc_frame
 00:0c79 add_vjob_if_required
 00:0ca1 is_vjob_required
-00:0ca1 k185
+00:0ca1 k183
 00:0cbf get_duration
 00:0cdc reset_timer
 00:0cef disable_animation
@@ -280,13 +280,13 @@
 00000008 _sizeof_acm_enabled
 00000008 _sizeof_acm_frame
 00000008 _sizeof_acm_timer
-00000010 _sizeof_acm_pointer
+00000010 _sizeof_acm_label
 0000000a _sizeof_get_animation_label
 0000002b _sizeof_set_animation
 0000020e _sizeof_process_animations
 00000031 _sizeof_set_new_frame
 00000028 _sizeof_add_vjob_if_required
-00000000 _sizeof_k185
+00000000 _sizeof_k183
 0000001e _sizeof_is_vjob_required
 0000001d _sizeof_get_duration
 00000013 _sizeof_reset_timer
