@@ -36,6 +36,46 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  get_animation_label:
+    ; IN:  A = Slot number in ACM
+    ; OUT: HL = Label of animation file linked to the given slot.
+    ld hl,acm_pointer
+    call offset_word_table
+    call get_word
+  ret
+
+  set_animation:
+    ; IN: A = Slot.
+    ;     HL = Pointer to animation
+    .equ ERROR_SLOT_ENABLED $ff
+    .equ OPERATION_SUCCESFUL $00
+    ld (temp_byte),a
+    ld c,l
+    ld b,h
+    push bc
+    pop ix
+
+    call is_animation_enabled
+    cp TRUE
+    jp nz,+
+      ; Slot is already in use! Abort with error message.
+      ld a,ERROR_SLOT_ENABLED
+      ret
+    +:
+      ld a,(temp_byte)
+      ld hl,acm_pointer
+      call offset_word_table
+      push ix
+      pop bc
+      ld (hl),c
+      inc hl
+      ld (hl),b
+    
+    ld a,OPERATION_SUCCESFUL
+  ret
+  
+
+
   process_animations:      
     .redefine COUNT 0
     ld a,COUNT

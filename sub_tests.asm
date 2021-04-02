@@ -440,6 +440,44 @@
     call get_frame
     ASSERT_A_EQUALS 1
 
+    ; This is going well...!
+    ; Test adding an animation.
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
+    ld a,0
+    ld hl,cody_walking
+    call set_animation
+    ASSERT_A_EQUALS ERROR_SLOT_ENABLED
+
+    ; Test adding an animation, this time in a disabled slot.
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
+    ld a,1
+    ld hl,cody_walking
+    call set_animation
+    ASSERT_A_EQUALS OPERATION_SUCCESFUL
+
+    ; Test get animation label.
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
+    ld a,0
+    call get_animation_label
+    ASSERT_HL_EQUALS cody_walking
+
+    ; Test adding an animation, the pointer.
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
+    ld a,1
+    call get_animation_label
+    ASSERT_HL_EQUALS $0000
+    ld a,1
+    ld hl,cody_walking
+    call set_animation
+    ld a,1
+    call get_animation_label
+    ASSERT_HL_EQUALS cody_walking
+
+
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:
     ld a,11
