@@ -73,6 +73,8 @@
               jp ++++
             ++:
               ; Not looping, just disable animation
+              ld a,COUNT
+              call disable_animation
       ++++:
     .endr
   ret

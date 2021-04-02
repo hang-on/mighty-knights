@@ -432,6 +432,14 @@
     call get_frame
     ASSERT_A_EQUALS 0
 
+  ; Test looping, part three - no loop, just disable
+    LOAD_ACM fake_acm_data_2
+    CLEAR_VJOBS
+    call process_animations
+    ld a,2
+    call get_frame
+    ASSERT_A_EQUALS 1
+
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:
     ld a,11
