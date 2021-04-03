@@ -111,6 +111,8 @@
       ret
     +:
       ld a,(temp_byte)
+      call enable_animation
+      ld a,(temp_byte)
       ld hl,acm_label
       call offset_word_table    ; HL points to the label/pointer item.
       push ix                   ; Retrieve the animation label.
@@ -279,6 +281,14 @@
     ld hl,acm_enabled
     call offset_byte_table
     ld a,FALSE
+    ld (hl),a
+  ret
+
+  enable_animation:
+    ; IN:  A = Slot number in ACM
+    ld hl,acm_enabled
+    call offset_byte_table
+    ld a,TRUE
     ld (hl),a
   ret
   

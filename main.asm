@@ -10,7 +10,7 @@
 .equ FALSE 0
 
 ; Remove comment to enable unit testing
-.equ TEST_MODE
+;.equ TEST_MODE
 .ifdef TEST_MODE
   .equ USE_TEST_KERNEL
 .endif
@@ -124,11 +124,17 @@
     ld hl,demo_palette
     call load_cram
 
-    call initialize_vjobs
-    
     .ifdef TEST_MODE
       jp test_bench
     .endif
+
+    call initialize_vjobs
+    call initialize_acm
+
+    ld a,0
+    ld hl,cody_walking
+    call set_animation
+    
 
 
     ei
@@ -157,6 +163,8 @@
     call PSGFrame
     call PSGSFXFrame
     call refresh_sat_handler
+
+    call process_animations
 
 
   jp main_loop
