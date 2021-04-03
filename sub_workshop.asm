@@ -108,6 +108,7 @@
   set_animation:
     ; Setup a given animation in a specified slot in the ACM. If the slot is 
     ; not disabled, do nothing and return with an error.
+    ; ERROR/return temp. disabled!!
     ; IN: A = Slot.
     ;     HL = Animation label
     .equ ERROR_SLOT_ENABLED $ff
@@ -115,13 +116,13 @@
     ld (temp_byte),a
     push hl                     ; Save the label for later.
     pop ix
-    call is_animation_enabled
-    cp TRUE
-    jp nz,+
-      ; Slot is already in use! Abort with error message.
-      ld a,ERROR_SLOT_ENABLED
-      ret
-    +:
+    ;call is_animation_enabled
+    ;cp TRUE
+    ;jp nz,+
+    ;  ; Slot is already in use! Abort with error message.
+    ;  ld a,ERROR_SLOT_ENABLED
+    ;  ret
+    ;+:
       ld a,(temp_byte)
       call enable_animation
       ld a,(temp_byte)

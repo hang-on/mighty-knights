@@ -48,6 +48,8 @@
   ;
   cody instanceof actor
   arthur instanceof actor
+  arthur_clone_1 instanceof actor
+  arthur_clone_2 instanceof actor
 .ends
 .org 0
 .bank 0 slot 0
@@ -133,6 +135,8 @@
     call initialize_acm
     INITIALIZE_ACTOR cody, 0, 100, 100
     INITIALIZE_ACTOR arthur, 1, 130, 50
+    INITIALIZE_ACTOR arthur_clone_1, 2, 130, 90
+    INITIALIZE_ACTOR arthur_clone_2, 3, 130, 170
 
     ld a,0
     ld hl,cody_walking
@@ -164,6 +168,7 @@
   ; ---------------------------------------------------------------------------
   main_loop:
     call wait_for_vblank
+    ;halt
     ; -------------------------------------------------------------------------
     ; Begin vblank critical code (DRAW).
     call load_sat
@@ -183,6 +188,12 @@
 
     ld a,1
     ld hl,arthur
+    call draw_actor
+    ld a,1
+    ld hl,arthur_clone_1
+    call draw_actor
+    ld a,1
+    ld hl,arthur_clone_2
     call draw_actor
 
   jp main_loop
