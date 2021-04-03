@@ -215,14 +215,23 @@
   
   layout_2x4:
     ; Y and X offsets to apply to the origin of an actor.
-    .db -32, -8
-    .db -32, 0
-    .db -24, -8
-    .db -24, 0
+    .db -32, -8     ; XX
+    .db -32, 0      ; XX
+    .db -24, -8     ; XX
+    .db -24, 0      ; XX
     .db -16, -8
     .db -16, 0
     .db -8, -8
     .db -8, 0
+
+  layout_2x3_1b:
+    .db -24, -8     ; XX
+    .db -24, 0      ; XX
+    .db -16, -8     ; XXX
+    .db -16, 0
+    .db -8, -8
+    .db -8, 0
+    .db -8, 8
 
   ; Animation file:
   cody_walking:
@@ -273,6 +282,45 @@
     .dw arthur_walking_0_tiles
     .dw 7 * CHARACTER_SIZE * 3
     .dw 10*CHARACTER_SIZE ; Load into position 10
+
+  ; Animation file:
+  arthur_walking:
+    ; Table of contents:
+    .dw @header, @frame_0, @frame_1, @frame_2, @frame_3
+    @header:
+      .db 3                       ; Max frame.
+      .db TRUE                    ; Looping.
+    @frame_0:
+      .db 7                       ; Duration.
+      .db FALSE                   ; Require vjob?
+      .dw $0000                   ; Pointer to vjob.
+      .db 7                       ; Size.
+      .db 10                      ; Index of first tile.
+      .dw layout_2x3_1b           ; Pointer to layout.
+    @frame_1:
+      .db 6                       ; Duration.
+      .db FALSE                   ; Require vjob?
+      .dw $0000                   ; Pointer to vjob.
+      .db 7                       ; Size.
+      .db 10                      ; Index of first tile.
+      .dw layout_2x3_1b           ; Pointer to layout.
+    @frame_2:
+      .db 7                       ; Duration.
+      .db FALSE                   ; Require vjob?
+      .dw $0000                   ; Pointer to vjob.
+      .db 7                       ; Size.
+      .db 10                      ; Index of first tile.
+      .dw layout_2x3_1b           ; Pointer to layout.
+    @frame_3:
+      .db 6                       ; Duration.
+      .db FALSE                   ; Require vjob?
+      .dw $0000                   ; Pointer to vjob.
+      .db 7                       ; Size.
+      .db 10                      ; Index of first tile.
+      .dw layout_2x3_1b           ; Pointer to layout.
+
+
+
 
   ; Mockup background of Village on Fire:
   .include "mockup_background_tilemap.asm"
