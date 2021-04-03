@@ -132,9 +132,14 @@
     call initialize_vjobs
     call initialize_acm
     INITIALIZE_ACTOR cody, 0, 100, 100
+    INITIALIZE_ACTOR arthur, 1, 130, 50
 
     ld a,0
     ld hl,cody_walking
+    call set_animation
+
+    ld a,1
+    ld hl,arthur_walking
     call set_animation
 
     ld hl,arthur_walking_vjob
@@ -176,6 +181,9 @@
     ld hl,cody
     call draw_actor
 
+    ld a,1
+    ld hl,arthur
+    call draw_actor
 
   jp main_loop
 .ends
@@ -291,28 +299,28 @@
       .db 3                       ; Max frame.
       .db TRUE                    ; Looping.
     @frame_0:
-      .db 7                       ; Duration.
+      .db 10                       ; Duration.
       .db FALSE                   ; Require vjob?
       .dw $0000                   ; Pointer to vjob.
       .db 7                       ; Size.
       .db 10                      ; Index of first tile.
       .dw layout_2x3_1b           ; Pointer to layout.
     @frame_1:
-      .db 6                       ; Duration.
+      .db 10                       ; Duration.
       .db FALSE                   ; Require vjob?
       .dw $0000                   ; Pointer to vjob.
       .db 7                       ; Size.
       .db 17                      ; Index of first tile.
       .dw layout_2x3_1b           ; Pointer to layout.
     @frame_2:
-      .db 7                       ; Duration.
+      .db 10                       ; Duration.
       .db FALSE                   ; Require vjob?
       .dw $0000                   ; Pointer to vjob.
       .db 7                       ; Size.
-      .db 25                      ; Index of first tile.
+      .db 24                      ; Index of first tile.
       .dw layout_2x3_1b           ; Pointer to layout.
     @frame_3:
-      .db 6                       ; Duration.
+      .db 10                       ; Duration.
       .db FALSE                   ; Require vjob?
       .dw $0000                   ; Pointer to vjob.
       .db 7                       ; Size.
