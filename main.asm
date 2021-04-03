@@ -137,7 +137,12 @@
     ld hl,cody_walking
     call set_animation
 
+    ld hl,arthur_walking_vjob
+    call add_vjob
 
+    
+    call process_vjobs
+    ;
     ei
     halt
     halt
@@ -191,6 +196,71 @@
   cody_walking_2_tiles:
     .include "bank_2/cody_walking_2_tiles.asm"
 
+
+  .equ PLAYER_TILE_BANK 2
+  .equ PLAYER_FIRST_TILE SPRITE_BANK_START + CHARACTER_SIZE
+  .macro PLAYER_VJOB ARGS TILES, AMOUNT
+    .db PLAYER_TILE_BANK
+    .dw TILES
+    .dw CHARACTER_SIZE*AMOUNT
+    .dw PLAYER_FIRST_TILE
+  .endm
+
+  cody_walking_0_vjob:
+    PLAYER_VJOB cody_walking_0_tiles, 8
+  cody_walking_1_and_3_vjob:
+    PLAYER_VJOB cody_walking_1_and_3_tiles, 8
+  cody_walking_2_vjob:
+    PLAYER_VJOB cody_walking_2_tiles, 8  
+  
+  layout_2x4:
+    ; Y and X offsets to apply to the origin of an actor.
+    .db -32, -8
+    .db -32, 0
+    .db -24, -8
+    .db -24, 0
+    .db -16, -8
+    .db -16, 0
+    .db -8, -8
+    .db -8, 0
+
+  ; Animation file:
+  cody_walking:
+    ; Table of contents:
+    .dw @header, @frame_0, @frame_1, @frame_2, @frame_3
+    @header:
+      .db 3                       ; Max frame.
+      .db TRUE                    ; Looping.
+    @frame_0:
+      .db 10                      ; Duration.
+      .db TRUE                    ; Require vjob?
+      .dw cody_walking_0_vjob     ; Pointer to vjob.
+      .db 8                       ; Size.
+      .db 1                       ; Index of first tile.
+      .dw layout_2x4              ; Pointer to layout.
+    @frame_1:
+      .db 10                      
+      .db TRUE                    
+      .dw cody_walking_1_and_3_vjob 
+      .db 8                       
+      .db 1                       
+      .dw layout_2x4              
+    @frame_2:
+      .db 10                      
+      .db TRUE                    
+      .dw cody_walking_2_vjob 
+      .db 8                       
+      .db 1                       
+      .dw layout_2x4              
+    @frame_3:
+      .db 10                      
+      .db TRUE                    
+      .dw cody_walking_1_and_3_vjob 
+      .db 8                       
+      .db 1                       
+      .dw layout_2x4              
+
+
   arthur_walking_0_tiles:
     .include "bank_2/arthur_walking_0_tiles.asm"
   arthur_walking_1_and_3_tiles:
@@ -198,7 +268,11 @@
   arthur_walking_2_tiles:
     .include "bank_2/arthur_walking_2_tiles.asm"
 
-
+  arthur_walking_vjob:
+    .db 2
+    .dw arthur_walking_0_tiles
+    .dw 7 * CHARACTER_SIZE * 3
+    .dw 10*CHARACTER_SIZE ; Load into position 10
 
   ; Mockup background of Village on Fire:
   .include "mockup_background_tilemap.asm"
