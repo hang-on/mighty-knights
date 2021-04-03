@@ -6,6 +6,18 @@
     x db
   .endst
 
+  .macro INITIALIZE_ACTOR
+    ld hl,init_data_\@
+    ld de,\1
+    ld bc,3
+    ldir
+    jp +
+      init_data_\@:
+        .db \2 \3 \4 
+    +:
+  .endm
+
+
 
   .ramsection "Test kernel" slot 3
     ; For faking writes to vram.

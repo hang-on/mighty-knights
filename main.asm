@@ -46,7 +46,8 @@
   hline_counter db
   pause_flag db
   ;
-
+  cody instanceof actor
+  arthur instanceof actor
 .ends
 .org 0
 .bank 0 slot 0
@@ -130,6 +131,8 @@
 
     call initialize_vjobs
     call initialize_acm
+    INITIALIZE_ACTOR cody, 0, 100, 100
+
 
     ld a,0
     ld hl,cody_walking
@@ -165,6 +168,10 @@
     call refresh_sat_handler
 
     call process_animations
+
+    ld a,0
+    ld hl,cody
+    call draw_actor
 
 
   jp main_loop
