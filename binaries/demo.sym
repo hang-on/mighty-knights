@@ -172,11 +172,14 @@
 02:8020 cody_walking_0_tiles
 02:8120 cody_walking_1_and_3_tiles
 02:8220 cody_walking_2_tiles
-02:8320 mockup_background_tilemap
-02:8920 mockup_tilemap_job
-02:8927 mockup_background_tiles
-02:9527 mockup_tiles_job
-02:952e adventure_awaits
+02:8320 arthur_walking_0_tiles
+02:8420 arthur_walking_1_and_3_tiles
+02:8520 arthur_walking_2_tiles
+02:8620 mockup_background_tilemap
+02:8c20 mockup_tilemap_job
+02:8c27 mockup_background_tiles
+02:9827 mockup_tiles_job
+02:982e adventure_awaits
 
 [definitions]
 00000011 _sizeof_PSGInit
@@ -337,6 +340,9 @@
 00000100 _sizeof_cody_walking_0_tiles
 00000100 _sizeof_cody_walking_1_and_3_tiles
 00000100 _sizeof_cody_walking_2_tiles
+00000100 _sizeof_arthur_walking_0_tiles
+00000100 _sizeof_arthur_walking_1_and_3_tiles
+00000100 _sizeof_arthur_walking_2_tiles
 00000600 _sizeof_mockup_background_tilemap
 00000007 _sizeof_mockup_tilemap_job
 00000c00 _sizeof_mockup_background_tiles

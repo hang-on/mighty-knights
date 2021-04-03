@@ -133,11 +133,9 @@
     call initialize_acm
     INITIALIZE_ACTOR cody, 0, 100, 100
 
-
     ld a,0
     ld hl,cody_walking
     call set_animation
-    
 
 
     ei
@@ -186,14 +184,19 @@
     .db $23 $10 $12 $18 $06 $15 $2A $3F $13 $0B $0F $0C $38 $26 $27 $2F
     demo_palette_end:
 
-
-
   cody_walking_0_tiles:
     .include "bank_2/cody_walking_0_tiles.asm"
   cody_walking_1_and_3_tiles:
     .include "bank_2/cody_walking_1_and_3_tiles.asm"
   cody_walking_2_tiles:
     .include "bank_2/cody_walking_2_tiles.asm"
+
+  arthur_walking_0_tiles:
+    .include "bank_2/arthur_walking_0_tiles.asm"
+  arthur_walking_1_and_3_tiles:
+    .include "bank_2/arthur_walking_1_and_3_tiles.asm"
+  arthur_walking_2_tiles:
+    .include "bank_2/arthur_walking_2_tiles.asm"
 
 
 
