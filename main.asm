@@ -302,21 +302,21 @@
       .db FALSE                   ; Require vjob?
       .dw $0000                   ; Pointer to vjob.
       .db 7                       ; Size.
-      .db 10                      ; Index of first tile.
+      .db 17                      ; Index of first tile.
       .dw layout_2x3_1b           ; Pointer to layout.
     @frame_2:
       .db 7                       ; Duration.
       .db FALSE                   ; Require vjob?
       .dw $0000                   ; Pointer to vjob.
       .db 7                       ; Size.
-      .db 10                      ; Index of first tile.
+      .db 25                      ; Index of first tile.
       .dw layout_2x3_1b           ; Pointer to layout.
     @frame_3:
       .db 6                       ; Duration.
       .db FALSE                   ; Require vjob?
       .dw $0000                   ; Pointer to vjob.
       .db 7                       ; Size.
-      .db 10                      ; Index of first tile.
+      .db 17                      ; Index of first tile.
       .dw layout_2x3_1b           ; Pointer to layout.
 
 
