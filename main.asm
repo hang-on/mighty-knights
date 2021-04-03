@@ -45,6 +45,8 @@
   vblank_counter db
   hline_counter db
   pause_flag db
+  min_line db
+  max_line db
   ;
   cody instanceof actor
   arthur instanceof actor
@@ -131,6 +133,9 @@
       jp test_bench
     .endif
 
+    ld a,$ff
+    ld (min_line),a
+
     call initialize_vjobs
     call initialize_acm
     INITIALIZE_ACTOR cody, 0, 100, 100
@@ -168,11 +173,29 @@
   ; ---------------------------------------------------------------------------
   main_loop:
     call wait_for_vblank
-    ;halt
-    ; -------------------------------------------------------------------------
+     ; -------------------------------------------------------------------------
     ; Begin vblank critical code (DRAW).
     call load_sat
     call process_vjobs
+    
+    in a,V_COUNTER_PORT
+    ld b,a
+    ld a,(min_line)
+    sub b
+    jp c,+
+      ; New minimum line
+      ld (min_line),a
+    +:
+    in a,V_COUNTER_PORT
+    ld b,a
+    ld a,(max_line)
+    sub b
+    jp nc,+
+      ; New minimum line
+      ld (max_line),a
+    +:
+
+
     ;
     ; -------------------------------------------------------------------------
     ; Begin general updating (UPDATE).
