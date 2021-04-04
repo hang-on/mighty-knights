@@ -122,32 +122,41 @@
   .equ LARGE_BLAST 6
 
   add_tileblaster_task:
-    ; IN: HL = Source, DE = destination, A = size (S/M/L).
+    ; IN: HL = Tileblaster task struct.
     ; Note: No overflow protection!
-      push hl
-       push de
-        push af
-          ld a,(tileblaster_tasks)
-          ld hl,tbm_size
-          call offset_byte_table
-        pop af
-        ld (hl),a
-        ;
-        ld a,(tileblaster_tasks)
-        ld hl,tbm_destination
-        call offset_word_table
-      pop de
-      ld (hl),e
-      inc hl
-      ld (hl),d
-      ;
-      ld a,(tileblaster_tasks)
-      ld hl,tbm_source
-      call offset_word_table
-    pop de
-    ld (hl),e
+    push hl
+    pop ix
+
+    ld a,(tileblaster_tasks)
+    ld hl,tbm_bank
+    call offset_byte_table
+    ld a,(ix+0)
+    ld (hl),a
+
+    ld a,(tileblaster_tasks)
+    ld hl,tbm_size
+    call offset_byte_table
+    ld a,(ix+5)
+    ld (hl),a
+    
+    ld a,(tileblaster_tasks)
+    ld hl,tbm_destination
+    call offset_word_table
+    ld a,(ix+3)
+    ld (hl),a
     inc hl
-    ld (hl),d
+    ld a,(ix+4)
+    ld (hl),a
+
+    ld a,(tileblaster_tasks)
+    ld hl,tbm_source
+    call offset_word_table
+    ld a,(ix+1)
+    ld (hl),a
+    inc hl
+    ld a,(ix+2)
+    ld (hl),a
+
 
     ld hl,tileblaster_tasks
     inc (hL)
@@ -189,7 +198,6 @@
       cp LARGE_BLAST
         jp z,large_blast
     .endr
-
 
     _tileblasting_finished:
   ret

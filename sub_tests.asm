@@ -504,14 +504,20 @@
   call get_word 
   ASSERT_HL_EQUALS MEDIUM_BLAST_SIZE_IN_BYTES
 
+  jp +
+    fake_tileblaster_task:
+      .db 2
+      .dw cody_walking_1_and_3_tiles
+      .dw SPRITE_BANK_START + CHARACTER_SIZE
+      .db MEDIUM_BLAST
+  +:
   RESET_TEST_KERNEL
   LOAD_TBM fake_tbm
-  ld hl,cody_walking_1_and_3_tiles
-  ld de,SPRITE_BANK_START + CHARACTER_SIZE
-  ld a,MEDIUM_BLAST
+  ld hl,fake_tileblaster_task
   call add_tileblaster_task
   ld a,(tileblaster_tasks)
   ASSERT_A_EQUALS 2
+  
   ld a,1
   ld hl,tbm_source
   call offset_word_table
@@ -527,6 +533,12 @@
   call offset_byte_table
   ld a,(hl)
   ASSERT_A_EQUALS MEDIUM_BLAST
+  ld a,1
+  ld hl,tbm_bank
+  call offset_byte_table
+  ld a,(hl)
+  ASSERT_A_EQUALS 2
+
 
   RESET_TEST_KERNEL
   LOAD_TBM fake_tbm_1
