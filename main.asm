@@ -45,6 +45,8 @@
   vblank_counter db
   hline_counter db
   pause_flag db
+  
+  critical_routines_finish_at db
   ;
   cody instanceof actor
   arthur instanceof actor
@@ -174,8 +176,10 @@
     ; Begin vblank critical code (DRAW).
     call load_sat
     call blast_tiles
-
-    ;call process_vjobs
+    
+    ld hl,critical_routines_finish_at
+    call get_vcounter
+    
     
     ;
     ; -------------------------------------------------------------------------
