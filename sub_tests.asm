@@ -188,8 +188,10 @@
 
 
   test_bench:
+    ; These are the animation tests:
+    
     call initialize_acm
-
+    
     ; Test to get ENABLED staus from the anim in slot 0.
     LOAD_ACM fake_acm_data
     ld a,0
