@@ -58,12 +58,7 @@
   destination dw
 .endst
 
-.struct tileblaster_task
-  bank db
-  source dw
-  destination dw
-  size db
-.endst
+
 
 .ramsection "Vjob RAM" slot 3
   vjobs db

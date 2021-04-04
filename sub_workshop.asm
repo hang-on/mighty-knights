@@ -54,6 +54,13 @@
   tbm_size dsb TBM_SLOTS
 .ends
 
+.struct tileblaster_task
+  bank db
+  source dw
+  destination dw
+  size db
+.endst
+
 .section "Tileblasting OUTI" free
   .ifdef USE_TEST_KERNEL
       .equ SMALL_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*4
@@ -97,18 +104,18 @@
       ld (hl),d
 
   .else
-  large_blast:
-    .rept CHARACTER_SIZE * 4
-      outi
-    .endr
-  medium_blast:
-    .rept CHARACTER_SIZE * 4
-      outi
-    .endr
-  small_blast:
-    .rept CHARACTER_SIZE * 4
-      outi
-    .endr
+    large_blast:
+      .rept CHARACTER_SIZE * 4
+        outi
+      .endr
+    medium_blast:
+      .rept CHARACTER_SIZE * 4
+        outi
+      .endr
+    small_blast:
+      .rept CHARACTER_SIZE * 4
+        outi
+      .endr
   .endif
   ret ; We are in the tileblasting subroutine here...
 .ends
@@ -175,29 +182,41 @@
       call offset_byte_table
       ld a,(hl)
       SELECT_BANK_IN_REGISTER_A
+
+      ld a,(tileblaster_tasks)
+      ld hl,tbm_destination
+      call offset_word_table
+      call get_word ; HL now holds destination...
+      call setup_vram_write
+
       ld a,(tileblaster_tasks)
       ld hl,tbm_source
       call offset_word_table
       call get_word ; HL now holds source...
       push hl
         ld a,(tileblaster_tasks)
-        ld hl,tbm_destination
-        call offset_word_table
-        call get_word ; HL now holds destination...
-        push hl
-          ld a,(tileblaster_tasks)
-          ld hl,tbm_size
-          call offset_byte_table
-          ld a,(hl)
-        pop de
+        ld hl,tbm_size
+        call offset_byte_table
+        ld a,(hl)
+        ld c,DATA_PORT
       pop hl
       cp SMALL_BLAST
-        jp z,small_blast
+      jp nz,+
+        call small_blast
+        jp ++
+      +
       cp MEDIUM_BLAST
-        jp z,medium_blast
+      jp nz,+
+        call medium_blast
+        jp ++
+      +:
       cp LARGE_BLAST
-        jp z,large_blast
+      jp nz,+
+        call large_blast
+        jp ++
+      ++:
     .endr
+
 
     _tileblasting_finished:
   ret

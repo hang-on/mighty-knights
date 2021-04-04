@@ -10,7 +10,7 @@
 .equ FALSE 0
 
 ; Remove comment to enable unit testing
-.equ TEST_MODE
+;.equ TEST_MODE
 .ifdef TEST_MODE
   .equ USE_TEST_KERNEL
 .endif
@@ -142,6 +142,7 @@
     ld hl,cody_walking
     call set_animation
 
+
     ld a,1
     ld hl,arthur_walking
     call set_animation
@@ -151,6 +152,7 @@
 
     
     call process_vjobs
+    
     ;
     ei
     halt
@@ -170,10 +172,10 @@
     call wait_for_vblank
      ; -------------------------------------------------------------------------
     ; Begin vblank critical code (DRAW).
-
     call load_sat
-    
-    call process_vjobs
+    call blast_tiles
+
+    ;call process_vjobs
     
     ;
     ; -------------------------------------------------------------------------
@@ -234,6 +236,20 @@
   cody_walking_2_vjob:
     PLAYER_VJOB cody_walking_2_tiles, 8  
   
+  .macro PLAYER_TILEBLAST_TASK ARGS TILES
+      .db PLAYER_TILE_BANK
+      .dw TILES
+      .dw PLAYER_FIRST_TILE
+      .db MEDIUM_BLAST
+  .endm
+  cody_walking_0_task:
+    PLAYER_TILEBLAST_TASK cody_walking_0_tiles
+  cody_walking_1_and_3_task:
+    PLAYER_TILEBLAST_TASK cody_walking_1_and_3_tiles
+  cody_walking_2_task:
+    PLAYER_TILEBLAST_TASK cody_walking_2_tiles
+
+
   layout_2x4:
     ; Y and X offsets to apply to the origin of an actor.
     .db -32, -8     ; XX
@@ -264,28 +280,28 @@
     @frame_0:
       .db 10                      ; Duration.
       .db TRUE                    ; Require vjob?
-      .dw cody_walking_0_vjob     ; Pointer to vjob.
+      .dw cody_walking_0_task     ; Pointer to vjob.
       .db 8                       ; Size.
       .db 1                       ; Index of first tile.
       .dw layout_2x4              ; Pointer to layout.
     @frame_1:
       .db 10                      
       .db TRUE                    
-      .dw cody_walking_1_and_3_vjob 
+      .dw cody_walking_1_and_3_task 
       .db 8                       
       .db 1                       
       .dw layout_2x4              
     @frame_2:
       .db 10                      
       .db TRUE                    
-      .dw cody_walking_2_vjob 
+      .dw cody_walking_2_task 
       .db 8                       
       .db 1                       
       .dw layout_2x4              
     @frame_3:
       .db 10                      
       .db TRUE                    
-      .dw cody_walking_1_and_3_vjob 
+      .dw cody_walking_1_and_3_task 
       .db 8                       
       .db 1                       
       .dw layout_2x4              
