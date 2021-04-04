@@ -48,6 +48,14 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  get_vcounter:
+    ; Read the vcounter port and store it's value in a variable and in A.
+    ; IN: HL = Pointer to variable in RAM.
+    ; OUT: Value of vcounter port in A.
+    in a,V_COUNTER_PORT
+    ld (hl),a
+  ret
+  
   draw_actor:
     ; An actor can take different forms depending on which animation it is
     ; linked with. This is set (and thus can vary) on a frame-by-frame basis.
