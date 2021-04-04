@@ -512,7 +512,23 @@
   call add_tileblaster_task
   ld a,(tileblaster_tasks)
   ASSERT_A_EQUALS 2
-  
+  ld a,1
+  ld hl,tbm_source
+  call offset_word_table
+  call get_word
+  ASSERT_HL_EQUALS cody_walking_1_and_3_tiles
+  ld a,1
+  ld hl,tbm_destination
+  call offset_word_table
+  call get_word
+  ASSERT_HL_EQUALS SPRITE_BANK_START + CHARACTER_SIZE
+  ld a,1
+  ld hl,tbm_size
+  call offset_byte_table
+  ld a,(hl)
+  ASSERT_A_EQUALS MEDIUM_BLAST
+
+
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:
     ld a,11

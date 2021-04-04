@@ -124,7 +124,30 @@
   add_tileblaster_task:
     ; IN: HL = Source, DE = destination, A = size (S/M/L).
     ; Note: No overflow protection!
-
+      push hl
+       push de
+        push af
+          ld a,(tileblaster_tasks)
+          ld hl,tbm_size
+          call offset_byte_table
+        pop af
+        ld (hl),a
+        ;
+        ld a,(tileblaster_tasks)
+        ld hl,tbm_destination
+        call offset_word_table
+      pop de
+      ld (hl),e
+      inc hl
+      ld (hl),d
+      ;
+      ld a,(tileblaster_tasks)
+      ld hl,tbm_source
+      call offset_word_table
+    pop de
+    ld (hl),e
+    inc hl
+    ld (hl),d
 
     ld hl,tileblaster_tasks
     inc (hL)
