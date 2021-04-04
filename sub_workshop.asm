@@ -368,7 +368,7 @@
     call add_vjob_if_required
   ret
 
-  add_vjob_if_required:
+  add_vjob_if_required: ; FIXME: vjobs replaced with tile blasts.
     ; IN: A = animation slot number in ACM.
     ld (temp_byte),a
     ld hl,acm_label             ; HL = Start of pointer table.
@@ -387,7 +387,8 @@
     ret z
       inc hl                      ; HL is at first byte of vjob pointer
       call get_word               ; HL is now the address of the vjob.
-      call add_vjob
+      ;call add_vjob
+      call add_tileblaster_task
   ret
   
   

@@ -1,4 +1,283 @@
 
+     ; Test to get ENABLED staus from the anim in slot 0.
+    LOAD_ACM fake_acm_data
+    ld a,0
+    call is_animation_enabled
+    ASSERT_A_EQUALS TRUE
+
+    ; Test to get DISABLED staus from the anim in slot 1.
+    LOAD_ACM fake_acm_data
+    ld a,1
+    call is_animation_enabled
+    ASSERT_A_EQUALS FALSE
+
+    ; Test simple getters:
+    LOAD_ACM fake_acm_data
+    ld a,0
+    call get_frame
+    ASSERT_A_EQUALS 0
+    ld a,2
+    call get_frame
+    ASSERT_A_EQUALS 1
+    ld a,0
+    call get_timer
+    ASSERT_A_EQUALS 9
+    ld a,2
+    call get_timer
+    ASSERT_A_EQUALS 0
+
+    ; Test getting data from the animation file:
+    LOAD_ACM fake_acm_data
+    ld a,0
+    call is_animation_looping
+    ASSERT_A_EQUALS TRUE
+
+    ; Test btach ticking of enabled animations
+    LOAD_ACM fake_acm_data
+    call tick_enabled_animations
+    ld a,0
+    call get_timer
+    ASSERT_A_EQUALS 8
+    ld a,2
+    call get_timer
+    ASSERT_A_EQUALS 0
+    ld a,7
+    call get_timer
+    ASSERT_A_EQUALS 9 
+
+    ; Test max frame
+    LOAD_ACM fake_acm_data
+    ld a,0
+    call is_animation_at_max_frame
+    ASSERT_A_EQUALS FALSE
+    ld a,2
+    call is_animation_at_max_frame
+    ASSERT_A_EQUALS TRUE
+
+    ; Test disable non-looping animation at max frame:
+    LOAD_ACM fake_acm_data
+    ld a,2
+    call is_animation_at_max_frame
+    cp TRUE
+    jp nz,+
+      ld a,2
+      call is_animation_looping
+      cp FALSE
+      jp nz,+
+        ld a,2
+        call disable_animation
+    +:
+    ld a,2
+    call is_animation_enabled
+    ASSERT_A_EQUALS FALSE
+
+    ; Test getting info about current frame from file
+    LOAD_ACM fake_acm_data
+    ld a,0
+    call get_duration
+    ASSERT_A_EQUALS 10
+
+    ; Test getting info about current frame from file
+    LOAD_ACM fake_acm_data
+    ld a,2
+    call get_duration
+    ASSERT_A_EQUALS 7
+    ld a,0
+    call get_duration
+    ASSERT_A_EQUALS 10
+
+    ; Test getting info about current frame from file
+    LOAD_ACM fake_acm_data
+    ld a,0
+    call is_vjob_required
+    ASSERT_A_EQUALS TRUE
+    ld a,2
+    call is_vjob_required
+    ASSERT_A_EQUALS FALSE
+
+    ; Test adding a vjob if the current frame requires it.
+    LOAD_ACM fake_acm_data
+    CLEAR_VJOBS
+    ld a,2
+    call add_vjob_if_required
+    ld a,(vjobs)
+    ASSERT_A_EQUALS 0
+
+    ; Test adding a vjob if the current frame requires it.
+    LOAD_ACM fake_acm_data
+    CLEAR_VJOBS
+    ld a,0
+    call add_vjob_if_required
+    ld a,(vjobs)
+    ASSERT_A_EQUALS 1
+    ld hl,vjob_table
+    call get_word
+    ASSERT_HL_EQUALS cody_walking_0_vjob
+
+    ; Test adding a vjob if the current frame requires it.
+    LOAD_ACM fake_acm_data
+    CLEAR_VJOBS
+    ld a,2
+    call add_vjob_if_required
+    ld a,(vjobs)
+    ASSERT_A_EQUALS 0
+    ld hl,vjob_table
+    call get_word
+    ASSERT_HL_EQUALS $0000
+
+    ; Roll out the big batch tests:
+    LOAD_ACM fake_acm_data_2
+    CLEAR_VJOBS
+    call process_animations
+      ; Are timers handled as expected?
+      ld a,0
+      call get_timer
+      ASSERT_A_EQUALS 8
+      jp +
+        timers_ticked_once:
+          .db 8 0 0 2 0 0 0 9
+      +:
+      ld hl,acm_timer
+      ASSERT_HL_POINTS_TO_STRING ACM_SLOTS timers_ticked_once
+
+    ; Test incrementing frame
+    LOAD_ACM fake_acm_data_2
+    CLEAR_VJOBS
+    call process_animations
+    ld a,2
+    call get_frame
+    ASSERT_A_EQUALS 1
+    
+    ; Test looping, part one
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
+    call process_animations
+    ld a,7
+    call get_frame
+    ASSERT_A_EQUALS_NOT 2
+
+    ; Further testing incrementing frame
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
+    call process_animations
+    ld a,2
+    call get_frame
+    ASSERT_A_EQUALS 1
+    ld a,2
+    call get_duration
+    ASSERT_A_EQUALS 7
+    ld a,2
+    call get_timer
+    ASSERT_A_EQUALS 7
+
+  ; Test looping, part two
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
+    call process_animations
+    ld a,7
+    call get_frame
+    ASSERT_A_EQUALS 0
+
+  ; Test looping, part three - no loop, just disable
+    LOAD_ACM fake_acm_data_2
+    CLEAR_VJOBS
+    call process_animations
+    ld a,2
+    call get_frame
+    ASSERT_A_EQUALS 1
+
+    ; This is going well...!
+
+
+    ; Test get animation label.
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
+    ld a,0
+    call get_animation_label
+    ASSERT_HL_EQUALS cody_walking
+
+    ; Test adding an animation, the pointer.
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
+    ld a,1
+    call get_animation_label
+    ASSERT_HL_EQUALS $0000
+    ld a,1
+    ld hl,cody_walking
+    call set_animation
+    ld a,1
+    call get_animation_label
+    ASSERT_HL_EQUALS cody_walking
+    ld a,1
+    call get_timer
+    ASSERT_A_EQUALS 10
+    ld a,1
+    call is_vjob_required
+    ASSERT_A_EQUALS TRUE
+
+    ld a,0
+    call get_layout
+    ASSERT_A_EQUALS 1
+    ld a,b
+    ASSERT_A_EQUALS 8
+    ASSERT_HL_EQUALS layout_2x4
+    ld a,(hl)
+    ASSERT_A_EQUALS -32
+    ASSERT_HL_POINTS_TO_STRING 8,layout_2x4
+
+
+
+    .macro CLEAR_SAT_BUFFER
+      ld a,0
+      ld (sat_buffer_index),a
+      ld hl,sat_buffer_y
+      .rept 64
+        ld (hl),a
+        inc hl
+      .endr
+      ld hl,sat_buffer_xc
+      .rept 128
+        ld (hl),a
+        inc hl
+      .endr
+    .endm
+
+    jp +
+      .dstruct fake_actor actor 0, 100, 100
+    +:
+    jp +
+      offset_fake_actor:
+        .db 68 68 76 76 84 84 92 92
+      offset_fake_actor_xc:
+        .db 92, 1, 100, 2, 92, 3, 100, 4
+    +:
+
+    ; Test sat y buffer.
+    CLEAR_SAT_BUFFER
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
+    ld a,0  ; use frame currently displaying in slot 0.
+    ld hl,fake_actor
+    call draw_actor
+    ld hl,sat_buffer_y
+    ASSERT_HL_POINTS_TO_STRING 8, offset_fake_actor
+
+  ; Test sat xc buffer.
+    CLEAR_SAT_BUFFER
+    LOAD_ACM fake_acm_data_3
+    CLEAR_VJOBS
+    ld a,0  ; use frame currently displaying in slot 0.
+    ld hl,fake_actor
+    call draw_actor
+    ld hl,sat_buffer_xc
+    ld a,(hl)
+    ASSERT_A_EQUALS 92
+    ASSERT_HL_POINTS_TO_STRING 6, offset_fake_actor_xc
+
+    ;----------------------------------------------------------
+ 
+ 
+ 
   .macro INITIALIZE_ACTOR
     ld hl,init_data_\@
     ld de,\1
