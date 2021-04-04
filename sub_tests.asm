@@ -468,9 +468,39 @@
     ASSERT_HL_POINTS_TO_STRING 6, offset_fake_actor_xc
 
   ; These are the tileblaster tests:
-    
-
-
+    .equ FULL_TBM 1 + TBM_SLOTS + (2*TBM_SLOTS) + (2*TBM_SLOTS) + TBM_SLOTS
+    .macro LOAD_TBM
+    ld hl,\1
+    ld de,tileblaster_tasks
+    ld bc,FULL_TBM
+    ldir
+  .endm 
+  jp +
+    fake_tbm:
+      ; Number of tasks:
+      .db 1
+      .db 2, 0, 0, 0, 0, 0, 0, 0
+      .dw cody_walking_0_tiles, $0000, $0000, $0000, $0000, $0000, $0000, $0000
+      .dw SPRITE_BANK_START + CHARACTER_SIZE, $0000, $0000, $0000, $0000, $0000, $0000, $0000
+      .db MEDIUM_BLAST, 0, 0, 0, 0, 0, 0, 0
+  +:
+  RESET_TEST_KERNEL
+  LOAD_TBM fake_tbm
+  ld a,(tileblaster_tasks)
+  ASSERT_A_EQUALS 1
+  
+  call blast_tiles
+  ld a,(test_kernel_bank)
+  ASSERT_A_EQUALS 2
+  ;ld hl,test_kernel_destination
+  ;call get_word
+  ;ASSERT_HL_EQUALS SPRITE_BANK_START + CHARACTER_SIZE
+  ;ld hl,test_kernel_bytes_written
+  ;call get_word ;
+  ;ASSERT_HL_EQUALS MEDIUM_BLAST_SIZE_IN_BYTES
+  ld hl,test_kernel_source
+  call get_word
+  ASSERT_HL_EQUALS cody_walking_0_tiles
 
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:

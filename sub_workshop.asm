@@ -47,17 +47,119 @@
 
 .equ TBM_SLOTS 8
 .ramsection "Tile Blaster Matrix (TBM)" slot 3 
-  tbm_tasks db
+  tileblaster_tasks db
+  tbm_bank dsb TBM_SLOTS
   tbm_source dsb TBM_SLOTS*2
   tbm_destination dsb TBM_SLOTS*2
   tbm_size dsb TBM_SLOTS
 .ends
 
+.section "Tileblasting OUTI" free
+  .ifdef USE_TEST_KERNEL
+      .equ SMALL_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*4
+      .equ MEDIUM_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*8
+      .equ LARGE_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*12
+      small_blast:
+      medium_blast:
+      large_blast:
+      ; A holds the size
+      cp SMALL_BLAST
+      jp nz,+
+        ld bc,SMALL_BLAST_SIZE_IN_BYTES
+        jp ++
+      +:
+      cp MEDIUM_BLAST
+      jp nz,+
+        ld bc,MEDIUM_BLAST_SIZE_IN_BYTES
+        jp ++
+      +:
+      cp LARGE_BLAST
+      jp nz,++
+        ld bc,LARGE_BLAST_SIZE_IN_BYTES
+      ++:
+
+      push hl
+      pop ix ; save HL
+      ld hl,test_kernel_destination
+      ld (hl),e
+      inc hl
+      ld (hl),d
+      ld hl,test_kernel_source
+      push ix
+      pop de
+      ld (hl),e
+      inc hl
+      ld (hl),d
+
+  .else
+  large_blast:
+    .rept CHARACTER_SIZE * 4
+      outi
+    .endr
+  medium_blast:
+    .rept CHARACTER_SIZE * 4
+      outi
+    .endr
+  small_blast:
+    .rept CHARACTER_SIZE * 4
+      outi
+    .endr
+  .endif
+  ret ; We are in the tileblasting subroutine here...
+.ends
 
 
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  .equ SMALL_BLAST 2
+  .equ MEDIUM_BLAST 4
+  .equ LARGE_BLAST 6
+
+  blast_tiles:
+    .rept TBM_SLOTS
+      ld a,(tileblaster_tasks)
+      cp 0
+      jp z,_tileblasting_finished
+
+      ; OK, still jobs to process.
+      dec a
+      ld (tileblaster_tasks),a
+      ld hl,tbm_bank
+      call offset_byte_table
+      ld a,(hl)
+      SELECT_BANK_IN_REGISTER_A
+      ld a,(tileblaster_tasks)
+      ld hl,tbm_source
+      call offset_word_table
+      call get_word ; HL now holds source...
+      push hl
+        ld a,(tileblaster_tasks)
+        ld hl,tbm_destination
+        call offset_word_table
+        call get_word ; HL now holds destination...
+        push hl
+          ld a,(tileblaster_tasks)
+          ld hl,tbm_size
+          call offset_byte_table
+          ld a,(hl)
+        pop de
+      pop hl
+      cp SMALL_BLAST
+        jp z,small_blast
+      cp MEDIUM_BLAST
+        jp z,medium_blast
+      cp LARGE_BLAST
+        jp z,large_blast
+    .endr
+
+
+    _tileblasting_finished:
+  ret
+  
+
+
+
   get_vcounter:
     ; Read the vcounter port and store it's value in a variable and in A.
     ; IN: HL = Pointer to variable in RAM.
