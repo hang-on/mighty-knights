@@ -62,6 +62,9 @@
       small_blast:
       medium_blast:
       large_blast:
+      push hl
+      pop ix ; save HL
+      
       ; A holds the size
       cp SMALL_BLAST
       jp nz,+
@@ -77,9 +80,11 @@
       jp nz,++
         ld bc,LARGE_BLAST_SIZE_IN_BYTES
       ++:
+      ld hl,test_kernel_bytes_written
+      ld (hl),c
+      inc hl
+      ld (hl),b
 
-      push hl
-      pop ix ; save HL
       ld hl,test_kernel_destination
       ld (hl),e
       inc hl

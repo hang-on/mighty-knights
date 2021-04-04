@@ -492,15 +492,15 @@
   call blast_tiles
   ld a,(test_kernel_bank)
   ASSERT_A_EQUALS 2
-  ;ld hl,test_kernel_destination
-  ;call get_word
-  ;ASSERT_HL_EQUALS SPRITE_BANK_START + CHARACTER_SIZE
-  ;ld hl,test_kernel_bytes_written
-  ;call get_word ;
-  ;ASSERT_HL_EQUALS MEDIUM_BLAST_SIZE_IN_BYTES
   ld hl,test_kernel_source
   call get_word
   ASSERT_HL_EQUALS cody_walking_0_tiles
+  ld hl,test_kernel_destination
+  call get_word
+  ASSERT_HL_EQUALS SPRITE_BANK_START + CHARACTER_SIZE
+  ld hl,test_kernel_bytes_written
+  call get_word 
+  ASSERT_HL_EQUALS MEDIUM_BLAST_SIZE_IN_BYTES
 
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:
