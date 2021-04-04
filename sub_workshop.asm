@@ -38,12 +38,22 @@
 .endm
 
 .equ ACM_SLOTS 8
-.ramsection "Animation Control Matrix (ACM)" slot 3 align 256 
+.ramsection "Animation Control Matrix (ACM)" slot 3
   acm_enabled dsb ACM_SLOTS
   acm_frame dsb ACM_SLOTS
   acm_timer dsb ACM_SLOTS
   acm_label dsb ACM_SLOTS*2
 .ends
+
+.equ TBM_SLOTS 8
+.ramsection "Tile Blaster Matrix (TBM)" slot 3 
+  tbm_tasks db
+  tbm_source dsb TBM_SLOTS*2
+  tbm_destination dsb TBM_SLOTS*2
+  tbm_size dsb TBM_SLOTS
+.ends
+
+
 
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free

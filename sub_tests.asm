@@ -189,7 +189,7 @@
 
   test_bench:
     ; These are the animation tests:
-    
+
     call initialize_acm
     
     ; Test to get ENABLED staus from the anim in slot 0.
@@ -466,6 +466,9 @@
     ld a,(hl)
     ASSERT_A_EQUALS 92
     ASSERT_HL_POINTS_TO_STRING 6, offset_fake_actor_xc
+
+  ; These are the tileblaster tests:
+    
 
 
 
