@@ -114,38 +114,26 @@
   ret
 
   set_animation:
-    ; Setup a given animation in a specified slot in the ACM. If the slot is 
-    ; not disabled, do nothing and return with an error.
-    ; ERROR/return temp. disabled!!
+    ; Setup a given animation in a specified slot in the ACM.
     ; IN: A = Slot.
     ;     HL = Animation label
-    .equ ERROR_SLOT_ENABLED $ff
-    .equ OPERATION_SUCCESFUL $00
     ld (temp_byte),a
     push hl                     ; Save the label for later.
     pop ix
-    ;call is_animation_enabled
-    ;cp TRUE
-    ;jp nz,+
-    ;  ; Slot is already in use! Abort with error message.
-    ;  ld a,ERROR_SLOT_ENABLED
-    ;  ret
-    ;+:
-      ld a,(temp_byte)
-      call enable_animation
-      ld a,(temp_byte)
-      ld hl,acm_label
-      call offset_word_table    ; HL points to the label/pointer item.
-      push ix                   ; Retrieve the animation label.
-      pop bc
-      ld (hl),c
-      inc hl
-      ld (hl),b
-      ; Use the animation label to fill the other fields in the slot.
-      ld a,(temp_byte)          ; This behavior is similar to when an animation
-      ld b,FRAME_RESET          ; loops back to the first frame (0).
-      call set_new_frame
-      ld a,OPERATION_SUCCESFUL
+    ld a,(temp_byte)
+    call enable_animation
+    ld a,(temp_byte)
+    ld hl,acm_label
+    call offset_word_table    ; HL points to the label/pointer item.
+    push ix                   ; Retrieve the animation label.
+    pop bc
+    ld (hl),c
+    inc hl
+    ld (hl),b
+    ; Use the animation label to fill the other fields in the slot.
+    ld a,(temp_byte)          ; This behavior is similar to when an animation
+    ld b,FRAME_RESET          ; loops back to the first frame (0).
+    call set_new_frame
   ret
 
   process_animations:      
