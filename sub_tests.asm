@@ -490,6 +490,8 @@
   ASSERT_A_EQUALS 1
   
   call blast_tiles
+  ld a,(tileblaster_tasks)
+  ASSERT_A_EQUALS 0
   ld a,(test_kernel_bank)
   ASSERT_A_EQUALS 2
   ld hl,test_kernel_source
@@ -502,6 +504,15 @@
   call get_word 
   ASSERT_HL_EQUALS MEDIUM_BLAST_SIZE_IN_BYTES
 
+  RESET_TEST_KERNEL
+  LOAD_TBM fake_tbm
+  ld hl,cody_walking_1_and_3_tiles
+  ld de,SPRITE_BANK_START + CHARACTER_SIZE
+  ld a,MEDIUM_BLAST
+  call add_tileblaster_task
+  ld a,(tileblaster_tasks)
+  ASSERT_A_EQUALS 2
+  
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:
     ld a,11

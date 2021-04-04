@@ -121,6 +121,15 @@
   .equ MEDIUM_BLAST 4
   .equ LARGE_BLAST 6
 
+  add_tileblaster_task:
+    ; IN: HL = Source, DE = destination, A = size (S/M/L).
+    ; Note: No overflow protection!
+
+
+    ld hl,tileblaster_tasks
+    inc (hL)
+  ret
+
   blast_tiles:
     .rept TBM_SLOTS
       ld a,(tileblaster_tasks)
