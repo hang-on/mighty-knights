@@ -528,6 +528,25 @@
   ld a,(hl)
   ASSERT_A_EQUALS MEDIUM_BLAST
 
+  RESET_TEST_KERNEL
+  LOAD_TBM fake_tbm_1
+  jp +
+    fake_tbm_1: ; zero tasks, but with garbage..
+      ; Number of tasks:
+      .db 0
+      .db 12, 0, 0, 0, 0, 0, 0, 0
+      .dw cody_walking_0_tiles, $0000, $0000, $0000, $0000, $0000, $0000, $0000
+      .dw SPRITE_BANK_START + CHARACTER_SIZE, $0000, $0000, $0000, $0000, $0000, $0000, $0000
+      .db 40, 0, 0, 0, 0, 0, 0, 0
+  +:
+  call blast_tiles
+  ld a,(tileblaster_tasks)
+  ASSERT_A_EQUALS 0
+  ld a,(test_kernel_bank)
+  ASSERT_A_EQUALS 0
+  ld hl,test_kernel_source
+  call get_word
+  ASSERT_HL_EQUALS $0000
 
   ; ------- end of tests --------------------------------------------------------
   exit_with_succes:
