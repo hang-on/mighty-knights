@@ -33,6 +33,108 @@
   push iy
 .endm
 ; -----------------------------------------------------------------------------
+.macro SELECT_BANK_IN_REGISTER_A
+; -----------------------------------------------------------------------------
+  ; Select a bank for slot 2, - put value in register A.
+  .ifdef USE_TEST_KERNEL
+    ld (test_kernel_bank),a
+  .else
+    ld (SLOT_2_CONTROL),a
+  .endif
+.endm
+
+
+
+; -----------------------------------------------------------------------------
+; Handling vram loading via a video job (vjob) format
+; -----------------------------------------------------------------------------
+
+  .equ VJOB_MAX 8 ; amount of video jobs the table can hold 
+
+.struct vjob
+  bank db
+  source dw
+  size dw
+  destination dw
+.endst
+
+
+
+.ramsection "Vjob RAM" slot 3
+  vjobs db
+  vjob_table dsb 2*VJOB_MAX 
+.ends
+
+.section "Video jobs" free
+  initialize_vjobs:
+    ; Does not take any parameters
+    xor a
+    ld (vjobs),a
+  ret
+  
+  add_vjob:
+    ; HL: Video job to add to table
+    ld a,(vjobs)
+    cp VJOB_MAX
+    ret z                       ; Protect against overflow..
+    ;
+    ld b,l
+    ld c,h
+    push bc
+      ld a,(vjobs)
+      ld hl,vjob_table
+      call offset_word_table
+    pop bc
+    ld (hl),b
+    inc hl
+    ld (hl),c
+    ;
+    ld hl,vjobs
+    inc (hl)
+  ret
+  
+  process_vjobs:
+    ; Does not take any parameters
+    ld a,(vjobs)
+    cp 0
+    ret z
+    ld b,0
+    ld c,a
+    -:
+        push bc
+          ld a,b
+          ld hl,vjob_table
+          call offset_word_table
+          call get_word
+          call run_vjob
+        pop bc
+      inc b
+      ld a,c
+      cp b
+    jp nz,-
+    ;
+    xor a
+    ld (vjobs),a
+  ret
+
+  run_vjob:
+    ; HL: Pointer to video job to run.
+    push hl
+    pop ix
+    ld a,(ix+0)
+    SELECT_BANK_IN_REGISTER_A
+    ld l,(ix+1)
+    ld h,(ix+2)
+    ld c,(ix+3)
+    ld b,(ix+4)
+    ld e,(ix+5)
+    ld d,(ix+6)
+    call load_vram
+  ret
+.ends
+
+
+; -----------------------------------------------------------------------------
 ; SAT Handler
 ; -----------------------------------------------------------------------------
 .equ PRIORITY_SPRITES 6         ; Number of tiles not part of asc/desc flicker.
@@ -53,11 +155,12 @@
 ; -----------------------------------------------------------------------------   
   add_sprite:
     ; Add a sprite of size = 1 character to the SAT.
-    ; Entry: D = Y origin.
+    ; Entry: C = Char.
+    ;        D = Y origin.
     ;        E = X origin.
-    ;        IX = Pointer to offset + tile block.
+    ;        IX = Pointer to offset pair Y,X
     ; Exit: None
-    ; Uses: A, DE, HL, IX (Warning: Do not use B!, as it is used by 
+    ; Uses: A, DE, HL, IX (Warning: Do not use B or C, as it is used by 
     ; add_meta_sprite).
     ;
     ; Test for sprite overflow (more than 64 hardware sprites at once).
@@ -78,12 +181,11 @@
     ld hl,sat_buffer_xc
     call offset_word_table
     ;
-    ld a,e                ; Get the x-pos.
-    add a,(ix+1)             ; Write it to the buffer.
+    ld a,e                  ; Get the x-pos.
+    add a,(ix+1)            ; Write it to the buffer.
     ld (hl),a
-    ld a,(ix+2)
     inc hl
-    ld (hl),a             ; Write it to the buffer
+    ld (hl),c             ; Write the char (it should still be there)
     ;
     ld hl,sat_buffer_index
     inc (hl)
@@ -178,7 +280,7 @@
   ret
   clean_buffer:                       ; Data for a clean sat Y buffer.
     .rept HARDWARE_SPRITES
-      .db $00
+      .db 192
     .endr
 .ends
 ; -----------------------------------------------------------------------------
@@ -276,8 +378,9 @@
     jp nz,-
   ret
 
-  get_address:
-    ; In: Pointer in HL. Out: Address pointed to in HL.
+  get_word:
+    ; In: Pointer in HL. Out: Word pointed to in HL.
+    ; Uses A, HL
     ld a,(hl)
     push af
       inc hl
@@ -308,24 +411,45 @@
 
   load_vram:
     ; Load a number of bytes from a source address into vram.
-    ; Entry: BC = Number of bytes to load
+    ; Entry: A = Bank
+    ;        BC = Number of bytes to load
     ;        DE = Destination address in vram
     ;        HL = Source address
     ; Exit:  DE = Next free byte in vram.
     ; Uses: AF, BC, DE, HL,
-    ld a,e
-    out (CONTROL_PORT),a
-    ld a,d
-    or VRAM_WRITE_COMMAND
-    out (CONTROL_PORT),a
-    -:
-      ld a,(hl)
-      out (DATA_PORT),a
+    .ifdef USE_TEST_KERNEL
+      push hl
+      pop ix ; save HL
+      ld hl,test_kernel_destination
+      ld (hl),e
       inc hl
-      dec bc
-      ld a,c
-      or b
-    jp nz,-
+      ld (hl),d
+      ld hl,test_kernel_bytes_written
+      ld (hl),c
+      inc hl
+      ld (hl),b
+      ld hl,test_kernel_source
+      push ix
+      pop de
+      ld (hl),e
+      inc hl
+      ld (hl),d
+    .else
+      ld (SLOT_2_CONTROL),a
+      ld a,e
+      out (CONTROL_PORT),a
+      ld a,d
+      or VRAM_WRITE_COMMAND
+      out (CONTROL_PORT),a
+      -:
+        ld a,(hl)
+        out (DATA_PORT),a
+        inc hl
+        dec bc
+        ld a,c
+        or b
+      jp nz,-
+    .endif
   ret
 
 
@@ -390,4 +514,83 @@
   ret
 .ends
 
+.section "String to stack various stuff" free
+  move_bytes_from_string_to_stack:
+    ; HL = ptr to string
+    ; A = size of string (bytes)
+    ex de,hl
+    ld hl,2 ; return address
+    add hl,sp
+    ex de,hl
+    ld b,a
+    -:
+      ld a,(hl)
+      ld (de),a
+      inc hl
+      inc de
+    djnz -
+
+  ret
+
+  batch_offset_to_stack:
+    ; Create a string on the stack by applying a string of offsets to a 
+    ; fixed origin.
+    ; A = origin
+    ; HL = string length,string w. offsets
+    ex de,hl
+    ld hl,2 ; return address
+    add hl,sp
+    ex de,hl  ; now DE points to stack and HL points to parameter
+    ;    
+    ld c,a
+    ld b,(hl)
+    inc hl
+    -:
+      ld a,c
+      add a,(hl)
+      ld (de),a ;push on stack here...
+      inc hl
+      inc de
+    djnz -
+  ret
+
+  batch_offset_to_DE:
+    ; Create a string at DE by applying a string of offsets to a 
+    ; fixed origin.
+    ; A = origin
+    ; HL = string length,string w. offsets
+    ; DE = Destination in RAM.
+    ld c,a
+    ld b,(hl)
+    inc hl
+    -:
+      ld a,c
+      add a,(hl)
+      ld (de),a 
+      inc hl
+      inc de
+    djnz -
+  ret
+
+  batch_alternating_offset_and_copy_to_DE:
+    ; Create a string at DE.
+    ; A = origin to apply offset to.
+    ; HL = number of pairs, string w. offsets and raw copy pairs
+    ; DE = Destination in RAM.
+    ld c,a
+    ld b,(hl)
+    inc hl
+    -:
+      ld a,c
+      add a,(hl)
+      ld (de),a 
+      inc hl
+      inc de
+      ld a,(hl)
+      ld (de),a
+      inc hl
+      inc de
+    djnz -
+  ret
+.ends
        
