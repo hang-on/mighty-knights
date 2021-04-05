@@ -237,19 +237,12 @@
     TILEBLAST cody_walking_2_tiles
 
 
-
-
   arthur_walking_0_tiles:
     .include "bank_2/arthur_walking_0_tiles.asm"
   arthur_walking_1_and_3_tiles:
     .include "bank_2/arthur_walking_1_and_3_tiles.asm"
   arthur_walking_2_tiles:
     .include "bank_2/arthur_walking_2_tiles.asm"
-
-
-
-
-
 
 
   ; Mockup background of Village on Fire:
