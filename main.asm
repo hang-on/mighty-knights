@@ -177,8 +177,6 @@
     
     ld hl,critical_routines_finish_at
     call get_vcounter
-    
-    
     ;
     ; -------------------------------------------------------------------------
     ; Begin general updating (UPDATE).
@@ -224,19 +222,6 @@
 
   .equ PLAYER_TILE_BANK 2
   .equ PLAYER_FIRST_TILE SPRITE_BANK_START + CHARACTER_SIZE
-  .macro PLAYER_VJOB ARGS TILES, AMOUNT
-    .db PLAYER_TILE_BANK
-    .dw TILES
-    .dw CHARACTER_SIZE*AMOUNT
-    .dw PLAYER_FIRST_TILE
-  .endm
-
-  cody_walking_0_vjob:
-    PLAYER_VJOB cody_walking_0_tiles, 8
-  cody_walking_1_and_3_vjob:
-    PLAYER_VJOB cody_walking_1_and_3_tiles, 8
-  cody_walking_2_vjob:
-    PLAYER_VJOB cody_walking_2_tiles, 8  
   
   .macro PLAYER_TILEBLAST_TASK ARGS TILES
       .db PLAYER_TILE_BANK
