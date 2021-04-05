@@ -36,28 +36,28 @@
       .db 3                       ; Max frame.
       .db TRUE                    ; Looping.
     @frame_0:
-      .db 10                       ; Duration.
+      .db 7                       ; Duration.
       .db FALSE                   ; Require vjob?
       .dw $0000                   ; Pointer to vjob.
       .db 7                       ; Size.
       .db 10                      ; Index of first tile.
       .dw layout_2x3_1b           ; Pointer to layout.
     @frame_1:
-      .db 10                       ; Duration.
+      .db 7                       ; Duration.
       .db FALSE                   ; Require vjob?
       .dw $0000                   ; Pointer to vjob.
       .db 7                       ; Size.
       .db 17                      ; Index of first tile.
       .dw layout_2x3_1b           ; Pointer to layout.
     @frame_2:
-      .db 10                       ; Duration.
+      .db 7                       ; Duration.
       .db FALSE                   ; Require vjob?
       .dw $0000                   ; Pointer to vjob.
       .db 7                       ; Size.
       .db 24                      ; Index of first tile.
       .dw layout_2x3_1b           ; Pointer to layout.
     @frame_3:
-      .db 10                       ; Duration.
+      .db 7                       ; Duration.
       .db FALSE                   ; Require vjob?
       .dw $0000                   ; Pointer to vjob.
       .db 7                       ; Size.
