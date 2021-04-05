@@ -134,6 +134,20 @@
       jp test_bench
     .endif
 
+  ld a,2
+  ld hl,test_background_tiles
+  ld de,BACKGROUND_BANK_START
+  ld bc,test_background_tiles_end - test_background_tiles
+  call load_vram
+
+  ld a,2
+  ld hl,test_background_tilemap
+  ld de,NAME_TABLE_START
+  ld bc,VISIBLE_NAME_TABLE_SIZE
+  call load_vram
+
+
+
     call initialize_vjobs
     call initialize_acm
     INITIALIZE_ACTOR cody, 0, 100, 100
@@ -245,20 +259,13 @@
     .include "bank_2/arthur_walking_2_tiles.asm"
 
 
-  ; Mockup background of Village on Fire:
-  .include "mockup_background_tilemap.asm"
-    mockup_tilemap_job:
-      .db 2
-      .dw mockup_background_tilemap
-      .dw VISIBLE_NAME_TABLE_SIZE
-      .dw NAME_TABLE_START
-
-  .include "mockup_background_tiles.asm"
-    mockup_tiles_job:
-      .db 2
-      .dw mockup_background_tiles
-      .dw 96*CHARACTER_SIZE
-      .dw BACKGROUND_BANK_START
+  test_background_tiles:
+    .include "bank_2/test_background_tiles.asm"
+  test_background_tiles_end:    
+  test_background_tilemap:
+  .include "bank_2/test_background_tilemap.asm"
+  test_background_tilemap_end:
+  
 
   adventure_awaits:
     .incbin "adventure_awaits_compr.psg"
