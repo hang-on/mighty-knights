@@ -126,9 +126,10 @@
   size db
 .endst
 
-.equ SMALL_BLAST 2
-.equ MEDIUM_BLAST 4
-.equ LARGE_BLAST 6
+.equ SMALL_BLAST 4
+.equ MEDIUM_BLAST 8
+.equ LARGE_BLAST 12
+.equ XLARGE_BLAST 14
 
 .bank 0 slot 0
 .section "Animations: Subroutines" free 
@@ -231,7 +232,6 @@
     ld h,(ix+7)
   ret
 
-
   get_timer:
     ; IN:  A = Slot number in ACM
     ; OUT: A = The time remaining for the current frame.
@@ -239,9 +239,6 @@
     call offset_byte_table
     ld a,(hl)
   ret
-
-
-
 
   initialize_acm:
     ; Turn off all animation slots in the matrix.
@@ -261,8 +258,6 @@
     call offset_byte_table
     ld a,(hl)
   ret
-
-
 
   is_animation_at_max_frame:
     ; IN:  A = Slot number in ACM
@@ -286,7 +281,6 @@
       ld a,FALSE
   ret
 
-
   is_animation_looping:
     ; IN:  A = Slot number in ACM
     ; OUT: A = TRUE or FALSE.
@@ -298,7 +292,6 @@
     ld a,(hl)                     ; Load into A and return.
   ret
 
-  
   is_tileblast_required:
     ; Look up animation file to check whether a tilblast is required for the 
     ; current frame.
@@ -460,9 +453,11 @@
       .equ SMALL_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*4
       .equ MEDIUM_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*8
       .equ LARGE_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*12
+      .equ XLARGE_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*14
       small_blast:
       medium_blast:
       large_blast:
+      xlarge_blast:
       push hl
       pop ix ; save HL
       
@@ -478,8 +473,14 @@
         jp ++
       +:
       cp LARGE_BLAST
-      jp nz,++
+      jp nz,+
         ld bc,LARGE_BLAST_SIZE_IN_BYTES
+        jp ++
+      +:
+      cp XLARGE_BLAST
+      jp nz,++
+        ld bc,XLARGE_BLAST_SIZE_IN_BYTES
+  
       ++:
       ld hl,test_kernel_bytes_written
       ld (hl),c
@@ -497,6 +498,10 @@
       inc hl
       ld (hl),d
   .else
+    xlarge_blast:
+      .rept CHARACTER_SIZE * 2
+        outi
+      .endr
     large_blast:
       .rept CHARACTER_SIZE * 4
         outi
@@ -595,6 +600,11 @@
         jp ++
       +:
       cp LARGE_BLAST
+      jp nz,+
+        call large_blast
+        jp ++
+      +:
+      cp XLARGE_BLAST
       jp nz,++
         call large_blast
       ++:
