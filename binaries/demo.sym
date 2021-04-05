@@ -3,7 +3,9 @@
 
 [labels]
 00:0025 PSGInit
-00:133d PSGStop
+00:12db PSGPlayNoRepeat
+00:12df PSGPlay
+00:1302 PSGStop
 00:1140 PSGSFXStop
 00:118b _skip_chn2
 00:11b0 _skip_chn3
@@ -72,12 +74,6 @@
 00:c13c PSGSFXLoopFlag
 00:c13d PSGSFXSubstringLen
 00:c13e PSGSFXSubstringRetAddr
-00:c152 vjobs
-00:c153 vjob_table
-00:129f initialize_vjobs
-00:12a4 add_vjob
-00:12bf process_vjobs
-00:12e2 run_vjob
 00:c000 sat_buffer_y
 00:c040 sat_buffer_xc
 00:c0c0 sat_buffer_index
@@ -87,10 +83,10 @@
 00:06c9 load_sat
 00:0a40 refresh_sat_handler
 00:0a68 clean_buffer
-00:c163 vdp_registers
-00:1301 initialize_vdp_registers
-00:1317 set_display
-00:132d set_register
+00:c152 vdp_registers
+00:129f initialize_vdp_registers
+00:12b5 set_display
+00:12cb set_register
 00:1231 clear_vram
 00:1245 get_word
 00:124d load_cram
@@ -148,8 +144,8 @@
 00:0372 add_tileblast_to_que
 00:03b8 blast_tiles
 00:06a0 _tileblasting_finished
-00:1363 get_vcounter
-00:1367 draw_actor
+00:1328 get_vcounter
+00:132c draw_actor
 00:c140 temp_byte
 00:c141 temp_word
 00:c142 vblank_counter
@@ -200,6 +196,8 @@
 
 [definitions]
 00000011 _sizeof_PSGInit
+00000004 _sizeof_PSGPlayNoRepeat
+00000023 _sizeof_PSGPlay
 00000026 _sizeof_PSGStop
 0000004b _sizeof_PSGSFXStop
 00000025 _sizeof__skip_chn2
@@ -269,12 +267,6 @@
 00000001 _sizeof_PSGSFXLoopFlag
 00000001 _sizeof_PSGSFXSubstringLen
 00000002 _sizeof_PSGSFXSubstringRetAddr
-00000001 _sizeof_vjobs
-00000010 _sizeof_vjob_table
-00000005 _sizeof_initialize_vjobs
-0000001b _sizeof_add_vjob
-00000023 _sizeof_process_vjobs
-0000001f _sizeof_run_vjob
 00000040 _sizeof_sat_buffer_y
 00000080 _sizeof_sat_buffer_xc
 00000001 _sizeof_sat_buffer_index

@@ -115,7 +115,7 @@
     ;
     call PSGInit
     ld hl,adventure_awaits
-    ;call PSGPlay
+    call PSGPlay
     ;
     call clear_vram
     ld hl,vdp_register_init
@@ -146,9 +146,6 @@
   ld bc,VISIBLE_NAME_TABLE_SIZE
   call load_vram
 
-
-
-    call initialize_vjobs
     call initialize_acm
     INITIALIZE_ACTOR cody, 0, 100, 100
     INITIALIZE_ACTOR arthur, 1, 130, 50
