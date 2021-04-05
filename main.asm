@@ -236,61 +236,7 @@
   cody_walking_2_blast:
     TILEBLAST cody_walking_2_tiles
 
-  layout_2x4:
-    ; Y and X offsets to apply to the origin of an actor.
-    .db -32, -8     ; XX
-    .db -32, 0      ; XX
-    .db -24, -8     ; XX
-    .db -24, 0      ; XX
-    .db -16, -8
-    .db -16, 0
-    .db -8, -8
-    .db -8, 0
 
-  layout_2x3_1b:
-    .db -24, -8     ; XX
-    .db -24, 0      ; XX
-    .db -16, -8     ; XXX
-    .db -16, 0
-    .db -8, -8
-    .db -8, 0
-    .db -8, 8
-
-  ; Animation file:
-  cody_walking:
-    ; Table of contents:
-    .dw @header, @frame_0, @frame_1, @frame_2, @frame_3
-    @header:
-      .db 3                       ; Max frame.
-      .db TRUE                    ; Looping.
-    @frame_0:
-      .db 10                      ; Duration.
-      .db TRUE                    ; Require vjob?
-      .dw cody_walking_0_blast    ; Pointer to vjob.
-      .db 8                       ; Size.
-      .db 1                       ; Index of first tile.
-      .dw layout_2x4              ; Pointer to layout.
-    @frame_1:
-      .db 10                      
-      .db TRUE                    
-      .dw cody_walking_1_and_3_blast 
-      .db 8                       
-      .db 1                       
-      .dw layout_2x4              
-    @frame_2:
-      .db 10                      
-      .db TRUE                    
-      .dw cody_walking_2_blast 
-      .db 8                       
-      .db 1                       
-      .dw layout_2x4              
-    @frame_3:
-      .db 10                      
-      .db TRUE                    
-      .dw cody_walking_1_and_3_blast 
-      .db 8                       
-      .db 1                       
-      .dw layout_2x4              
 
 
   arthur_walking_0_tiles:
@@ -302,41 +248,6 @@
 
 
 
-  ; Animation file:
-  arthur_walking:
-    ; Table of contents:
-    .dw @header, @frame_0, @frame_1, @frame_2, @frame_3
-    @header:
-      .db 3                       ; Max frame.
-      .db TRUE                    ; Looping.
-    @frame_0:
-      .db 10                       ; Duration.
-      .db FALSE                   ; Require vjob?
-      .dw $0000                   ; Pointer to vjob.
-      .db 7                       ; Size.
-      .db 10                      ; Index of first tile.
-      .dw layout_2x3_1b           ; Pointer to layout.
-    @frame_1:
-      .db 10                       ; Duration.
-      .db FALSE                   ; Require vjob?
-      .dw $0000                   ; Pointer to vjob.
-      .db 7                       ; Size.
-      .db 17                      ; Index of first tile.
-      .dw layout_2x3_1b           ; Pointer to layout.
-    @frame_2:
-      .db 10                       ; Duration.
-      .db FALSE                   ; Require vjob?
-      .dw $0000                   ; Pointer to vjob.
-      .db 7                       ; Size.
-      .db 24                      ; Index of first tile.
-      .dw layout_2x3_1b           ; Pointer to layout.
-    @frame_3:
-      .db 10                       ; Duration.
-      .db FALSE                   ; Require vjob?
-      .dw $0000                   ; Pointer to vjob.
-      .db 7                       ; Size.
-      .db 17                      ; Index of first tile.
-      .dw layout_2x3_1b           ; Pointer to layout.
 
 
 
