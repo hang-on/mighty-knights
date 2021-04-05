@@ -411,7 +411,8 @@
 
   load_vram:
     ; Load a number of bytes from a source address into vram.
-    ; Entry: BC = Number of bytes to load
+    ; Entry: A = Bank
+    ;        BC = Number of bytes to load
     ;        DE = Destination address in vram
     ;        HL = Source address
     ; Exit:  DE = Next free byte in vram.
@@ -434,6 +435,7 @@
       inc hl
       ld (hl),d
     .else
+      ld (SLOT_2_CONTROL),a
       ld a,e
       out (CONTROL_PORT),a
       ld a,d

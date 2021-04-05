@@ -144,17 +144,15 @@
     ld hl,cody_walking
     call set_animation
 
-
     ld a,1
     ld hl,arthur_walking
     call set_animation
 
-    ld hl,arthur_walking_vjob
-    call add_vjob
-
-    
-    call process_vjobs
-    
+    ld a,2
+    ld hl,arthur_walking_0_tiles
+    ld de,10*CHARACTER_SIZE
+    ld bc, 7*CHARACTER_SIZE*3
+    call load_vram
     ;
     ei
     halt
@@ -318,11 +316,7 @@
   arthur_walking_2_tiles:
     .include "bank_2/arthur_walking_2_tiles.asm"
 
-  arthur_walking_vjob:
-    .db 2
-    .dw arthur_walking_0_tiles
-    .dw 7 * CHARACTER_SIZE * 3
-    .dw 10*CHARACTER_SIZE ; Load into position 10
+
 
   ; Animation file:
   arthur_walking:
