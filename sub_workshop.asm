@@ -47,7 +47,7 @@
 
 .equ TBM_SLOTS 8
 .ramsection "Tile Blaster Matrix (TBM)" slot 3 
-  tileblaster_tasks db
+  tileblasts_in_que db
   tbm_bank dsb TBM_SLOTS
   tbm_source dsb TBM_SLOTS*2
   tbm_destination dsb TBM_SLOTS*2
@@ -135,19 +135,19 @@
     push hl
     pop ix
 
-    ld a,(tileblaster_tasks)
+    ld a,(tileblasts_in_que)
     ld hl,tbm_bank
     call offset_byte_table
     ld a,(ix+0)
     ld (hl),a
 
-    ld a,(tileblaster_tasks)
+    ld a,(tileblasts_in_que)
     ld hl,tbm_size
     call offset_byte_table
     ld a,(ix+5)
     ld (hl),a
     
-    ld a,(tileblaster_tasks)
+    ld a,(tileblasts_in_que)
     ld hl,tbm_destination
     call offset_word_table
     ld a,(ix+3)
@@ -156,7 +156,7 @@
     ld a,(ix+4)
     ld (hl),a
 
-    ld a,(tileblaster_tasks)
+    ld a,(tileblasts_in_que)
     ld hl,tbm_source
     call offset_word_table
     ld a,(ix+1)
@@ -166,36 +166,36 @@
     ld (hl),a
 
 
-    ld hl,tileblaster_tasks
+    ld hl,tileblasts_in_que
     inc (hL)
   ret
 
   blast_tiles:
     .rept TBM_SLOTS
-      ld a,(tileblaster_tasks)
+      ld a,(tileblasts_in_que)
       cp 0
       jp z,_tileblasting_finished
 
       ; OK, still jobs to process.
       dec a
-      ld (tileblaster_tasks),a
+      ld (tileblasts_in_que),a
       ld hl,tbm_bank
       call offset_byte_table
       ld a,(hl)
       SELECT_BANK_IN_REGISTER_A
 
-      ld a,(tileblaster_tasks)
+      ld a,(tileblasts_in_que)
       ld hl,tbm_destination
       call offset_word_table
       call get_word ; HL now holds destination...
       call setup_vram_write
 
-      ld a,(tileblaster_tasks)
+      ld a,(tileblasts_in_que)
       ld hl,tbm_source
       call offset_word_table
       call get_word ; HL now holds source...
       push hl
-        ld a,(tileblaster_tasks)
+        ld a,(tileblasts_in_que)
         ld hl,tbm_size
         call offset_byte_table
         ld a,(hl)

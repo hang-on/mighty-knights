@@ -104,7 +104,7 @@
 00:c0fb acm_frame
 00:c103 acm_timer
 00:c10b acm_label
-00:c0c2 tileblaster_tasks
+00:c0c2 tileblasts_in_que
 00:c0c3 tbm_bank
 00:c0cb tbm_source
 00:c0db tbm_destination
@@ -302,7 +302,7 @@
 00000008 _sizeof_acm_frame
 00000008 _sizeof_acm_timer
 00000010 _sizeof_acm_label
-00000001 _sizeof_tileblaster_tasks
+00000001 _sizeof_tileblasts_in_que
 00000008 _sizeof_tbm_bank
 00000010 _sizeof_tbm_source
 00000010 _sizeof_tbm_destination
