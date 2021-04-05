@@ -125,7 +125,7 @@
 00:0651 set_new_frame@inc_frame
 00:066a add_vjob_if_required
 00:0692 is_vjob_required
-00:0692 k420
+00:0692 k417
 00:06b0 get_duration
 00:06cd reset_timer
 00:06e0 disable_animation
@@ -173,9 +173,9 @@
 02:8020 cody_walking_0_tiles
 02:8120 cody_walking_1_and_3_tiles
 02:8220 cody_walking_2_tiles
-02:8320 cody_walking_0_task
-02:8326 cody_walking_1_and_3_task
-02:832c cody_walking_2_task
+02:8320 cody_walking_0_blast
+02:8326 cody_walking_1_and_3_blast
+02:832c cody_walking_2_blast
 02:8332 layout_2x4
 02:8342 layout_2x3_1b
 02:8350 cody_walking
@@ -321,7 +321,7 @@
 0000020e _sizeof_process_animations
 00000031 _sizeof_set_new_frame
 00000028 _sizeof_add_vjob_if_required
-00000000 _sizeof_k420
+00000000 _sizeof_k417
 0000001e _sizeof_is_vjob_required
 0000001d _sizeof_get_duration
 00000013 _sizeof_reset_timer
@@ -370,9 +370,9 @@
 00000100 _sizeof_cody_walking_0_tiles
 00000100 _sizeof_cody_walking_1_and_3_tiles
 00000100 _sizeof_cody_walking_2_tiles
-00000006 _sizeof_cody_walking_0_task
-00000006 _sizeof_cody_walking_1_and_3_task
-00000006 _sizeof_cody_walking_2_task
+00000006 _sizeof_cody_walking_0_blast
+00000006 _sizeof_cody_walking_1_and_3_blast
+00000006 _sizeof_cody_walking_2_blast
 00000010 _sizeof_layout_2x4
 0000000e _sizeof_layout_2x3_1b
 0000002c _sizeof_cody_walking

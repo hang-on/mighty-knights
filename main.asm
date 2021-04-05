@@ -228,11 +228,11 @@
       .dw PLAYER_FIRST_TILE
       .db MEDIUM_BLAST
   .endm
-  cody_walking_0_task:
+  cody_walking_0_blast:
     TILEBLAST cody_walking_0_tiles
-  cody_walking_1_and_3_task:
+  cody_walking_1_and_3_blast:
     TILEBLAST cody_walking_1_and_3_tiles
-  cody_walking_2_task:
+  cody_walking_2_blast:
     TILEBLAST cody_walking_2_tiles
 
   layout_2x4:
@@ -265,28 +265,28 @@
     @frame_0:
       .db 10                      ; Duration.
       .db TRUE                    ; Require vjob?
-      .dw cody_walking_0_task     ; Pointer to vjob.
+      .dw cody_walking_0_blast    ; Pointer to vjob.
       .db 8                       ; Size.
       .db 1                       ; Index of first tile.
       .dw layout_2x4              ; Pointer to layout.
     @frame_1:
       .db 10                      
       .db TRUE                    
-      .dw cody_walking_1_and_3_task 
+      .dw cody_walking_1_and_3_blast 
       .db 8                       
       .db 1                       
       .dw layout_2x4              
     @frame_2:
       .db 10                      
       .db TRUE                    
-      .dw cody_walking_2_task 
+      .dw cody_walking_2_blast 
       .db 8                       
       .db 1                       
       .dw layout_2x4              
     @frame_3:
       .db 10                      
       .db TRUE                    
-      .dw cody_walking_1_and_3_task 
+      .dw cody_walking_1_and_3_blast 
       .db 8                       
       .db 1                       
       .dw layout_2x4              

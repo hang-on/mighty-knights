@@ -222,9 +222,6 @@
     _tileblasting_finished:
   ret
   
-
-
-
   get_vcounter:
     ; Read the vcounter port and store it's value in a variable and in A.
     ; IN: HL = Pointer to variable in RAM.
