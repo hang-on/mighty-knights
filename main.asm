@@ -223,18 +223,18 @@
   .equ PLAYER_TILE_BANK 2
   .equ PLAYER_FIRST_TILE SPRITE_BANK_START + CHARACTER_SIZE
   
-  .macro PLAYER_TILEBLAST_TASK ARGS TILES
+  .macro TILEBLAST ARGS TILES
       .db PLAYER_TILE_BANK
       .dw TILES
       .dw PLAYER_FIRST_TILE
       .db MEDIUM_BLAST
   .endm
   cody_walking_0_task:
-    PLAYER_TILEBLAST_TASK cody_walking_0_tiles
+    TILEBLAST cody_walking_0_tiles
   cody_walking_1_and_3_task:
-    PLAYER_TILEBLAST_TASK cody_walking_1_and_3_tiles
+    TILEBLAST cody_walking_1_and_3_tiles
   cody_walking_2_task:
-    PLAYER_TILEBLAST_TASK cody_walking_2_tiles
+    TILEBLAST cody_walking_2_tiles
 
 
   layout_2x4:
