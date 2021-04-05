@@ -112,7 +112,7 @@
 00:0bd8 large_blast
 00:0cd8 medium_blast
 00:0dd8 small_blast
-00:0071 add_tileblaster_task
+00:0071 add_tileblast_to_que
 00:00b7 blast_tiles
 00:03b7 _tileblasting_finished
 00:03b8 get_vcounter
@@ -123,9 +123,8 @@
 00:042b process_animations
 00:0639 set_new_frame
 00:0651 set_new_frame@inc_frame
-00:066a add_vjob_if_required
-00:0692 is_vjob_required
-00:0692 k417
+00:066a add_tileblast_if_required
+00:0692 is_tileblast_required
 00:06b0 get_duration
 00:06cd reset_timer
 00:06e0 disable_animation
@@ -310,7 +309,7 @@
 00000100 _sizeof_large_blast
 00000100 _sizeof_medium_blast
 00000101 _sizeof_small_blast
-00000046 _sizeof_add_tileblaster_task
+00000046 _sizeof_add_tileblast_to_que
 00000300 _sizeof_blast_tiles
 00000001 _sizeof__tileblasting_finished
 00000004 _sizeof_get_vcounter
@@ -320,9 +319,8 @@
 00000024 _sizeof_set_animation
 0000020e _sizeof_process_animations
 00000031 _sizeof_set_new_frame
-00000028 _sizeof_add_vjob_if_required
-00000000 _sizeof_k417
-0000001e _sizeof_is_vjob_required
+00000028 _sizeof_add_tileblast_if_required
+0000001e _sizeof_is_tileblast_required
 0000001d _sizeof_get_duration
 00000013 _sizeof_reset_timer
 0000000a _sizeof_disable_animation

@@ -129,7 +129,7 @@
   .equ MEDIUM_BLAST 4
   .equ LARGE_BLAST 6
 
-  add_tileblaster_task:
+  add_tileblast_to_que:
     ; IN: HL = Tileblaster task struct.
     ; Note: No overflow protection!
     push hl
@@ -217,8 +217,6 @@
         jp ++
       ++:
     .endr
-
-
     _tileblasting_finished:
   ret
   
@@ -382,10 +380,10 @@
     ld a,(temp_byte)
     call reset_timer
     ld a,(temp_byte)
-    call add_vjob_if_required
+    call add_tileblast_if_required
   ret
 
-  add_vjob_if_required: ; FIXME: vjobs replaced with tile blasts.
+ add_tileblast_if_required:
     ; IN: A = animation slot number in ACM.
     ld (temp_byte),a
     ld hl,acm_label             ; HL = Start of pointer table.
@@ -402,15 +400,14 @@
     ld a,(hl)                     ; Read true or false.
     cp FALSE
     ret z
-      inc hl                      ; HL is at first byte of vjob pointer
+      inc hl                      ; HL is at first byte of tileblast pointer
       call get_word               ; HL is now the address of the vjob.
-      ;call add_vjob
-      call add_tileblaster_task
+      call add_tileblast_to_que
   ret
   
   
-  is_vjob_required::
-    ; Look up animation file to check whether a vjob is required for the 
+  is_tileblast_required:
+    ; Look up animation file to check whether a tilblast is required for the 
     ; current frame.
     ; IN: A = animation slot number in ACM.
     ; OUT: A = TRUE/FALSE
