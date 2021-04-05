@@ -34,6 +34,7 @@
 ;
 .include "psglib.inc"
 .include "mighty_knights_lib.asm"
+.include "animations_lib.asm"
 .include "sub_workshop.asm"
 .include "sub_tests.asm"        
 ; -----------------------------------------------------------------------------
