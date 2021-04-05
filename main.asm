@@ -53,6 +53,7 @@
   arthur instanceof actor
   arthur_clone_1 instanceof actor
   arthur_clone_2 instanceof actor
+  rastan instanceof actor
 .ends
 .org 0
 .bank 0 slot 0
@@ -134,23 +135,28 @@
       jp test_bench
     .endif
 
-  ld a,2
-  ld hl,test_background_tiles
-  ld de,BACKGROUND_BANK_START
-  ld bc,test_background_tiles_end - test_background_tiles
-  call load_vram
+    ld a,2
+    ld hl,test_background_tiles
+    ld de,BACKGROUND_BANK_START
+    ld bc,test_background_tiles_end - test_background_tiles
+    call load_vram
 
-  ld a,2
-  ld hl,test_background_tilemap
-  ld de,NAME_TABLE_START
-  ld bc,VISIBLE_NAME_TABLE_SIZE
-  call load_vram
+    ld a,2
+    ld hl,test_background_tilemap
+    ld de,NAME_TABLE_START
+    ld bc,VISIBLE_NAME_TABLE_SIZE
+    call load_vram
+
+
 
     call initialize_acm
     INITIALIZE_ACTOR cody, 0, 100, 100
     INITIALIZE_ACTOR arthur, 1, 130, 50
     INITIALIZE_ACTOR arthur_clone_1, 2, 130, 90
     INITIALIZE_ACTOR arthur_clone_2, 3, 130, 170
+
+    INITIALIZE_ACTOR rastan, 4, 84, 160
+
 
     ld a,0
     ld hl,cody_walking
@@ -161,10 +167,24 @@
     call set_animation
 
     ld a,2
+    ld hl,rastan_walking
+    call set_animation
+
+
+    ld a,2
     ld hl,arthur_walking_0_tiles
     ld de,10*CHARACTER_SIZE
     ld bc, 7*CHARACTER_SIZE*3
     call load_vram
+
+    .equ RASTAN_TILE_BANK 2
+    .equ RASTAN_FIRST_TILE SPRITE_BANK_START + (31*CHARACTER_SIZE)
+    ld a,RASTAN_TILE_BANK
+    ld hl,rastan_walking_0_tiles
+    ld de,RASTAN_FIRST_TILE
+    ld bc,(13*CHARACTER_SIZE) + (13*CHARACTER_SIZE)
+    call load_vram
+
     ;
     ei
     halt
@@ -200,6 +220,10 @@
 
     ld a,0
     ld hl,cody
+    call draw_actor
+
+    ld a,2
+    ld hl,rastan
     call draw_actor
 
     ld a,1
@@ -248,12 +272,18 @@
     TILEBLAST cody_walking_2_tiles
 
 
+  rastan_walking_0_tiles:
+    .include "bank_2/rastan_walking_0_tiles.asm"
+  rastan_walking_1_tiles:
+    .include "bank_2/rastan_walking_1_tiles.asm"
+
   arthur_walking_0_tiles:
     .include "bank_2/arthur_walking_0_tiles.asm"
   arthur_walking_1_and_3_tiles:
     .include "bank_2/arthur_walking_1_and_3_tiles.asm"
   arthur_walking_2_tiles:
     .include "bank_2/arthur_walking_2_tiles.asm"
+
 
 
   test_background_tiles:

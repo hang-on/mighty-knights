@@ -26,6 +26,22 @@
     .db -8, 0
     .db -8, 8
 
+  layout_1t_3x4:
+    .db -40, -12     ; X
+    .db -32, -12     ; XXX
+    .db -32, -4      ; XXX
+    .db -32, 4       ; XXX
+    .db -24, -12     ; XXX
+    .db -24, -4
+    .db -24, 4
+    .db -16, -12
+    .db -16, -4
+    .db -16, 4
+    .db -8, -12
+    .db -8, -4
+    .db -8, 4
+
+
   ; ---------------------------------------------------------------------------
   ; Animation files
   ; ---------------------------------------------------------------------------
@@ -98,6 +114,28 @@
       .db 8                       
       .db 1                       
       .dw layout_2x4              
+
+  rastan_walking:
+    ; Table of contents:
+    .dw @header, @frame_0, @frame_1
+    @header:
+      .db 1                       ; Max frame.
+      .db TRUE                    ; Looping.
+    @frame_0:
+      .db 9                       ; Duration.
+      .db FALSE                   ; Require vjob?
+      .dw $0000                   ; Pointer to vjob.
+      .db 13                       ; Size.
+      .db 31                      ; Index of first tile.
+      .dw layout_1t_3x4           ; Pointer to layout.
+    @frame_1:
+      .db 9                       ; Duration.
+      .db FALSE                   ; Require vjob?
+      .dw $0000                   ; Pointer to vjob.
+      .db 13                       ; Size.
+      .db 44                      ; Index of first tile.
+      .dw layout_1t_3x4           ; Pointer to layout.
+
 
 .ends
 
