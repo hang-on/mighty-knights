@@ -125,7 +125,7 @@
 00:0651 set_new_frame@inc_frame
 00:066a add_vjob_if_required
 00:0692 is_vjob_required
-00:0692 k419
+00:0692 k420
 00:06b0 get_duration
 00:06cd reset_timer
 00:06e0 disable_animation
@@ -321,7 +321,7 @@
 0000020e _sizeof_process_animations
 00000031 _sizeof_set_new_frame
 00000028 _sizeof_add_vjob_if_required
-00000000 _sizeof_k419
+00000000 _sizeof_k420
 0000001e _sizeof_is_vjob_required
 0000001d _sizeof_get_duration
 00000013 _sizeof_reset_timer

@@ -219,7 +219,6 @@
   cody_walking_2_tiles:
     .include "bank_2/cody_walking_2_tiles.asm"
 
-
   .equ PLAYER_TILE_BANK 2
   .equ PLAYER_FIRST_TILE SPRITE_BANK_START + CHARACTER_SIZE
   
@@ -235,7 +234,6 @@
     TILEBLAST cody_walking_1_and_3_tiles
   cody_walking_2_task:
     TILEBLAST cody_walking_2_tiles
-
 
   layout_2x4:
     ; Y and X offsets to apply to the origin of an actor.

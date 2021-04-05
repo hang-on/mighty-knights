@@ -61,6 +61,7 @@
   size db
 .endst
 
+.bank 0 slot 0
 .section "Tileblasting OUTI" free
   .ifdef USE_TEST_KERNEL
       .equ SMALL_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*4
@@ -120,7 +121,7 @@
   ret ; We are in the tileblasting subroutine here...
 .ends
 
-
+.bank 0 slot 0
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
