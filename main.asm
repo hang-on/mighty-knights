@@ -194,7 +194,7 @@
 
     ld a,2
     ld hl,arthur_standing_tiles
-    ld de,57*CHARACTER_SIZE
+    ld de,SPRITE_BANK_START + 57*CHARACTER_SIZE
     ld bc,14*CHARACTER_SIZE
     call load_vram
 
