@@ -54,6 +54,7 @@
   arthur_clone_1 instanceof actor
   arthur_clone_2 instanceof actor
   rastan instanceof actor
+  big_arthur instanceof actor
 .ends
 .org 0
 .bank 0 slot 0
@@ -156,6 +157,7 @@
     INITIALIZE_ACTOR arthur_clone_2, 3, 130, 170
 
     INITIALIZE_ACTOR rastan, 4, 84, 160
+    INITIALIZE_ACTOR big_arthur, 5, 84, 30
 
 
     ld a,0
@@ -168,6 +170,10 @@
 
     ld a,2
     ld hl,rastan_walking
+    call set_animation
+
+    ld a,3
+    ld hl,arthur_standing
     call set_animation
 
 
@@ -184,6 +190,14 @@
     ld de,RASTAN_FIRST_TILE
     ld bc,(13*CHARACTER_SIZE) + (13*CHARACTER_SIZE)
     call load_vram
+
+
+    ld a,2
+    ld hl,arthur_standing_tiles
+    ld de,57*CHARACTER_SIZE
+    ld bc,14*CHARACTER_SIZE
+    call load_vram
+
 
     ;
     ei
@@ -217,6 +231,10 @@
     call refresh_sat_handler
 
     call process_animations
+    ld a,3
+    ld hl,big_arthur
+    call draw_actor
+
 
     ld a,0
     ld hl,cody
@@ -235,6 +253,7 @@
     ld a,1
     ld hl,arthur_clone_2
     call draw_actor
+
 
   jp main_loop
 .ends
