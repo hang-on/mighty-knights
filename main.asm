@@ -284,6 +284,8 @@
   arthur_walking_2_tiles:
     .include "bank_2/arthur_walking_2_tiles.asm"
 
+  arthur_standing_tiles:
+    .include "bank_2/arthur_standing_tiles.asm"
 
 
   test_background_tiles:

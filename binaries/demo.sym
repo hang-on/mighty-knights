@@ -201,11 +201,12 @@
 02:8672 arthur_walking_0_tiles
 02:8752 arthur_walking_1_and_3_tiles
 02:8832 arthur_walking_2_tiles
-02:8912 test_background_tiles
-02:8992 test_background_tiles_end
-02:8992 test_background_tilemap
-02:8f92 test_background_tilemap_end
-02:8f92 adventure_awaits
+02:8912 arthur_standing_tiles
+02:8b52 test_background_tiles
+02:8bd2 test_background_tiles_end
+02:8bd2 test_background_tilemap
+02:91d2 test_background_tilemap_end
+02:91d2 adventure_awaits
 
 [definitions]
 00000011 _sizeof_PSGInit
@@ -393,6 +394,7 @@
 000000e0 _sizeof_arthur_walking_0_tiles
 000000e0 _sizeof_arthur_walking_1_and_3_tiles
 000000e0 _sizeof_arthur_walking_2_tiles
+00000240 _sizeof_arthur_standing_tiles
 00000080 _sizeof_test_background_tiles
 00000000 _sizeof_test_background_tiles_end
 00000600 _sizeof_test_background_tilemap
