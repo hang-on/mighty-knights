@@ -49,12 +49,15 @@
   
   critical_routines_finish_at db
   ;
-  cody instanceof actor
+  ;cody instanceof actor
   arthur instanceof actor
   arthur_clone_1 instanceof actor
   arthur_clone_2 instanceof actor
   rastan instanceof actor
   big_arthur instanceof actor
+  big_arthur_clone_1 instanceof actor
+  arthur_v3 instanceof actor
+
 .ends
 .org 0
 .bank 0 slot 0
@@ -151,18 +154,22 @@
 
 
     call initialize_acm
-    INITIALIZE_ACTOR cody, 0, 100, 100
+    ;INITIALIZE_ACTOR cody, 0, 100, 100
     INITIALIZE_ACTOR arthur, 1, 130, 50
     INITIALIZE_ACTOR arthur_clone_1, 2, 130, 90
     INITIALIZE_ACTOR arthur_clone_2, 3, 130, 170
 
     INITIALIZE_ACTOR rastan, 4, 84, 160
     INITIALIZE_ACTOR big_arthur, 5, 84, 30
+    INITIALIZE_ACTOR big_arthur_clone_1, 6, 170, 180
+
+    INITIALIZE_ACTOR arthur_v3, 7, 180, 220
 
 
-    ld a,0
-    ld hl,cody_walking
-    call set_animation
+    ;ld a,0
+    ;ld hl,cody_walking
+    ;call set_animation
+
 
     ld a,1
     ld hl,arthur_walking
@@ -176,12 +183,25 @@
     ld hl,arthur_standing
     call set_animation
 
+    ld a,4
+    ld hl,arthur_standing_v3
+    call set_animation
+
+
 
     ld a,2
     ld hl,arthur_walking_0_tiles
     ld de,10*CHARACTER_SIZE
     ld bc, 7*CHARACTER_SIZE*3
     call load_vram
+
+    ld a,2
+    ld hl,arthur_standing_v3_tiles
+    ld de,SPRITE_BANK_START + 71*CHARACTER_SIZE
+    ld bc, 14*CHARACTER_SIZE
+    call load_vram
+
+
 
     .equ RASTAN_TILE_BANK 2
     .equ RASTAN_FIRST_TILE SPRITE_BANK_START + (31*CHARACTER_SIZE)
@@ -231,14 +251,22 @@
     call refresh_sat_handler
 
     call process_animations
+
+    ld a,4
+    ld hl,arthur_v3
+    call draw_actor
+
     ld a,3
     ld hl,big_arthur
     call draw_actor
-
-
-    ld a,0
-    ld hl,cody
+    ld a,3
+    ld hl,big_arthur_clone_1
     call draw_actor
+
+
+    ;ld a,0
+    ;ld hl,cody
+    ;call draw_actor
 
     ld a,2
     ld hl,rastan
@@ -247,12 +275,9 @@
     ld a,1
     ld hl,arthur
     call draw_actor
-    ld a,1
-    ld hl,arthur_clone_1
-    call draw_actor
-    ld a,1
-    ld hl,arthur_clone_2
-    call draw_actor
+  ;  ld a,1
+  ;  ld hl,arthur_clone_1
+  ;  call draw_actor
 
 
   jp main_loop
@@ -304,7 +329,10 @@
     .include "bank_2/arthur_walking_2_tiles.asm"
 
   arthur_standing_tiles:
-    .include "bank_2/arthur_standing_tiles.asm"
+    .include "bank_2/arthur_standing_v2_tiles.asm"
+
+  arthur_standing_v3_tiles:
+    .include "bank_2/arthur_standing_v3_tiles.asm"
 
 
   test_background_tiles:
