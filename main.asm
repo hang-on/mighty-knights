@@ -48,16 +48,8 @@
   pause_flag db
   
   critical_routines_finish_at db
-  ;
-  ;cody instanceof actor
+
   arthur instanceof actor
-  arthur_clone_1 instanceof actor
-  arthur_clone_2 instanceof actor
-  rastan instanceof actor
-  big_arthur instanceof actor
-  big_arthur_clone_1 instanceof actor
-  arthur_v3 instanceof actor
-  arthur_v4 instanceof actor
 
 .ends
 .org 0
@@ -155,73 +147,18 @@
 
 
     call initialize_acm
-    ;INITIALIZE_ACTOR cody, 0, 100, 100
-    INITIALIZE_ACTOR arthur, 1, 130, 50
-    INITIALIZE_ACTOR arthur_clone_1, 2, 130, 90
-    INITIALIZE_ACTOR arthur_clone_2, 3, 130, 170
-
-    INITIALIZE_ACTOR rastan, 4, 84, 160
-    INITIALIZE_ACTOR big_arthur, 5, 84, 30
-    INITIALIZE_ACTOR big_arthur_clone_1, 6, 170, 180
-
-    INITIALIZE_ACTOR arthur_v3, 7, 180, 220
-
-    INITIALIZE_ACTOR arthur_v4, 8, 180, 100
+    INITIALIZE_ACTOR arthur, 0, 130, 50
 
 
-
-    ;ld a,0
-    ;ld hl,cody_walking
-    ;call set_animation
-
-
-    ld a,1
-    ld hl,arthur_walking
-    call set_animation
-
-    ld a,2
-    ld hl,rastan_walking
-    call set_animation
-
-    ld a,3
+    ld a,0
     ld hl,arthur_standing
     call set_animation
 
-    ld a,4
-    ld hl,arthur_standing_v4
-    call set_animation
-
-
-
-    ld a,2
-    ld hl,arthur_walking_0_tiles
-    ld de,10*CHARACTER_SIZE
-    ld bc, 7*CHARACTER_SIZE*3
-    call load_vram
-
-    ld a,2
-    ld hl,arthur_standing_v4_tiles
-    ld de,SPRITE_BANK_START + 71*CHARACTER_SIZE
-    ld bc, 16*CHARACTER_SIZE
-    call load_vram
-
-
-
-    .equ RASTAN_TILE_BANK 2
-    .equ RASTAN_FIRST_TILE SPRITE_BANK_START + (31*CHARACTER_SIZE)
-    ld a,RASTAN_TILE_BANK
-    ld hl,rastan_walking_0_tiles
-    ld de,RASTAN_FIRST_TILE
-    ld bc,(13*CHARACTER_SIZE) + (13*CHARACTER_SIZE)
-    call load_vram
-
-
     ld a,2
     ld hl,arthur_standing_tiles
-    ld de,SPRITE_BANK_START + 57*CHARACTER_SIZE
-    ld bc,14*CHARACTER_SIZE
+    ld de,ADDRESS_OF_PLAYER_FIRST_TILE
+    ld bc, 16*CHARACTER_SIZE
     call load_vram
-
 
     ;
     ei
@@ -256,33 +193,9 @@
 
     call process_animations
 
-    ld a,4
-    ld hl,arthur_v4
-    call draw_actor
-
-    ld a,3
-    ld hl,big_arthur
-    call draw_actor
-    ld a,3
-    ld hl,big_arthur_clone_1
-    call draw_actor
-
-
-    ;ld a,0
-    ;ld hl,cody
-    ;call draw_actor
-
-    ld a,2
-    ld hl,rastan
-    call draw_actor
-
-    ld a,1
+    ld a,0
     ld hl,arthur
     call draw_actor
-  ;  ld a,1
-  ;  ld hl,arthur_clone_1
-  ;  call draw_actor
-
 
   jp main_loop
 .ends
@@ -296,48 +209,12 @@
     .db $23 $10 $12 $18 $06 $15 $2A $3F $13 $0B $0F $0C $38 $26 $27 $2F
     demo_palette_end:
 
-  cody_walking_0_tiles:
-    .include "bank_2/cody_walking_0_tiles.asm"
-  cody_walking_1_and_3_tiles:
-    .include "bank_2/cody_walking_1_and_3_tiles.asm"
-  cody_walking_2_tiles:
-    .include "bank_2/cody_walking_2_tiles.asm"
-
   .equ PLAYER_TILE_BANK 2
-  .equ PLAYER_FIRST_TILE SPRITE_BANK_START + CHARACTER_SIZE
-  
-  .macro TILEBLAST ARGS TILES
-      .db PLAYER_TILE_BANK
-      .dw TILES
-      .dw PLAYER_FIRST_TILE
-      .db MEDIUM_BLAST
-  .endm
-  cody_walking_0_blast:
-    TILEBLAST cody_walking_0_tiles
-  cody_walking_1_and_3_blast:
-    TILEBLAST cody_walking_1_and_3_tiles
-  cody_walking_2_blast:
-    TILEBLAST cody_walking_2_tiles
-
-
-  rastan_walking_0_tiles:
-    .include "bank_2/rastan_walking_0_tiles.asm"
-  rastan_walking_1_tiles:
-    .include "bank_2/rastan_walking_1_tiles.asm"
-
-  arthur_walking_0_tiles:
-    .include "bank_2/arthur_walking_0_tiles.asm"
-  arthur_walking_1_and_3_tiles:
-    .include "bank_2/arthur_walking_1_and_3_tiles.asm"
-  arthur_walking_2_tiles:
-    .include "bank_2/arthur_walking_2_tiles.asm"
+  .equ ADDRESS_OF_PLAYER_FIRST_TILE SPRITE_BANK_START + CHARACTER_SIZE
+  .equ INDEX_OF_PLAYER_FIRST_TILE ADDRESS_OF_PLAYER_FIRST_TILE/CHARACTER_SIZE
 
   arthur_standing_tiles:
-    .include "bank_2/arthur_standing_v2_tiles.asm"
-
-  arthur_standing_v4_tiles:
-    .include "bank_2/arthur_standing_v4_tiles.asm"
-
+    .include "bank_2/arthur_standing_tiles.asm"
 
   test_background_tiles:
     .include "bank_2/test_background_tiles.asm"

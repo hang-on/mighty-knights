@@ -1,3 +1,225 @@
+  
+  
+  arthur_standing:
+    ; Table of contents:
+    .dw @header, @frame_0
+    @header:
+      .db 0                       ; Max frame.
+      .db FALSE                    ; Looping.
+    @frame_0:
+      .db 7                       ; Duration.
+      .db FALSE                   ; Require vjob?
+      .dw $0000                   ; Pointer to vjob.
+      .db 14                       ; Size.
+      .db 57                      ; Index of first tile.
+      .dw layout_2t_3x4           ; Pointer to layout.
+
+
+  arthur_walking:
+    ; Table of contents:
+    .dw @header, @frame_0, @frame_1, @frame_2, @frame_3
+    @header:
+      .db 3                       ; Max frame.
+      .db TRUE                    ; Looping.
+    @frame_0:
+      .db 7                       ; Duration.
+      .db FALSE                   ; Require vjob?
+      .dw $0000                   ; Pointer to vjob.
+      .db 7                       ; Size.
+      .db 10                      ; Index of first tile.
+      .dw layout_2x3_1b           ; Pointer to layout.
+    @frame_1:
+      .db 7                       ; Duration.
+      .db FALSE                   ; Require vjob?
+      .dw $0000                   ; Pointer to vjob.
+      .db 7                       ; Size.
+      .db 17                      ; Index of first tile.
+      .dw layout_2x3_1b           ; Pointer to layout.
+    @frame_2:
+      .db 7                       ; Duration.
+      .db FALSE                   ; Require vjob?
+      .dw $0000                   ; Pointer to vjob.
+      .db 7                       ; Size.
+      .db 24                      ; Index of first tile.
+      .dw layout_2x3_1b           ; Pointer to layout.
+    @frame_3:
+      .db 7                       ; Duration.
+      .db FALSE                   ; Require vjob?
+      .dw $0000                   ; Pointer to vjob.
+      .db 7                       ; Size.
+      .db 17                      ; Index of first tile.
+      .dw layout_2x3_1b           ; Pointer to layout.
+
+
+  
+  cody_walking:
+    ; Table of contents:
+    .dw @header, @frame_0, @frame_1, @frame_2, @frame_3
+    @header:
+      .db 3                       ; Max frame.
+      .db TRUE                    ; Looping.
+    @frame_0:
+      .db 10                      ; Duration.
+      .db TRUE                    ; Require vjob?
+      .dw cody_walking_0_blast    ; Pointer to vjob.
+      .db 8                       ; Size.
+      .db 1                       ; Index of first tile.
+      .dw layout_2x4              ; Pointer to layout.
+    @frame_1:
+      .db 10                      
+      .db TRUE                    
+      .dw cody_walking_1_and_3_blast 
+      .db 8                       
+      .db 1                       
+      .dw layout_2x4              
+    @frame_2:
+      .db 10                      
+      .db TRUE                    
+      .dw cody_walking_2_blast 
+      .db 8                       
+      .db 1                       
+      .dw layout_2x4              
+    @frame_3:
+      .db 10                      
+      .db TRUE                    
+      .dw cody_walking_1_and_3_blast 
+      .db 8                       
+      .db 1                       
+      .dw layout_2x4              
+
+  rastan_walking:
+    ; Table of contents:
+    .dw @header, @frame_0, @frame_1
+    @header:
+      .db 1                       ; Max frame.
+      .db TRUE                    ; Looping.
+    @frame_0:
+      .db 9                       ; Duration.
+      .db FALSE                   ; Require vjob?
+      .dw $0000                   ; Pointer to vjob.
+      .db 13                       ; Size.
+      .db 31                      ; Index of first tile.
+      .dw layout_1t_3x4           ; Pointer to layout.
+    @frame_1:
+      .db 9                       ; Duration.
+      .db FALSE                   ; Require vjob?
+      .dw $0000                   ; Pointer to vjob.
+      .db 13                       ; Size.
+      .db 44                      ; Index of first tile.
+      .dw layout_1t_3x4           ; Pointer to layout.
+
+  
+  
+  
+  
+  
+  arthur_clone_1 instanceof actor
+  arthur_clone_2 instanceof actor
+  rastan instanceof actor
+  big_arthur instanceof actor
+  big_arthur_clone_1 instanceof actor
+  arthur_v3 instanceof actor
+  arthur_v4 instanceof actor
+  ;
+  ;cody instanceof actor
+
+    ;INITIALIZE_ACTOR cody, 0, 100, 100
+
+    INITIALIZE_ACTOR arthur_clone_1, 2, 130, 90
+    INITIALIZE_ACTOR arthur_clone_2, 3, 130, 170
+
+    INITIALIZE_ACTOR rastan, 4, 84, 160
+    INITIALIZE_ACTOR big_arthur, 5, 84, 30
+    INITIALIZE_ACTOR big_arthur_clone_1, 6, 170, 180
+
+    INITIALIZE_ACTOR arthur_v3, 7, 180, 220
+
+    INITIALIZE_ACTOR arthur_v4, 8, 180, 100
+
+
+    ld a,2
+    ld hl,rastan_walking
+    call set_animation
+
+    ld a,3
+    ld hl,arthur_standing
+    call set_animation
+
+    ld a,4
+    ld hl,arthur_standing_v4
+    call set_animation
+
+
+    ld a,3
+    ld hl,big_arthur
+    call draw_actor
+    ld a,3
+    ld hl,big_arthur_clone_1
+    call draw_actor
+
+
+    ;ld a,0
+    ;ld hl,cody
+    ;call draw_actor
+
+    ld a,2
+    ld hl,rastan
+    call draw_actor
+
+    ld a,1
+    ld hl,arthur
+    call draw_actor
+  ;  ld a,1
+  ;  ld hl,arthur_clone_1
+  ;  call draw_actor
+
+  .macro TILEBLAST ARGS TILES
+      .db PLAYER_TILE_BANK
+      .dw TILES
+      .dw PLAYER_FIRST_TILE
+      .db MEDIUM_BLAST
+  .endm
+  cody_walking_0_blast:
+    TILEBLAST cody_walking_0_tiles
+  cody_walking_1_and_3_blast:
+    TILEBLAST cody_walking_1_and_3_tiles
+  cody_walking_2_blast:
+    TILEBLAST cody_walking_2_tiles
+
+
+  rastan_walking_0_tiles:
+    .include "bank_2/rastan_walking_0_tiles.asm"
+  rastan_walking_1_tiles:
+    .include "bank_2/rastan_walking_1_tiles.asm"
+
+  arthur_walking_0_tiles:
+    .include "bank_2/arthur_walking_0_tiles.asm"
+  arthur_walking_1_and_3_tiles:
+    .include "bank_2/arthur_walking_1_and_3_tiles.asm"
+  arthur_walking_2_tiles:
+    .include "bank_2/arthur_walking_2_tiles.asm"
+
+  arthur_standing_v4_tiles:
+    .include "bank_2/arthur_standing_v4_tiles.asm"
+
+
+  cody_walking_0_tiles:
+    .include "bank_2/cody_walking_0_tiles.asm"
+  cody_walking_1_and_3_tiles:
+    .include "bank_2/cody_walking_1_and_3_tiles.asm"
+  cody_walking_2_tiles:
+    .include "bank_2/cody_walking_2_tiles.asm"
+
+
+
+
+
+    ;ld a,0
+    ;ld hl,cody_walking
+    ;call set_animation
+
+
+
 ; Vjobs:
 
 
