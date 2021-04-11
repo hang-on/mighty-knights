@@ -159,11 +159,11 @@
 02:8000 demo_palette
 02:8020 demo_palette_end
 02:8020 arthur_standing_tiles
-02:8220 test_background_tiles
-02:82a0 test_background_tiles_end
-02:82a0 test_background_tilemap
-02:88a0 test_background_tilemap_end
-02:88a0 adventure_awaits
+02:8220 mockup_background_tiles
+02:9a00 mockup_background_tiles_end
+02:9a00 mockup_background_tilemap
+02:a000 mockup_background_tilemap_end
+02:a000 adventure_awaits
 
 [definitions]
 00000011 _sizeof_PSGInit
@@ -320,8 +320,8 @@
 00000020 _sizeof_demo_palette
 00000000 _sizeof_demo_palette_end
 00000200 _sizeof_arthur_standing_tiles
-00000080 _sizeof_test_background_tiles
-00000000 _sizeof_test_background_tiles_end
-00000600 _sizeof_test_background_tilemap
-00000000 _sizeof_test_background_tilemap_end
+000017e0 _sizeof_mockup_background_tiles
+00000000 _sizeof_mockup_background_tiles_end
+00000600 _sizeof_mockup_background_tilemap
+00000000 _sizeof_mockup_background_tilemap_end
 00000746 _sizeof_adventure_awaits

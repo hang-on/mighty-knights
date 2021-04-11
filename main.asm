@@ -133,13 +133,13 @@
     .endif
 
     ld a,2
-    ld hl,test_background_tiles
+    ld hl,mockup_background_tiles
     ld de,BACKGROUND_BANK_START
-    ld bc,test_background_tiles_end - test_background_tiles
+    ld bc,mockup_background_tiles_end - mockup_background_tiles
     call load_vram
 
     ld a,2
-    ld hl,test_background_tilemap
+    ld hl,mockup_background_tilemap
     ld de,NAME_TABLE_START
     ld bc,VISIBLE_NAME_TABLE_SIZE
     call load_vram
@@ -147,7 +147,7 @@
 
 
     call initialize_acm
-    INITIALIZE_ACTOR arthur, 0, 130, 50
+    INITIALIZE_ACTOR arthur, 0, 175, 65
 
 
     ld a,0
@@ -216,12 +216,12 @@
   arthur_standing_tiles:
     .include "bank_2/arthur_standing_tiles.asm"
 
-  test_background_tiles:
-    .include "bank_2/test_background_tiles.asm"
-  test_background_tiles_end:    
-  test_background_tilemap:
-  .include "bank_2/test_background_tilemap.asm"
-  test_background_tilemap_end:
+  mockup_background_tiles:
+    .include "bank_2/mockup_background_tiles.asm"
+  mockup_background_tiles_end:    
+  mockup_background_tilemap:
+  .include "bank_2/mockup_background_tilemap.asm"
+  mockup_background_tilemap_end:
   
 
   adventure_awaits:
