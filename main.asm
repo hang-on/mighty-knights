@@ -57,6 +57,7 @@
   big_arthur instanceof actor
   big_arthur_clone_1 instanceof actor
   arthur_v3 instanceof actor
+  arthur_v4 instanceof actor
 
 .ends
 .org 0
@@ -120,7 +121,7 @@
     ;
     call PSGInit
     ld hl,adventure_awaits
-    call PSGPlay
+    ;call PSGPlay
     ;
     call clear_vram
     ld hl,vdp_register_init
@@ -165,6 +166,9 @@
 
     INITIALIZE_ACTOR arthur_v3, 7, 180, 220
 
+    INITIALIZE_ACTOR arthur_v4, 8, 180, 100
+
+
 
     ;ld a,0
     ;ld hl,cody_walking
@@ -184,7 +188,7 @@
     call set_animation
 
     ld a,4
-    ld hl,arthur_standing_v3
+    ld hl,arthur_standing_v4
     call set_animation
 
 
@@ -196,9 +200,9 @@
     call load_vram
 
     ld a,2
-    ld hl,arthur_standing_v3_tiles
+    ld hl,arthur_standing_v4_tiles
     ld de,SPRITE_BANK_START + 71*CHARACTER_SIZE
-    ld bc, 14*CHARACTER_SIZE
+    ld bc, 16*CHARACTER_SIZE
     call load_vram
 
 
@@ -253,7 +257,7 @@
     call process_animations
 
     ld a,4
-    ld hl,arthur_v3
+    ld hl,arthur_v4
     call draw_actor
 
     ld a,3
@@ -331,8 +335,8 @@
   arthur_standing_tiles:
     .include "bank_2/arthur_standing_v2_tiles.asm"
 
-  arthur_standing_v3_tiles:
-    .include "bank_2/arthur_standing_v3_tiles.asm"
+  arthur_standing_v4_tiles:
+    .include "bank_2/arthur_standing_v4_tiles.asm"
 
 
   test_background_tiles:

@@ -6,6 +6,24 @@
   ; ---------------------------------------------------------------------------
   ; Layouts
   ; ---------------------------------------------------------------------------
+    layout_2x5_3x3:
+    .db -56, -12     
+    .db -56, -4      ; XX
+    .db -48, -12     ; XX
+    .db -48, -4      ; XX
+    .db -40, -12     ; XX
+    .db -40, -4      ; XX
+    .db -32, -12     ; XXX
+    .db -32, -4      ; XXX 
+    .db -24, -12
+    .db -24, -4
+    .db -16, -12
+    .db -16, -4
+    .db -16, 4
+    .db -8, -12
+    .db -8, -4
+    .db -8, 4
+  
   layout_2x4:
     ; Y and X offsets to apply to the origin of an actor.
     .db -32, -8     ; XX
@@ -77,7 +95,7 @@
   ; ---------------------------------------------------------------------------
   ; Animation files
   ; ---------------------------------------------------------------------------
-  arthur_standing_v3:
+  arthur_standing_v4:
     ; Table of contents:
     .dw @header, @frame_0
     @header:
@@ -87,9 +105,9 @@
       .db 7                       ; Duration.
       .db FALSE                   ; Require vjob?
       .dw $0000                   ; Pointer to vjob.
-      .db 14                       ; Size.
+      .db 16                       ; Size.
       .db 71                      ; Index of first tile.
-      .dw layout_2m_3x4           ; Pointer to layout.
+      .dw layout_2x5_3x3          ; Pointer to layout.
 
 
   arthur_standing:
