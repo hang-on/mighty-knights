@@ -6,6 +6,24 @@
   ; ---------------------------------------------------------------------------
   ; Layouts
   ; ---------------------------------------------------------------------------
+    arthur_standing_layout:
+    .db -56, -8      
+    .db -48, -8      
+    .db -40, -12     
+    .db -40, -4      
+    .db -32, -12     
+    .db -32, -4       
+    .db -24, -12
+    .db -24, -4
+    .db -16, -12
+    .db -16, -4
+    .db -16, 4
+    .db -8, -12
+    .db -8, -4
+    .db -8, 4
+  
+
+
     layout_2x5_3x3:
     .db -56, -12     
     .db -56, -4      ; XX
@@ -105,9 +123,9 @@
       .db 7                       ; Duration.
       .db FALSE                   ; Require vjob?
       .dw $0000                   ; Pointer to vjob.
-      .db 16                       ; Size.
+      .db 14                       ; Size.
       .db INDEX_OF_PLAYER_FIRST_TILE  ; Index of first tile.
-      .dw layout_2x5_3x3          ; Pointer to layout.
+      .dw arthur_standing_layout          ; Pointer to layout.
 
 
 .ends

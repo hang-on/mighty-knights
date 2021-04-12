@@ -157,7 +157,7 @@
     ld a,2
     ld hl,arthur_standing_tiles
     ld de,ADDRESS_OF_PLAYER_FIRST_TILE
-    ld bc, 16*CHARACTER_SIZE
+    ld bc, 14*CHARACTER_SIZE
     call load_vram
 
     ;
