@@ -46,6 +46,8 @@
   vblank_counter db
   hline_counter db
   pause_flag db
+  input_ports dw
+
   
   critical_routines_finish_at db
 
@@ -154,11 +156,28 @@
     ld hl,arthur_standing
     call set_animation
 
+    ld a,1
+    ld hl,arthur_walking
+    call set_animation
+
     ld a,2
     ld hl,arthur_standing_tiles
     ld de,ADDRESS_OF_PLAYER_FIRST_TILE
     ld bc, 14*CHARACTER_SIZE
     call load_vram
+
+    ld a,2
+    ld hl,arthur_walking_0_tiles
+    ld de,$0200
+    ld bc, 13*CHARACTER_SIZE
+    call load_vram
+
+    ld a,2
+    ld hl,arthur_walking_1_tiles
+    ld de,$0400
+    ld bc, 14*CHARACTER_SIZE
+    call load_vram
+
 
     ;
     ei
@@ -191,9 +210,21 @@
     call PSGSFXFrame
     call refresh_sat_handler
 
+    ; Set input_ports (word) to mirror current state of ports $dc and $dd.
+    in a,(INPUT_PORT_1)
+    ld (input_ports),a
+    in a,(INPUT_PORT_2)
+    ld (input_ports+1),a
+
     call process_animations
 
-    ld a,0
+    call is_dpad_pressed
+    jp c,+
+      ld a,0
+      jp ++
+    +:
+      ld a,1
+    ++:
     ld hl,arthur
     call draw_actor
 
@@ -214,7 +245,12 @@
   .equ INDEX_OF_PLAYER_FIRST_TILE ADDRESS_OF_PLAYER_FIRST_TILE/CHARACTER_SIZE
 
   arthur_standing_tiles:
-    .include "bank_2/arthur_standing_tiles.asm"
+    .include "bank_2/arthur/standing/arthur_standing_tiles.asm"
+  
+  arthur_walking_0_tiles:
+    .include "bank_2/arthur/walking/arthur_walking_0_tiles_optm.asm"
+  arthur_walking_1_tiles:
+    .include "bank_2/arthur/walking/arthur_walking_1_tiles_optm.asm"
 
   mockup_background_tiles:
     .include "bank_2/mockup_background_tiles.asm"

@@ -300,6 +300,22 @@
     ld l,a
   ret
 
+  is_button_1_pressed:
+    ld a,(input_ports)
+    and %00010000
+    ret nz            ; Return with carry flag reset
+    scf
+  ret                 ; Return with carry flag set.
+
+  is_dpad_pressed:
+    ld a,(input_ports)
+    and %00001111   ; Isolate the dpad bits.
+    cpl             ; Invert bits; now 1 = keypress!
+    and %00001111   ; Get rid of garbage from cpl in last four bits.
+    cp 0            ; Now, is any dpad key preseed?
+    ret z           ; No, then return with carry flag reset (by the AND).
+    scf             ; Yes, then set carry flag and...
+  ret               ; Return with carry flag set.
 
   load_cram:
     ; Consecutively load a number of color values into color ram (CRAM), given a
