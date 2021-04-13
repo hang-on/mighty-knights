@@ -178,6 +178,12 @@
     ld bc, 14*CHARACTER_SIZE
     call load_vram
 
+    ld a,2
+    ld hl,arthur_walking_2_tiles
+    ld de,$0600
+    ld bc, 12*CHARACTER_SIZE
+    call load_vram
+
 
     ;
     ei
@@ -251,6 +257,8 @@
     .include "bank_2/arthur/walking/arthur_walking_0_tiles_optm.asm"
   arthur_walking_1_tiles:
     .include "bank_2/arthur/walking/arthur_walking_1_tiles_optm.asm"
+  arthur_walking_2_tiles:
+    .include "bank_2/arthur/walking/arthur_walking_2_tiles_optm.asm"
 
   mockup_background_tiles:
     .include "bank_2/mockup_background_tiles.asm"

@@ -6,6 +6,20 @@
   ; ---------------------------------------------------------------------------
   ; Layouts
   ; ---------------------------------------------------------------------------
+    arthur_walking_layout_b:
+    .db -56, -7      
+    .db -48, -7
+    .db -40, -11     
+    .db -40, -3     
+    .db -32, -11     
+    .db -32, -3       
+    .db -24, -11
+    .db -24, -3
+    .db -16, -11
+    .db -16, -3
+    .db -8, -11
+    .db -8, -3
+
     arthur_walking_layout:
     .db -56, -11      
     .db -48, -11
@@ -161,24 +175,31 @@
 
   arthur_walking:
     ; Table of contents:
-    .dw @header, @frame_0, @frame_1
+    .dw @header, @frame_0, @frame_1, @frame_2
     @header:
-      .db 1                       ; Max frame.
+      .db 2                       ; Max frame.
       .db TRUE                    ; Looping.
     @frame_0:
-      .db 20                       ; Duration.
+      .db 8                       ; Duration.
       .db FALSE                   ; Require vjob?
       .dw $0000                   ; Pointer to vjob.
       .db 13                       ; Size.
       .db 16                        ; Index of first tile.
       .dw arthur_walking_layout          ; Pointer to layout.
     @frame_1:
-      .db 20                       ; Duration.
+      .db 8                       ; Duration.
       .db FALSE                   ; Require vjob?
       .dw $0000                   ; Pointer to vjob.
       .db 14                       ; Size.
       .db 32                        ; Index of first tile.
       .dw arthur_walking_layout_a          ; Pointer to layout.
+    @frame_2:
+      .db 8                       ; Duration.
+      .db FALSE                   ; Require vjob?
+      .dw $0000                   ; Pointer to vjob.
+      .db 12                       ; Size.
+      .db 48                        ; Index of first tile.
+      .dw arthur_walking_layout_b          ; Pointer to layout.
 
 
 
