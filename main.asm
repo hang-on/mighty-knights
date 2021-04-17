@@ -146,51 +146,13 @@
     ld bc,VISIBLE_NAME_TABLE_SIZE
     call load_vram
 
-
-
     call initialize_acm
     INITIALIZE_ACTOR arthur, 0, 175, 65
 
 
     ld a,0
-    ld hl,arthur_standing
-    call set_animation
-
-    ld a,1
     ld hl,arthur_walking
     call set_animation
-
-    ld a,2
-    ld hl,arthur_standing_tiles
-    ld de,ADDRESS_OF_PLAYER_FIRST_TILE
-    ld bc, 14*CHARACTER_SIZE
-    ;call load_vram
-
-    ld a,2
-    ld hl,arthur_walking_0_tiles
-    ld de,$0200
-    ld bc, 13*CHARACTER_SIZE
-    call load_vram
-
-    ld a,2
-    ld hl,arthur_walking_1_tiles
-    ld de,$0400
-    ld bc, 14*CHARACTER_SIZE
-    call load_vram
-
-    ld a,2
-    ld hl,arthur_walking_2_tiles
-    ld de,$0600
-    ld bc, 12*CHARACTER_SIZE
-    call load_vram
-
-    ld a,2
-    ld hl,arthur_walking_3_tiles
-    ld de,$0800
-    ld bc, 14*CHARACTER_SIZE
-    call load_vram
-
-
 
     ;
     ei
@@ -231,13 +193,7 @@
 
     call process_animations
 
-    call is_dpad_pressed
-    jp c,+
-      ld a,0
-      jp ++
-    +:
-      ld a,1
-    ++:
+    ld a,0
     ld hl,arthur
     call draw_actor
 
@@ -268,6 +224,16 @@
   .endm
   arthur_standing_blast:
     TILEBLAST arthur_standing_tiles
+  arthur_walking_0_blast:
+    TILEBLAST arthur_walking_0_tiles
+  arthur_walking_1_blast:
+    TILEBLAST arthur_walking_1_tiles
+  arthur_walking_2_blast:
+    TILEBLAST arthur_walking_2_tiles
+  arthur_walking_3_blast:
+    TILEBLAST arthur_walking_3_tiles
+
+
 
   arthur_walking_0_tiles:
     .include "bank_2/arthur/walking/arthur_walking_0_tiles_optm.asm"

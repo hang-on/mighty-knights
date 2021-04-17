@@ -198,31 +198,31 @@
       .db TRUE                    ; Looping.
     @frame_0:
       .db 8                       ; Duration.
-      .db FALSE                   ; Require vjob?
-      .dw $0000                   ; Pointer to vjob.
+      .db TRUE                   ; Require vjob?
+      .dw arthur_walking_0_blast                   ; Pointer to vjob.
       .db 13                       ; Size.
-      .db 16                        ; Index of first tile.
+      .db INDEX_OF_PLAYER_FIRST_TILE                        ; Index of first tile.
       .dw arthur_walking_layout          ; Pointer to layout.
     @frame_1:
       .db 8                       ; Duration.
-      .db FALSE                   ; Require vjob?
-      .dw $0000                   ; Pointer to vjob.
+      .db TRUE                   ; Require vjob?
+      .dw arthur_walking_1_blast                   ; Pointer to vjob.
       .db 14                       ; Size.
-      .db 32                        ; Index of first tile.
+      .db INDEX_OF_PLAYER_FIRST_TILE                        ; Index of first tile.
       .dw arthur_walking_layout_a          ; Pointer to layout.
     @frame_2:
       .db 8                       ; Duration.
-      .db FALSE                   ; Require vjob?
-      .dw $0000                   ; Pointer to vjob.
+      .db TRUE                   ; Require vjob?
+      .dw arthur_walking_2_blast                   ; Pointer to vjob.
       .db 12                       ; Size.
-      .db 48                        ; Index of first tile.
+      .db INDEX_OF_PLAYER_FIRST_TILE                        ; Index of first tile.
       .dw arthur_walking_layout_b          ; Pointer to layout.
     @frame_3:
       .db 8                       ; Duration.
-      .db FALSE                   ; Require vjob?
-      .dw $0000                   ; Pointer to vjob.
+      .db TRUE                   ; Require vjob?
+      .dw arthur_walking_3_blast                   ; Pointer to vjob.
       .db 14                       ; Size.
-      .db 64                        ; Index of first tile.
+      .db INDEX_OF_PLAYER_FIRST_TILE                        ; Index of first tile.
       .dw arthur_walking_layout_c          ; Pointer to layout.
 
 
