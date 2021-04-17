@@ -193,7 +193,7 @@
 
     call process_animations
 
-    call is_dpad_pressed
+    call is_right_pressed
     jp nc,+
       ld hl,arthur
       call get_actor_state
@@ -217,6 +217,26 @@
       call set_animation
 
     ++:
+
+    .equ ARTHUR_HSPEED 1
+    ld hl,arthur
+    call get_actor_state
+    and ACTOR_WALKING
+    jp z,+
+      ld a,ARTHUR_HSPEED
+      ld hl,arthur
+      call set_actor_hspeed
+      jp ++
+    +:
+      ld a,0
+      ld hl,arthur
+      call set_actor_hspeed
+      jp ++
+    ++:
+
+
+    ld hl,arthur
+    call move_actor
 
     ld a,0
     ld hl,arthur

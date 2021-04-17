@@ -317,6 +317,13 @@
     scf             ; Yes, then set carry flag and...
   ret               ; Return with carry flag set.
 
+  is_right_pressed:
+    ld a,(input_ports)
+    and %00001000
+    ret nz          ; Return with carry flag reset
+    scf
+  ret               ; Return with carry flag set.
+
   load_cram:
     ; Consecutively load a number of color values into color ram (CRAM), given a
     ; destination color to write the first value.

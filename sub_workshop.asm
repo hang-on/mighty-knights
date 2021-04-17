@@ -5,8 +5,8 @@
     y db
     x db
     state db         ; A bitfield of tags for states
-    xspeed db
-    yspeed db
+    hspeed db
+    vspeed db
   .endst
 
 ; State format:
@@ -57,6 +57,28 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  move_actor:
+    ; IN: Actor in HL
+    push hl
+    pop ix
+    ld a,(ix+actor.hspeed)
+    add a,(ix+actor.x)
+    ld (ix+actor.x),a
+    ld a,(ix+actor.vspeed)
+    add a,(ix+actor.y)
+    ld (ix+actor.y),a
+  ret
+
+
+  set_actor_hspeed:
+    ; IN: Actor in HL
+    ld de,actor.hspeed
+    add hl,de
+    ld (hl),a
+  ret
+
+
+
   get_actor_state:
     ; IN: Actor in HL
     ; OUT: State byte in A.
