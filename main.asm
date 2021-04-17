@@ -193,31 +193,30 @@
 
     call process_animations
 
+    ; Set Arthur's state depending on controller input.
     call is_right_pressed
     jp nc,+
       ld hl,arthur
       call get_actor_state
       and ACTOR_WALKING
       jp nz,++
-      
-      ld a, ACTOR_WALKING
-      ld hl,arthur
-      call set_actor_state
-      ld a,0
-      ld hl,arthur_walking
-      call set_animation
+        ld a, ACTOR_WALKING
+        ld hl,arthur
+        call set_actor_state
+        ld a,0
+        ld hl,arthur_walking
+        call set_animation
       jp ++
     +:
       ld a, ACTOR_WALKING
       ld hl,arthur
       call reset_actor_state
-
       ld a,0
       ld hl,arthur_standing
       call set_animation
-
     ++:
 
+    ; Set state-dependent speed and move Arthur.
     .equ ARTHUR_HSPEED 1
     ld hl,arthur
     call get_actor_state
@@ -231,10 +230,7 @@
       ld a,0
       ld hl,arthur
       call set_actor_hspeed
-      jp ++
     ++:
-
-
     ld hl,arthur
     call move_actor
 

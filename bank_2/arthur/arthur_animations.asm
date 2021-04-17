@@ -53,28 +53,28 @@ arthur_animations:
       .db 3                           ; Max frame.
       .db TRUE                        ; Looping.
     @frame_0:
-      .db 8                           ; Duration.
+      .db 7                           ; Duration.
       .db TRUE                        ; Require tileblast?
       .dw arthur_walking_0_blast      ; Pointer to tileblast.
       .db 13                          ; Size.
       .db INDEX_OF_PLAYER_FIRST_TILE  ; Index of first tile.
       .dw arthur_walking_layout_0     ; Pointer to layout.
     @frame_1:
-      .db 9                       
+      .db 8                       
       .db TRUE                   
       .dw arthur_walking_1_blast                   
       .db 14                       
       .db INDEX_OF_PLAYER_FIRST_TILE                        
       .dw arthur_walking_layout_1          
     @frame_2:
-      .db 8                       
+      .db 7                       
       .db TRUE                   
       .dw arthur_walking_2_blast                   
       .db 12                       
       .db INDEX_OF_PLAYER_FIRST_TILE                        
       .dw arthur_walking_layout_2          
     @frame_3:
-      .db 9                       
+      .db 8                       
       .db TRUE                   
       .dw arthur_walking_3_blast                   
       .db 14                       
