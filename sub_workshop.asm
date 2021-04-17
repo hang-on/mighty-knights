@@ -21,6 +21,7 @@
 ;  `-------- (reserved)
 
   .equ ACTOR_WALKING %00000010
+  .equ ACTOR_FACING_LEFT %00000001
 
 
   .macro INITIALIZE_ACTOR
@@ -102,7 +103,8 @@
     ; IN: Actor in HL
     ; A: Byte containing bits to be reset
     ; OUT: A = updated states.
-    xor a
+    ld b,%11111111
+    xor b
     ld b,a
     ld de,actor.state
     add hl,de

@@ -203,6 +203,9 @@
         ld a, ACTOR_WALKING
         ld hl,arthur
         call set_actor_state
+        ld a, ACTOR_FACING_LEFT
+        ld hl,arthur
+        call reset_actor_state
         ld a,0
         ld hl,arthur_walking
         call set_animation
