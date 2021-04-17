@@ -152,6 +152,7 @@
 00:1109 main_loop
 02:8000 demo_palette
 02:8020 demo_palette_end
+02:8020 arthur_animations
 02:8020 arthur_standing
 02:8024 arthur_standing@header
 02:8026 arthur_standing@frame_0
@@ -331,6 +332,7 @@
 0000000b _sizeof_vdp_register_init
 00000030 _sizeof_main_loop
 00000020 _sizeof_demo_palette
+00000000 _sizeof_arthur_animations
 00000000 _sizeof_arthur_standing
 0000000e _sizeof_demo_palette_end
 00000006 _sizeof_arthur_standing_blast
