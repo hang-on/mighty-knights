@@ -184,8 +184,8 @@
       .db FALSE                    ; Looping.
     @frame_0:
       .db 7                       ; Duration.
-      .db FALSE                   ; Require vjob?
-      .dw $0000                   ; Pointer to vjob.
+      .db TRUE                   ; Require tileblast?
+      .dw arthur_standing_blast   ; Pointer to tileblast.
       .db 14                       ; Size.
       .db INDEX_OF_PLAYER_FIRST_TILE  ; Index of first tile.
       .dw arthur_standing_layout          ; Pointer to layout.
@@ -734,7 +734,7 @@
       +:
       cp XLARGE_BLAST
       jp nz,++
-        call large_blast
+        call xlarge_blast
       ++:
     .endr
     _tileblasting_finished:

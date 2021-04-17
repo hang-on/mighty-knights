@@ -164,7 +164,7 @@
     ld hl,arthur_standing_tiles
     ld de,ADDRESS_OF_PLAYER_FIRST_TILE
     ld bc, 14*CHARACTER_SIZE
-    call load_vram
+    ;call load_vram
 
     ld a,2
     ld hl,arthur_walking_0_tiles
@@ -260,6 +260,15 @@
   arthur_standing_tiles:
     .include "bank_2/arthur/standing/arthur_standing_tiles.asm"
   
+  .macro TILEBLAST ARGS TILES
+      .db PLAYER_TILE_BANK
+      .dw TILES
+      .dw ADDRESS_OF_PLAYER_FIRST_TILE
+      .db XLARGE_BLAST
+  .endm
+  arthur_standing_blast:
+    TILEBLAST arthur_standing_tiles
+
   arthur_walking_0_tiles:
     .include "bank_2/arthur/walking/arthur_walking_0_tiles_optm.asm"
   arthur_walking_1_tiles:
