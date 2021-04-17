@@ -23,11 +23,11 @@
   .macro INITIALIZE_ACTOR
     ld hl,init_data_\@
     ld de,\1
-    ld bc,3
+    ld bc,4
     ldir
     jp +
       init_data_\@:
-        .db \2 \3 \4 
+        .db \2 \3 \4 0
     +:
   .endm
 
@@ -54,7 +54,39 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
-  
+  get_actor_state:
+    ; IN: Actor in HL
+    ; OUT: State byte in A.
+    ld de,actor.state
+    add hl,de
+    ld a,(hl)
+  ret
+
+  set_actor_state:
+    ; IN: Actor in HL
+    ; A: Byte containing bits to be set
+    ; OUT: A = updated states.
+    ld de,actor.state
+    add hl,de
+    ld b,(hl)
+    or b
+    ld (hl),a
+  ret
+
+  reset_actor_state:
+    ; IN: Actor in HL
+    ; A: Byte containing bits to be set
+    ; OUT: A = updated states.
+    ld de,actor.state
+    add hl,de
+    ld b,(hl)
+    and b
+    ld (hl),a
+  ret
+
+
+
+
   draw_actor:
     ; An actor can take different forms depending on which animation it is
     ; linked with. This is set (and thus can vary) on a frame-by-frame basis.

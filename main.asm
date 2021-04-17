@@ -151,7 +151,7 @@
 
 
     ld a,0
-    ld hl,arthur_walking
+    ld hl,arthur_standing
     call set_animation
 
     ;
@@ -192,6 +192,26 @@
     ld (input_ports+1),a
 
     call process_animations
+
+    call is_dpad_pressed
+    jp nc,+
+      ld hl,arthur
+      call get_actor_state
+      and %00000010
+      jp nz,++
+      
+      ld a, %00000010
+      ld hl,arthur
+      call set_actor_state
+      ld a,0
+      ld hl,arthur_walking
+      call set_animation
+      jp ++
+    +:
+      ld a, %00000010
+      ld hl,arthur
+      call reset_actor_state
+    ++:
 
     ld a,0
     ld hl,arthur
