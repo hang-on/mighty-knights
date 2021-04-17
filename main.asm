@@ -177,7 +177,7 @@
     call blast_tiles
     
     ld hl,critical_routines_finish_at
-    call get_vcounter
+    call save_vcounter
     ;
     ; -------------------------------------------------------------------------
     ; Begin general updating (UPDATE).

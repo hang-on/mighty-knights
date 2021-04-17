@@ -417,6 +417,14 @@
 
   ret
 
+  save_vcounter:
+    ; Read the vcounter port and save it's value in a variable and in A.
+    ; IN: HL = Pointer to variable in RAM.
+    ; OUT: Value of vcounter port in A.
+    in a,V_COUNTER_PORT
+    ld (hl),a
+  ret
+
 
   setup_vram_write:
     ; HL = Address in vram

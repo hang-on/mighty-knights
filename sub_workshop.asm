@@ -4,7 +4,21 @@
     id db
     y db
     x db
+    state db         ; A bitfield of tags for states
   .endst
+
+; State format:
+;  00000000
+;  |||||||`- is_facing_left
+;  ||||||`-- is_walking
+;  |||||`--- is_jumping
+;  ||||`---- is_hurting
+;  |||`----- is_attacking
+;  ||`------ is_killed
+;  |`------- (reserved)
+;  `-------- (reserved)
+
+
 
   .macro INITIALIZE_ACTOR
     ld hl,init_data_\@
@@ -40,14 +54,6 @@
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
-
-  get_vcounter:
-    ; Read the vcounter port and store it's value in a variable and in A.
-    ; IN: HL = Pointer to variable in RAM.
-    ; OUT: Value of vcounter port in A.
-    in a,V_COUNTER_PORT
-    ld (hl),a
-  ret
   
   draw_actor:
     ; An actor can take different forms depending on which animation it is
