@@ -76,11 +76,13 @@
 
   reset_actor_state:
     ; IN: Actor in HL
-    ; A: Byte containing bits to be set
+    ; A: Byte containing bits to be reset
     ; OUT: A = updated states.
+    xor a
+    ld b,a
     ld de,actor.state
     add hl,de
-    ld b,(hl)
+    ld a,(hl)
     and b
     ld (hl),a
   ret
