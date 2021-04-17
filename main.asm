@@ -209,41 +209,7 @@
     .db $23 $10 $12 $18 $06 $15 $2A $3F $13 $0B $0F $0C $38 $26 $27 $2F
     demo_palette_end:
 
-  .equ PLAYER_TILE_BANK 2
-  .equ ADDRESS_OF_PLAYER_FIRST_TILE SPRITE_BANK_START + CHARACTER_SIZE
-  .equ INDEX_OF_PLAYER_FIRST_TILE ADDRESS_OF_PLAYER_FIRST_TILE/CHARACTER_SIZE
-
-  arthur_standing_tiles:
-    .include "bank_2/arthur/standing/arthur_standing_tiles.asm"
-  
-  .macro TILEBLAST ARGS TILES
-      .db PLAYER_TILE_BANK
-      .dw TILES
-      .dw ADDRESS_OF_PLAYER_FIRST_TILE
-      .db XLARGE_BLAST
-  .endm
-  arthur_standing_blast:
-    TILEBLAST arthur_standing_tiles
-  arthur_walking_0_blast:
-    TILEBLAST arthur_walking_0_tiles
-  arthur_walking_1_blast:
-    TILEBLAST arthur_walking_1_tiles
-  arthur_walking_2_blast:
-    TILEBLAST arthur_walking_2_tiles
-  arthur_walking_3_blast:
-    TILEBLAST arthur_walking_3_tiles
-
-
-
-  arthur_walking_0_tiles:
-    .include "bank_2/arthur/walking/arthur_walking_0_tiles_optm.asm"
-  arthur_walking_1_tiles:
-    .include "bank_2/arthur/walking/arthur_walking_1_tiles_optm.asm"
-  arthur_walking_2_tiles:
-    .include "bank_2/arthur/walking/arthur_walking_2_tiles_optm.asm"
-  arthur_walking_3_tiles:
-    .include "bank_2/arthur/walking/arthur_walking_3_tiles_optm.asm"
-
+  .include "bank_2/arthur/arthur_animations.asm"
 
   mockup_background_tiles:
     .include "bank_2/mockup_background_tiles.asm"
@@ -252,7 +218,6 @@
   .include "bank_2/mockup_background_tilemap.asm"
   mockup_background_tilemap_end:
   
-
   adventure_awaits:
     .incbin "adventure_awaits_compr.psg"
 
