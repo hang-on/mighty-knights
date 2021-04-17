@@ -5,6 +5,8 @@
     y db
     x db
     state db         ; A bitfield of tags for states
+    xspeed db
+    yspeed db
   .endst
 
 ; State format:
@@ -24,11 +26,11 @@
   .macro INITIALIZE_ACTOR
     ld hl,init_data_\@
     ld de,\1
-    ld bc,4
+    ld bc,6
     ldir
     jp +
       init_data_\@:
-        .db \2 \3 \4 0
+        .db \2 \3 \4 0 0 0
     +:
   .endm
 
