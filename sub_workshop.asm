@@ -18,6 +18,7 @@
 ;  |`------- (reserved)
 ;  `-------- (reserved)
 
+  .equ ACTOR_WALKING %00000010
 
 
   .macro INITIALIZE_ACTOR

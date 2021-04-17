@@ -197,10 +197,10 @@
     jp nc,+
       ld hl,arthur
       call get_actor_state
-      and %00000010
+      and ACTOR_WALKING
       jp nz,++
       
-      ld a, %00000010
+      ld a, ACTOR_WALKING
       ld hl,arthur
       call set_actor_state
       ld a,0
@@ -208,7 +208,7 @@
       call set_animation
       jp ++
     +:
-      ld a, %00000010
+      ld a, ACTOR_WALKING
       ld hl,arthur
       call reset_actor_state
     ++:
