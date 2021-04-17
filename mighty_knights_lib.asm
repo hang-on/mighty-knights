@@ -317,6 +317,13 @@
     scf             ; Yes, then set carry flag and...
   ret               ; Return with carry flag set.
 
+  is_left_pressed:
+    ld a,(input_ports)
+    and %00000100
+    ret nz          ; Return with carry flag reset
+    scf
+  ret               ; Return with carry flag set.
+
   is_right_pressed:
     ld a,(input_ports)
     and %00001000

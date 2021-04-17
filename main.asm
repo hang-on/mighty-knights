@@ -193,6 +193,9 @@
 
     call process_animations
 
+    ; FIXME: This should be states, cycling through
+    ; the bitfield in the state byte.
+
     ; Set Arthur's state depending on controller input.
     call is_right_pressed
     jp nc,+
@@ -206,6 +209,21 @@
         ld a, ACTOR_FACING_LEFT
         ld hl,arthur
         call reset_actor_state
+        ld a,0
+        ld hl,arthur_walking
+        call set_animation
+      jp ++
+    +:
+    call is_left_pressed
+    jp nc,+
+      ld hl,arthur
+      call get_actor_state
+      and ACTOR_WALKING
+      jp nz,++
+        ld a, ACTOR_WALKING
+        or ACTOR_FACING_LEFT
+        ld hl,arthur
+        call set_actor_state
         ld a,0
         ld hl,arthur_walking
         call set_animation
