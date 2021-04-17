@@ -113,9 +113,6 @@
     ld (hl),a
   ret
 
-
-
-
   draw_actor:
     ; An actor can take different forms depending on which animation it is
     ; linked with. This is set (and thus can vary) on a frame-by-frame basis.

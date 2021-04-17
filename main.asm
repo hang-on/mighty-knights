@@ -224,16 +224,31 @@
     ld hl,arthur
     call get_actor_state
     and ACTOR_WALKING
-    jp z,+
-      ld a,ARTHUR_HSPEED
+    jp z,arthur_not_walking
+      ; Arthur is walking...
       ld hl,arthur
-      call set_actor_hspeed
-      jp ++
-    +:
+      call get_actor_state
+      and ACTOR_FACING_LEFT
+      jp z,+
+        ; Facing left...
+        ld a,ARTHUR_HSPEED
+        neg
+        ld hl,arthur
+        call set_actor_hspeed
+        jp end_arthur_speed
+      +:
+        ; Facing right
+        ld a,ARTHUR_HSPEED
+        ld hl,arthur
+        call set_actor_hspeed
+        jp end_arthur_speed
+
+    arthur_not_walking:
       ld a,0
       ld hl,arthur
       call set_actor_hspeed
-    ++:
+    end_arthur_speed:
+    
     ld hl,arthur
     call move_actor
 
