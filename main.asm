@@ -197,6 +197,7 @@
     ; the bitfield in the state byte.
 
     ; Set Arthur's state depending on controller input.
+    ; FIXME: Duplicate code follows!
     call is_right_pressed
     jp nc,+
       ld hl,arthur
