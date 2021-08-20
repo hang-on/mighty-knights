@@ -9,6 +9,9 @@
     vspeed db
   .endst
 
+; FIXME: Too compact! Divide and conquer. Multiple states on each object,
+; direction (face - left, right), movement (body/legs - walking, jumping,
+; idle), attacking (weapon - idle, slash) 
 ; State format:
 ;  00000000
 ;  |||||||`- is_facing_left
