@@ -11,7 +11,8 @@
 
 ; FIXME: Too compact! Divide and conquer. Multiple states on each object,
 ; direction (face - left, right), movement (body/legs - walking, jumping,
-; idle), attacking (weapon - idle, slash) 
+; idle), attacking (weapon - idle, slash), health (hurting - no, yes).
+; + 2 reserved states. = 6 state-based actor properties.  
 ; State format:
 ;  00000000
 ;  |||||||`- is_facing_left
