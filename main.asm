@@ -46,13 +46,13 @@
   vblank_counter db
   hline_counter db
   pause_flag db
+  input_ports dw
+
   
   critical_routines_finish_at db
-  ;
-  cody instanceof actor
+
   arthur instanceof actor
-  arthur_clone_1 instanceof actor
-  arthur_clone_2 instanceof actor
+
 .ends
 .org 0
 .bank 0 slot 0
@@ -134,26 +134,26 @@
       jp test_bench
     .endif
 
-    call initialize_vjobs
-    call initialize_acm
-    INITIALIZE_ACTOR cody, 0, 100, 100
-    INITIALIZE_ACTOR arthur, 1, 130, 50
-    INITIALIZE_ACTOR arthur_clone_1, 2, 130, 90
-    INITIALIZE_ACTOR arthur_clone_2, 3, 130, 170
-
-    ld a,0
-    ld hl,cody_walking
-    call set_animation
-
-    ld a,1
-    ld hl,arthur_walking
-    call set_animation
+    ld a,2
+    ld hl,mockup_background_tiles
+    ld de,BACKGROUND_BANK_START
+    ld bc,mockup_background_tiles_end - mockup_background_tiles
+    call load_vram
 
     ld a,2
-    ld hl,arthur_walking_0_tiles
-    ld de,10*CHARACTER_SIZE
-    ld bc, 7*CHARACTER_SIZE*3
+    ld hl,mockup_background_tilemap
+    ld de,NAME_TABLE_START
+    ld bc,VISIBLE_NAME_TABLE_SIZE
     call load_vram
+
+    call initialize_acm
+    INITIALIZE_ACTOR arthur, 0, 175, 65
+
+
+    ld a,0
+    ld hl,arthur_standing
+    call set_animation
+
     ;
     ei
     halt
@@ -177,7 +177,7 @@
     call blast_tiles
     
     ld hl,critical_routines_finish_at
-    call get_vcounter
+    call save_vcounter
     ;
     ; -------------------------------------------------------------------------
     ; Begin general updating (UPDATE).
@@ -185,20 +185,94 @@
     call PSGSFXFrame
     call refresh_sat_handler
 
+    ; Set input_ports (word) to mirror current state of ports $dc and $dd.
+    in a,(INPUT_PORT_1)
+    ld (input_ports),a
+    in a,(INPUT_PORT_2)
+    ld (input_ports+1),a
+
     call process_animations
 
-    ld a,0
-    ld hl,cody
-    call draw_actor
+    ; FIXME: This should be states, cycling through
+    ; the bitfield in the state byte.
 
-    ld a,1
+    ; Set Arthur's state depending on controller input.
+    ; FIXME: Duplicate code follows!
+    call is_right_pressed
+    jp nc,+
+      ld hl,arthur
+      call get_actor_state
+      and ACTOR_WALKING
+      jp nz,++
+        ld a, ACTOR_WALKING
+        ld hl,arthur
+        call set_actor_state
+        ld a, ACTOR_FACING_LEFT
+        ld hl,arthur
+        call reset_actor_state
+        ld a,0
+        ld hl,arthur_walking
+        call set_animation
+      jp ++
+    +:
+    call is_left_pressed
+    jp nc,+
+      ld hl,arthur
+      call get_actor_state
+      and ACTOR_WALKING
+      jp nz,++
+        ld a, ACTOR_WALKING
+        or ACTOR_FACING_LEFT
+        ld hl,arthur
+        call set_actor_state
+        ld a,0
+        ld hl,arthur_walking
+        call set_animation
+      jp ++
+    +:
+      ld a, ACTOR_WALKING
+      ld hl,arthur
+      call reset_actor_state
+      ld a,0
+      ld hl,arthur_standing
+      call set_animation
+    ++:
+
+    ; Set state-dependent speed and move Arthur.
+    .equ ARTHUR_HSPEED 1
     ld hl,arthur
-    call draw_actor
-    ld a,1
-    ld hl,arthur_clone_1
-    call draw_actor
-    ld a,1
-    ld hl,arthur_clone_2
+    call get_actor_state
+    and ACTOR_WALKING
+    jp z,arthur_not_walking
+      ; Arthur is walking...
+      ld hl,arthur
+      call get_actor_state
+      and ACTOR_FACING_LEFT
+      jp z,+
+        ; Facing left...
+        ld a,ARTHUR_HSPEED
+        neg
+        ld hl,arthur
+        call set_actor_hspeed
+        jp end_arthur_speed
+      +:
+        ; Facing right
+        ld a,ARTHUR_HSPEED
+        ld hl,arthur
+        call set_actor_hspeed
+        jp end_arthur_speed
+
+    arthur_not_walking:
+      ld a,0
+      ld hl,arthur
+      call set_actor_hspeed
+    end_arthur_speed:
+    
+    ld hl,arthur
+    call move_actor
+
+    ld a,0
+    ld hl,arthur
     call draw_actor
 
   jp main_loop
@@ -213,53 +287,15 @@
     .db $23 $10 $12 $18 $06 $15 $2A $3F $13 $0B $0F $0C $38 $26 $27 $2F
     demo_palette_end:
 
-  cody_walking_0_tiles:
-    .include "bank_2/cody_walking_0_tiles.asm"
-  cody_walking_1_and_3_tiles:
-    .include "bank_2/cody_walking_1_and_3_tiles.asm"
-  cody_walking_2_tiles:
-    .include "bank_2/cody_walking_2_tiles.asm"
+  .include "bank_2/arthur/arthur_animations.asm"
 
-  .equ PLAYER_TILE_BANK 2
-  .equ PLAYER_FIRST_TILE SPRITE_BANK_START + CHARACTER_SIZE
+  mockup_background_tiles:
+    .include "bank_2/mockup_background_tiles.asm"
+  mockup_background_tiles_end:    
+  mockup_background_tilemap:
+  .include "bank_2/mockup_background_tilemap.asm"
+  mockup_background_tilemap_end:
   
-  .macro TILEBLAST ARGS TILES
-      .db PLAYER_TILE_BANK
-      .dw TILES
-      .dw PLAYER_FIRST_TILE
-      .db MEDIUM_BLAST
-  .endm
-  cody_walking_0_blast:
-    TILEBLAST cody_walking_0_tiles
-  cody_walking_1_and_3_blast:
-    TILEBLAST cody_walking_1_and_3_tiles
-  cody_walking_2_blast:
-    TILEBLAST cody_walking_2_tiles
-
-
-  arthur_walking_0_tiles:
-    .include "bank_2/arthur_walking_0_tiles.asm"
-  arthur_walking_1_and_3_tiles:
-    .include "bank_2/arthur_walking_1_and_3_tiles.asm"
-  arthur_walking_2_tiles:
-    .include "bank_2/arthur_walking_2_tiles.asm"
-
-
-  ; Mockup background of Village on Fire:
-  .include "mockup_background_tilemap.asm"
-    mockup_tilemap_job:
-      .db 2
-      .dw mockup_background_tilemap
-      .dw VISIBLE_NAME_TABLE_SIZE
-      .dw NAME_TABLE_START
-
-  .include "mockup_background_tiles.asm"
-    mockup_tiles_job:
-      .db 2
-      .dw mockup_background_tiles
-      .dw 96*CHARACTER_SIZE
-      .dw BACKGROUND_BANK_START
-
   adventure_awaits:
     .incbin "adventure_awaits_compr.psg"
 

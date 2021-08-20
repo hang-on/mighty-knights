@@ -4,16 +4,37 @@
     id db
     y db
     x db
+    state db         ; A bitfield of tags for states
+    hspeed db
+    vspeed db
   .endst
+
+; FIXME: Too compact! Divide and conquer. Multiple states on each object,
+; direction (face - left, right), movement (body/legs - walking, jumping,
+; idle), attacking (weapon - idle, slash) 
+; State format:
+;  00000000
+;  |||||||`- is_facing_left
+;  ||||||`-- is_walking
+;  |||||`--- is_jumping
+;  ||||`---- is_hurting
+;  |||`----- is_attacking
+;  ||`------ is_killed
+;  |`------- (reserved)
+;  `-------- (reserved)
+
+  .equ ACTOR_WALKING %00000010
+  .equ ACTOR_FACING_LEFT %00000001
+
 
   .macro INITIALIZE_ACTOR
     ld hl,init_data_\@
     ld de,\1
-    ld bc,3
+    ld bc,6
     ldir
     jp +
       init_data_\@:
-        .db \2 \3 \4 
+        .db \2 \3 \4 0 0 0
     +:
   .endm
 
@@ -36,22 +57,65 @@
 .endm
 
 
-
-
-
 .bank 0 slot 0
 ; -----------------------------------------------------------------------------
 .section "Subroutine workshop" free
 ; -----------------------------------------------------------------------------
+  move_actor:
+    ; IN: Actor in HL
+    push hl
+    pop ix
+    ld a,(ix+actor.hspeed)
+    add a,(ix+actor.x)
+    ld (ix+actor.x),a
+    ld a,(ix+actor.vspeed)
+    add a,(ix+actor.y)
+    ld (ix+actor.y),a
+  ret
 
-  get_vcounter:
-    ; Read the vcounter port and store it's value in a variable and in A.
-    ; IN: HL = Pointer to variable in RAM.
-    ; OUT: Value of vcounter port in A.
-    in a,V_COUNTER_PORT
+
+  set_actor_hspeed:
+    ; IN: Actor in HL
+    ld de,actor.hspeed
+    add hl,de
     ld (hl),a
   ret
-  
+
+
+
+  get_actor_state:
+    ; IN: Actor in HL
+    ; OUT: State byte in A.
+    ld de,actor.state
+    add hl,de
+    ld a,(hl)
+  ret
+
+  set_actor_state:
+    ; IN: Actor in HL
+    ; A: Byte containing bits to be set
+    ; OUT: A = updated states.
+    ld de,actor.state
+    add hl,de
+    ld b,(hl)
+    or b
+    ld (hl),a
+  ret
+
+  reset_actor_state:
+    ; IN: Actor in HL
+    ; A: Byte containing bits to be reset
+    ; OUT: A = updated states.
+    ld b,%11111111
+    xor b
+    ld b,a
+    ld de,actor.state
+    add hl,de
+    ld a,(hl)
+    and b
+    ld (hl),a
+  ret
+
   draw_actor:
     ; An actor can take different forms depending on which animation it is
     ; linked with. This is set (and thus can vary) on a frame-by-frame basis.

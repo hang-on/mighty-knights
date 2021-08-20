@@ -6,6 +6,25 @@
   ; ---------------------------------------------------------------------------
   ; Layouts
   ; ---------------------------------------------------------------------------
+
+    layout_2x5_3x3:
+    .db -56, -12     
+    .db -56, -4      ; XX
+    .db -48, -12     ; XX
+    .db -48, -4      ; XX
+    .db -40, -12     ; XX
+    .db -40, -4      ; XX
+    .db -32, -12     ; XXX
+    .db -32, -4      ; XXX 
+    .db -24, -12
+    .db -24, -4
+    .db -16, -12
+    .db -16, -4
+    .db -16, 4
+    .db -8, -12
+    .db -8, -4
+    .db -8, 4
+  
   layout_2x4:
     ; Y and X offsets to apply to the origin of an actor.
     .db -32, -8     ; XX
@@ -26,78 +45,58 @@
     .db -8, 0
     .db -8, 8
 
+  layout_1t_3x4:
+    .db -40, -12     ; X
+    .db -32, -12     ; XXX
+    .db -32, -4      ; XXX
+    .db -32, 4       ; XXX
+    .db -24, -12     ; XXX
+    .db -24, -4
+    .db -24, 4
+    .db -16, -12
+    .db -16, -4
+    .db -16, 4
+    .db -8, -12
+    .db -8, -4
+    .db -8, 4
+
+  layout_2t_3x4:
+    .db -48, -12     ; X
+    .db -40, -12     ; X
+    .db -32, -12     ; XXX
+    .db -32, -4      ; XXX
+    .db -32, 4       ; XXX
+    .db -24, -12     ; XXX
+    .db -24, -4
+    .db -24, 4
+    .db -16, -12
+    .db -16, -4
+    .db -16, 4
+    .db -8, -12
+    .db -8, -4
+    .db -8, 4
+
+  layout_2m_3x4:
+    .db -48, -4      ;  X
+    .db -40, -4      ;  X
+    .db -32, -12     ; XXX
+    .db -32, -4      ; XXX
+    .db -32, 4       ; XXX
+    .db -24, -12     ; XXX
+    .db -24, -4
+    .db -24, 4
+    .db -16, -12
+    .db -16, -4
+    .db -16, 4
+    .db -8, -12
+    .db -8, -4
+    .db -8, 4
+
+
   ; ---------------------------------------------------------------------------
   ; Animation files
   ; ---------------------------------------------------------------------------
-  arthur_walking:
-    ; Table of contents:
-    .dw @header, @frame_0, @frame_1, @frame_2, @frame_3
-    @header:
-      .db 3                       ; Max frame.
-      .db TRUE                    ; Looping.
-    @frame_0:
-      .db 10                       ; Duration.
-      .db FALSE                   ; Require vjob?
-      .dw $0000                   ; Pointer to vjob.
-      .db 7                       ; Size.
-      .db 10                      ; Index of first tile.
-      .dw layout_2x3_1b           ; Pointer to layout.
-    @frame_1:
-      .db 10                       ; Duration.
-      .db FALSE                   ; Require vjob?
-      .dw $0000                   ; Pointer to vjob.
-      .db 7                       ; Size.
-      .db 17                      ; Index of first tile.
-      .dw layout_2x3_1b           ; Pointer to layout.
-    @frame_2:
-      .db 10                       ; Duration.
-      .db FALSE                   ; Require vjob?
-      .dw $0000                   ; Pointer to vjob.
-      .db 7                       ; Size.
-      .db 24                      ; Index of first tile.
-      .dw layout_2x3_1b           ; Pointer to layout.
-    @frame_3:
-      .db 10                       ; Duration.
-      .db FALSE                   ; Require vjob?
-      .dw $0000                   ; Pointer to vjob.
-      .db 7                       ; Size.
-      .db 17                      ; Index of first tile.
-      .dw layout_2x3_1b           ; Pointer to layout.
 
-  cody_walking:
-    ; Table of contents:
-    .dw @header, @frame_0, @frame_1, @frame_2, @frame_3
-    @header:
-      .db 3                       ; Max frame.
-      .db TRUE                    ; Looping.
-    @frame_0:
-      .db 10                      ; Duration.
-      .db TRUE                    ; Require vjob?
-      .dw cody_walking_0_blast    ; Pointer to vjob.
-      .db 8                       ; Size.
-      .db 1                       ; Index of first tile.
-      .dw layout_2x4              ; Pointer to layout.
-    @frame_1:
-      .db 10                      
-      .db TRUE                    
-      .dw cody_walking_1_and_3_blast 
-      .db 8                       
-      .db 1                       
-      .dw layout_2x4              
-    @frame_2:
-      .db 10                      
-      .db TRUE                    
-      .dw cody_walking_2_blast 
-      .db 8                       
-      .db 1                       
-      .dw layout_2x4              
-    @frame_3:
-      .db 10                      
-      .db TRUE                    
-      .dw cody_walking_1_and_3_blast 
-      .db 8                       
-      .db 1                       
-      .dw layout_2x4              
 
 .ends
 
@@ -126,9 +125,10 @@
   size db
 .endst
 
-.equ SMALL_BLAST 2
-.equ MEDIUM_BLAST 4
-.equ LARGE_BLAST 6
+.equ SMALL_BLAST 4
+.equ MEDIUM_BLAST 8
+.equ LARGE_BLAST 12
+.equ XLARGE_BLAST 14
 
 .bank 0 slot 0
 .section "Animations: Subroutines" free 
@@ -231,7 +231,6 @@
     ld h,(ix+7)
   ret
 
-
   get_timer:
     ; IN:  A = Slot number in ACM
     ; OUT: A = The time remaining for the current frame.
@@ -239,9 +238,6 @@
     call offset_byte_table
     ld a,(hl)
   ret
-
-
-
 
   initialize_acm:
     ; Turn off all animation slots in the matrix.
@@ -261,8 +257,6 @@
     call offset_byte_table
     ld a,(hl)
   ret
-
-
 
   is_animation_at_max_frame:
     ; IN:  A = Slot number in ACM
@@ -286,7 +280,6 @@
       ld a,FALSE
   ret
 
-
   is_animation_looping:
     ; IN:  A = Slot number in ACM
     ; OUT: A = TRUE or FALSE.
@@ -298,7 +291,6 @@
     ld a,(hl)                     ; Load into A and return.
   ret
 
-  
   is_tileblast_required:
     ; Look up animation file to check whether a tilblast is required for the 
     ; current frame.
@@ -460,9 +452,11 @@
       .equ SMALL_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*4
       .equ MEDIUM_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*8
       .equ LARGE_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*12
+      .equ XLARGE_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*14
       small_blast:
       medium_blast:
       large_blast:
+      xlarge_blast:
       push hl
       pop ix ; save HL
       
@@ -478,8 +472,14 @@
         jp ++
       +:
       cp LARGE_BLAST
-      jp nz,++
+      jp nz,+
         ld bc,LARGE_BLAST_SIZE_IN_BYTES
+        jp ++
+      +:
+      cp XLARGE_BLAST
+      jp nz,++
+        ld bc,XLARGE_BLAST_SIZE_IN_BYTES
+  
       ++:
       ld hl,test_kernel_bytes_written
       ld (hl),c
@@ -497,6 +497,10 @@
       inc hl
       ld (hl),d
   .else
+    xlarge_blast:
+      .rept CHARACTER_SIZE * 2
+        outi
+      .endr
     large_blast:
       .rept CHARACTER_SIZE * 4
         outi
@@ -595,8 +599,13 @@
         jp ++
       +:
       cp LARGE_BLAST
-      jp nz,++
+      jp nz,+
         call large_blast
+        jp ++
+      +:
+      cp XLARGE_BLAST
+      jp nz,++
+        call xlarge_blast
       ++:
     .endr
     _tileblasting_finished:
