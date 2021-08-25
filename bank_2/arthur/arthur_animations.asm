@@ -81,6 +81,7 @@ arthur_animations:
       .db INDEX_OF_PLAYER_FIRST_TILE                        
       .dw arthur_walking_layout_3          
 
+
     arthur_walking_0_blast:
       TILEBLAST arthur_walking_0_tiles
     arthur_walking_1_blast:
@@ -90,14 +91,7 @@ arthur_animations:
     arthur_walking_3_blast:
       TILEBLAST arthur_walking_3_tiles
     
-    arthur_walking_0_tiles:
-      .include "bank_2/arthur/walking/arthur_walking_0_tiles_optm.asm"
-    arthur_walking_1_tiles:
-      .include "bank_2/arthur/walking/arthur_walking_1_tiles_optm.asm"
-    arthur_walking_2_tiles:
-      .include "bank_2/arthur/walking/arthur_walking_2_tiles_optm.asm"
-    arthur_walking_3_tiles:
-      .include "bank_2/arthur/walking/arthur_walking_3_tiles_optm.asm"
+    .include "bank_2/arthur/walking/tiles.asm"
 
     arthur_walking_layout_0:
       .db -56, -11      
