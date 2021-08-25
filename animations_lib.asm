@@ -151,7 +151,7 @@
     cp FALSE
     ret z
       inc hl                      ; HL is at first byte of tileblast pointer
-      call get_word               ; HL is now the address of the vjob.
+      ;call get_word               ; HL is now the address of the vjob.
       call add_tileblast_to_que
   ret
 
@@ -225,10 +225,10 @@
     call get_word                 ; Now HL is at the base of the current frame      
     push hl
     pop ix
-    ld b,(ix+4)                     ; Size    
-    ld a,(ix+5)                     ; First char
-    ld l,(ix+6)
-    ld h,(ix+7)
+    ld b,(ix+8)                     ; Size    
+    ld a,(ix+9)                     ; First char
+    ld l,(ix+10)                    ; Base address of layout
+    ld h,(ix+11)
   ret
 
   get_timer:

@@ -1,5 +1,85 @@
   
+    ; FIXME: This should be states, cycling through
+    ; the bitfield in the state byte.
+
+    ; Set Arthur's state depending on controller input.
+    ; FIXME: Duplicate code follows!
+    call is_right_pressed
+    jp nc,+
+      ld hl,arthur
+      call get_actor_state
+      and ACTOR_WALKING
+      jp nz,++
+        ld a, ACTOR_WALKING
+        ld hl,arthur
+        call set_actor_state
+        ld a, ACTOR_FACING_LEFT
+        ld hl,arthur
+        call reset_actor_state
+        ld a,0
+        ld hl,arthur_walking
+        call set_animation
+      jp ++
+    +:
+    call is_left_pressed
+    jp nc,+
+      ld hl,arthur
+      call get_actor_state
+      and ACTOR_WALKING
+      jp nz,++
+        ld a, ACTOR_WALKING
+        or ACTOR_FACING_LEFT
+        ld hl,arthur
+        call set_actor_state
+        ld a,0
+        ld hl,arthur_walking
+        call set_animation
+      jp ++
+    +:
+      ld a, ACTOR_WALKING
+      ld hl,arthur
+      call reset_actor_state
+      ld a,0
+      ld hl,arthur_standing
+      call set_animation
+    ++:
+
+    ; Set state-dependent speed and move Arthur.
+    .equ ARTHUR_HSPEED 1
+    ld hl,arthur
+    call get_actor_state
+    and ACTOR_WALKING
+    jp z,arthur_not_walking
+      ; Arthur is walking...
+      ld hl,arthur
+      call get_actor_state
+      and ACTOR_FACING_LEFT
+      jp z,+
+        ; Facing left...
+        ld a,ARTHUR_HSPEED
+        neg
+        ld hl,arthur
+        call set_actor_hspeed
+        jp end_arthur_speed
+      +:
+        ; Facing right
+        ld a,ARTHUR_HSPEED
+        ld hl,arthur
+        call set_actor_hspeed
+        jp end_arthur_speed
+
+    arthur_not_walking:
+      ld a,0
+      ld hl,arthur
+      call set_actor_hspeed
+    end_arthur_speed:
+    
+    ld hl,arthur
+    call move_actor
+
   
+
+
   arthur_standing:
     ; Table of contents:
     .dw @header, @frame_0
