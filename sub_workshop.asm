@@ -4,29 +4,20 @@
     id db
     y db
     x db
-    state db         ; A bitfield of tags for states
+    reserved_byte db         ; 
     hspeed db
     vspeed db
+    ; states
+    face db                   ; Left or right
+    legs db                   ; standing, walking, jumping
+    weapon db                 ; idle, slash (comboing?)
+    form db                   ; OK, hurting, dead (+ maybe immortal)
+    reserved_state db
+    ; misc
+    health db
+    attack_damage db
+    reserved_misc db
   .endst
-
-; FIXME: Too compact! Divide and conquer. Multiple states on each object,
-; direction (face - left, right), movement (body/legs - walking, jumping,
-; idle), attacking (weapon - idle, slash), health (hurting - no, yes).
-; + 2 reserved states. = 6 state-based actor properties.  
-; State format:
-;  00000000
-;  |||||||`- is_facing_left
-;  ||||||`-- is_walking
-;  |||||`--- is_jumping
-;  ||||`---- is_hurting
-;  |||`----- is_attacking
-;  ||`------ is_killed
-;  |`------- (reserved)
-;  `-------- (reserved)
-
-  .equ ACTOR_WALKING %00000010
-  .equ ACTOR_FACING_LEFT %00000001
-
 
   .macro INITIALIZE_ACTOR
     ld hl,init_data_\@
@@ -79,41 +70,6 @@
     ; IN: Actor in HL
     ld de,actor.hspeed
     add hl,de
-    ld (hl),a
-  ret
-
-
-
-  get_actor_state:
-    ; IN: Actor in HL
-    ; OUT: State byte in A.
-    ld de,actor.state
-    add hl,de
-    ld a,(hl)
-  ret
-
-  set_actor_state:
-    ; IN: Actor in HL
-    ; A: Byte containing bits to be set
-    ; OUT: A = updated states.
-    ld de,actor.state
-    add hl,de
-    ld b,(hl)
-    or b
-    ld (hl),a
-  ret
-
-  reset_actor_state:
-    ; IN: Actor in HL
-    ; A: Byte containing bits to be reset
-    ; OUT: A = updated states.
-    ld b,%11111111
-    xor b
-    ld b,a
-    ld de,actor.state
-    add hl,de
-    ld a,(hl)
-    and b
     ld (hl),a
   ret
 

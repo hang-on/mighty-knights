@@ -21,8 +21,25 @@ arthur_animations:
       .db INDEX_OF_PLAYER_FIRST_TILE  ; Index of first tile.
       .dw arthur_standing_layout      ; Pointer to layout.
 
-    arthur_standing_tiles:
-      .include "bank_2/arthur/standing/arthur_standing_tiles.asm"
+  arthur_standing_left:
+    ; Table of contents:
+    .dw @header, @frame_0
+    @header:
+      .db 0                           ; Max frame.
+      .db FALSE                       ; Looping.
+    @frame_0:
+      .db 7                           ; Duration.
+      .db TRUE                        ; Require tileblast?
+      .db PLAYER_TILE_BANK            ; Blast: Tile bank.
+      .dw arthur_standing_left_tiles  ; Blast: Tiles.
+      .dw ADDRESS_OF_PLAYER_FIRST_TILE; Blast: Addx of first tile in tile bank.
+      .db XLARGE_BLAST                ; Blast: Blast size.
+      .db 14                          ; Size (number of tiles in frame).
+      .db INDEX_OF_PLAYER_FIRST_TILE  ; Index of first tile.
+      .dw arthur_standing_left_layout ; Pointer to layout.
+
+
+    .include "bank_2/arthur/standing/tiles.asm"
 
     arthur_standing_layout:
       .db -56, -8      
@@ -39,6 +56,23 @@ arthur_animations:
       .db -8, -12
       .db -8, -4
       .db -8, 4
+
+    arthur_standing_left_layout:
+      .db -56, 0      
+      .db -48, 0      
+      .db -40, -4     
+      .db -40, 4      
+      .db -32, -4     
+      .db -32, 4       
+      .db -24, -4
+      .db -24, 4
+      .db -16, -12
+      .db -16, -4
+      .db -16, 4
+      .db -8, -12
+      .db -8, -4
+      .db -8, 4
+
 
   arthur_walking:
     ; Table of contents:

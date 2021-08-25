@@ -151,7 +151,7 @@
 
 
     ld a,0
-    ld hl,arthur_walking
+    ld hl,arthur_standing_left
     call set_animation
 
     ;
