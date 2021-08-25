@@ -35,6 +35,7 @@
 .include "psglib.inc"
 .include "mighty_knights_lib.asm"
 .include "animations_lib.asm"
+.include "actors_lib.asm"
 .include "sub_workshop.asm"
 .include "sub_tests.asm"        
 ; -----------------------------------------------------------------------------
@@ -192,6 +193,22 @@
     ld (input_ports+1),a
 
     call process_animations
+
+    ; Only for demo purpose:
+    call is_right_pressed
+    jp nc,+
+      ld a,0
+      ld hl,arthur_standing
+      call set_animation
+      jp ++
+    +:
+    call is_left_pressed
+    jp nc,+
+      ld a,0
+      ld hl,arthur_standing_left
+      call set_animation
+    +:
+    ++:
 
     ld a,0
     ld hl,arthur
