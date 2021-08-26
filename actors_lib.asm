@@ -11,13 +11,12 @@
     reserved_byte db         ; 
     hspeed db
     vspeed db
-    ; states, first byte = state changed (t/f), second byte = state.
-    ; check STATES_MAX
-    face dw                   ; Left or right
-    legs dw                   ; standing, walking, jumping
-    weapon dw                 ; idle, slash (comboing?)
-    form dw                   ; OK, hurting, dead (+ maybe immortal)
-    reserved_state dw
+    ; states
+    face db                   ; Left or right
+    legs db                   ; standing, walking, jumping
+    weapon db                 ; idle, slash (comboing?)
+    form db                   ; OK, hurting, dead (+ maybe immortal)
+    reserved_state db
     ; misc
     health db
     attack_damage db
@@ -80,6 +79,8 @@
     ld (hl),a
   ret
 
+  ; FIXME: Evolve to reorient_actor:
+  ; flip and then set anim according to state of legs
   flip_actor:
     ; IN: Actor in HL
     ld de,actor.face
