@@ -1,5 +1,8 @@
 ; Actors library
   .equ ACTOR_MAX 5 ;***
+  .equ STATES_MAX 5
+  .equ FACING_RIGHT $00
+  .equ FACING_LEFT $ff
   
   .struct actor
     id db
@@ -8,12 +11,13 @@
     reserved_byte db         ; 
     hspeed db
     vspeed db
-    ; states
-    face db                   ; Left or right
-    legs db                   ; standing, walking, jumping
-    weapon db                 ; idle, slash (comboing?)
-    form db                   ; OK, hurting, dead (+ maybe immortal)
-    reserved_state db
+    ; states, first byte = state changed (t/f), second byte = state.
+    ; check STATES_MAX
+    face dw                   ; Left or right
+    legs dw                   ; standing, walking, jumping
+    weapon dw                 ; idle, slash (comboing?)
+    form dw                   ; OK, hurting, dead (+ maybe immortal)
+    reserved_state dw
     ; misc
     health db
     attack_damage db
@@ -55,7 +59,7 @@
       inc ix
     djnz -                ; Loop through all chars in frame.
   ret
-  
+
   move_actor:
     ; IN: Actor in HL
     push hl
@@ -70,10 +74,28 @@
 
   set_actor_hspeed:
     ; IN: Actor in HL
+    ;     Horizontal speed in A 
     ld de,actor.hspeed
     add hl,de
     ld (hl),a
   ret
+
+  flip_actor:
+    ; IN: Actor in HL
+    ld de,actor.face
+    add hl,de
+    ld a,(hl)
+    cp FACING_RIGHT
+    jp nz,+
+      ld a,FACING_LEFT
+      ld (hl),a
+      jp ++
+    +:
+      ld a,FACING_RIGHT
+      ld (hl),a
+    ++:
+  ret
+
 
 
 
