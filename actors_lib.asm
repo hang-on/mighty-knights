@@ -5,6 +5,7 @@
   .equ FACING_LEFT $ff
   
   .struct actor
+    ; Remember to update the initializer below when struct changes.
     id db
     y db
     x db
@@ -26,11 +27,13 @@
   .macro INITIALIZE_ACTOR
     ld hl,init_data_\@
     ld de,\1
-    ld bc,6
+    ld bc,init_data_end_\@-init_data_\@
     ldir
     jp +
       init_data_\@:
-        .db \2 \3 \4 0 0 0
+        .db \2 \3 \4 
+        .db 0 0 0 0 0 0 0 0 0 0 0
+        init_data_end_\@:
     +:
   .endm
 
