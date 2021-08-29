@@ -1,4 +1,21 @@
   
+        call is_right_pressed
+    jp nc,+
+      ld a,PLAYER_ACM_SLOT
+      ld hl,arthur_standing
+      call set_animation
+      jp ++
+    +:
+    call is_left_pressed
+    jp nc,+
+      ld a,PLAYER_ACM_SLOT
+      ld hl,arthur_standing_left
+      call set_animation
+    +:
+    ++:
+
+    
+    
     ; FIXME: This should be states, cycling through
     ; the bitfield in the state byte.
 

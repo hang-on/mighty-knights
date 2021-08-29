@@ -48,13 +48,13 @@
   hline_counter db
   pause_flag db
   input_ports dw
-
   
   critical_routines_finish_at db
 
   arthur instanceof actor
-
+  
 .ends
+
 .org 0
 .bank 0 slot 0
 ; -----------------------------------------------------------------------------
@@ -150,21 +150,23 @@
     call initialize_acm
     INITIALIZE_ACTOR arthur, 0, 175, 65
 
-
-    ld a,0
-    ld hl,arthur_standing_left
+    .equ PLAYER_ACM_SLOT 0
+    ld a,PLAYER_ACM_SLOT
+    ld hl,arthur_standing
     call set_animation
+    ld a,IDLE
+    ld hl,arthur.motor
+    ld (hl),a
 
-    ;
     ei
     halt
     halt
     xor a
     ld (vblank_counter),a
-    ;
+    
     ld a,ENABLED
     call set_display
-    ;
+    
   jp main_loop
     vdp_register_init:
     .db %00100110  %10100000 $ff $ff $ff
@@ -192,25 +194,64 @@
     in a,(INPUT_PORT_2)
     ld (input_ports+1),a
 
+    ; ------------------
+
+    ld a,(arthur.motor)
+    cp IDLE
+    jp nz,+
+      call is_right_pressed
+      jp c,start_walking
+      call is_left_pressed
+      jp c,start_walking
+      jp handle_arthur_state_end
+        start_walking:
+          ld a,WALKING
+          ld (arthur.motor),a
+          ld a,TRUE
+          ld (arthur.state_changed),a
+        jp handle_arthur_state_end
+    +:
+    cp WALKING
+    jp nz,+
+      call is_dpad_pressed
+      jp c,+
+        stop_walking:
+          ld a,IDLE
+          ld (arthur.motor),a
+          ld a,TRUE
+          ld (arthur.state_changed),a
+        jp handle_arthur_state_end
+    +:
+    handle_arthur_state_end:
+
+
+    ; If Arthur's state was updated, set his animation accordingly.
+    ld a,(arthur.state_changed)
+    cp TRUE
+    jp nz,end_arthur_state_changed
+      ld a,(arthur.motor)
+      cp IDLE
+      jp nz,+
+        ld a,PLAYER_ACM_SLOT
+        ld hl,arthur_standing
+        call set_animation
+        jp end_arthur_state_changed
+      +:
+      ld a,(arthur.motor)
+      cp WALKING
+      jp nz,+
+        ld a,PLAYER_ACM_SLOT
+        ld hl,arthur_walking
+        call set_animation
+        jp end_arthur_state_changed
+      +:
+    end_arthur_state_changed:
+    ld a,FALSE                      ; Reset Arthur's state-changed flag
+    ld (arthur.state_changed),a
+
     call process_animations
 
-    ; Only for demo purpose:
-    call is_right_pressed
-    jp nc,+
-      ld a,0
-      ld hl,arthur_standing
-      call set_animation
-      jp ++
-    +:
-    call is_left_pressed
-    jp nc,+
-      ld a,0
-      ld hl,arthur_standing_left
-      call set_animation
-    +:
-    ++:
-
-    ld a,0
+    ld a,PLAYER_ACM_SLOT
     ld hl,arthur
     call draw_actor
 

@@ -1,8 +1,9 @@
 ; Actors library
   .equ ACTOR_MAX 5 ;***
-  .equ STATES_MAX 5
   .equ FACING_RIGHT $00
   .equ FACING_LEFT $ff
+  .equ IDLE 0
+  .equ WALKING 1
   
   .struct actor
     ; Remember to update the initializer below when struct changes.
@@ -13,8 +14,9 @@
     hspeed db
     vspeed db
     ; states
+    state_changed db
     face db                   ; Left or right
-    legs db                   ; standing, walking, jumping
+    motor db                  ; (legs) standing, walking, jumping
     weapon db                 ; idle, slash (comboing?)
     form db                   ; OK, hurting, dead (+ maybe immortal)
     reserved_state db
@@ -32,7 +34,7 @@
     jp +
       init_data_\@:
         .db \2 \3 \4 
-        .db 0 0 0 0 0 0 0 0 0 0 0
+        .db 0 0 0 0 0 0 0 0 0 0 0 0
         init_data_end_\@:
     +:
   .endm
@@ -44,6 +46,7 @@
     ; An actor can take different forms depending on which animation it is
     ; linked with. This is set (and thus can vary) on a frame-by-frame basis.
     ; draw_actor uses "add_sprite" to move sprites into the SAT buffer.
+    ; NOTE: Use this only once per actor per frame (it buffers sprites).
     ; IN: A  = Animation slot to use for drawing.
     ;     HL = Actor.
     inc hl                ; Move past index.
@@ -99,9 +102,5 @@
       ld (hl),a
     ++:
   ret
-
-
-
-
 
 .ends

@@ -1,4 +1,7 @@
 arthur_animations:
+  .dw arthur_standing, arthur_standing_left
+  .dw arthur_walking
+
 
   .equ PLAYER_TILE_BANK :arthur_animations
   .equ ADDRESS_OF_PLAYER_FIRST_TILE SPRITE_BANK_START + CHARACTER_SIZE
