@@ -198,19 +198,32 @@
 
     ld a,(arthur.motor)
     cp IDLE
-    jp nz,+
+    jp nz,+++
       call is_right_pressed
-      jp c,start_walking
+      jp c,++
       call is_left_pressed
-      jp c,start_walking
+      jp c,++
       jp handle_arthur_state_end
-        start_walking:
+        ++:
           ld a,WALKING
           ld (arthur.motor),a
           ld a,TRUE
           ld (arthur.state_changed),a
-        jp handle_arthur_state_end
-    +:
+          call is_right_pressed
+          jp nz,+
+            ld a,FACING_RIGHT
+            ld (arthur.face),a
+            ld a,ARTHUR_SPEED
+            ld (arthur.hspeed),a
+            jp handle_arthur_state_end    
+          +:
+            ld a,FACING_LEFT
+            ld (arthur.face),a
+            ld a,ARTHUR_SPEED
+            neg
+            ld (arthur.hspeed),a
+            jp handle_arthur_state_end   
+    +++:
     cp WALKING
     jp nz,+
       call is_dpad_pressed
@@ -231,12 +244,20 @@
     jp nz,end_arthur_state_changed
       ld a,(arthur.motor)
       cp IDLE
-      jp nz,+
-        ld a,PLAYER_ACM_SLOT
-        ld hl,arthur_standing
-        call set_animation
-        jp end_arthur_state_changed
-      +:
+      jp nz,++
+        ld a,(arthur.face)
+        cp FACING_RIGHT
+        jp nz,+
+          ld a,PLAYER_ACM_SLOT
+          ld hl,arthur_standing
+          call set_animation
+          jp end_arthur_state_changed
+        +:
+          ld a,PLAYER_ACM_SLOT
+          ld hl,arthur_standing_left
+          call set_animation
+          jp end_arthur_state_changed
+      ++:
       ld a,(arthur.motor)
       cp WALKING
       jp nz,+

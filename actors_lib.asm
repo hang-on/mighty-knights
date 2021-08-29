@@ -4,6 +4,7 @@
   .equ FACING_LEFT $ff
   .equ IDLE 0
   .equ WALKING 1
+  .equ ARTHUR_SPEED 3
   
   .struct actor
     ; Remember to update the initializer below when struct changes.
