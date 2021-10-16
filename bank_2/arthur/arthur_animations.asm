@@ -1,11 +1,7 @@
 arthur_animations:
+  .dw arthur_standing, arthur_standing_left
+  .dw arthur_walking
 
-  .macro TILEBLAST ARGS TILES
-      .db PLAYER_TILE_BANK
-      .dw TILES
-      .dw ADDRESS_OF_PLAYER_FIRST_TILE
-      .db XLARGE_BLAST
-  .endm
 
   .equ PLAYER_TILE_BANK :arthur_animations
   .equ ADDRESS_OF_PLAYER_FIRST_TILE SPRITE_BANK_START + CHARACTER_SIZE
@@ -20,15 +16,33 @@ arthur_animations:
     @frame_0:
       .db 7                           ; Duration.
       .db TRUE                        ; Require tileblast?
-      .dw arthur_standing_blast       ; Pointer to tileblast.
-      .db 14                          ; Size.
+      .db PLAYER_TILE_BANK            ; Blast: Tile bank.
+      .dw arthur_standing_tiles       ; Blast: Tiles.
+      .dw ADDRESS_OF_PLAYER_FIRST_TILE; Blast: Addx of first tile in tile bank.
+      .db XLARGE_BLAST                ; Blast: Blast size.
+      .db 14                          ; Size (number of tiles in frame).
       .db INDEX_OF_PLAYER_FIRST_TILE  ; Index of first tile.
       .dw arthur_standing_layout      ; Pointer to layout.
 
-    arthur_standing_blast:
-      TILEBLAST arthur_standing_tiles
-    arthur_standing_tiles:
-      .include "bank_2/arthur/standing/arthur_standing_tiles.asm"
+  arthur_standing_left:
+    ; Table of contents:
+    .dw @header, @frame_0
+    @header:
+      .db 0                           ; Max frame.
+      .db FALSE                       ; Looping.
+    @frame_0:
+      .db 7                           ; Duration.
+      .db TRUE                        ; Require tileblast?
+      .db PLAYER_TILE_BANK            ; Blast: Tile bank.
+      .dw arthur_standing_left_tiles  ; Blast: Tiles.
+      .dw ADDRESS_OF_PLAYER_FIRST_TILE; Blast: Addx of first tile in tile bank.
+      .db XLARGE_BLAST                ; Blast: Blast size.
+      .db 14                          ; Size (number of tiles in frame).
+      .db INDEX_OF_PLAYER_FIRST_TILE  ; Index of first tile.
+      .dw arthur_standing_left_layout ; Pointer to layout.
+
+
+    .include "bank_2/arthur/standing/tiles.asm"
 
     arthur_standing_layout:
       .db -56, -8      
@@ -46,6 +60,23 @@ arthur_animations:
       .db -8, -4
       .db -8, 4
 
+    arthur_standing_left_layout:
+      .db -56, 0      
+      .db -48, 0      
+      .db -40, -4     
+      .db -40, 4      
+      .db -32, -4     
+      .db -32, 4       
+      .db -24, -4
+      .db -24, 4
+      .db -16, -12
+      .db -16, -4
+      .db -16, 4
+      .db -8, -12
+      .db -8, -4
+      .db -8, 4
+
+
   arthur_walking:
     ; Table of contents:
     .dw @header, @frame_0, @frame_1, @frame_2, @frame_3
@@ -55,49 +86,45 @@ arthur_animations:
     @frame_0:
       .db 7                           ; Duration.
       .db TRUE                        ; Require tileblast?
-      .dw arthur_walking_0_blast      ; Pointer to tileblast.
+      .db PLAYER_TILE_BANK            ; Blast: Tile bank.
+      .dw arthur_walking_0_tiles      ; Blast: Tiles.
+      .dw ADDRESS_OF_PLAYER_FIRST_TILE; Blast: Addx of first tile in tile bank.
+      .db XLARGE_BLAST                ; Blast: Blast size.
       .db 13                          ; Size.
       .db INDEX_OF_PLAYER_FIRST_TILE  ; Index of first tile.
       .dw arthur_walking_layout_0     ; Pointer to layout.
     @frame_1:
       .db 8                       
       .db TRUE                   
-      .dw arthur_walking_1_blast                   
+      .db PLAYER_TILE_BANK            ; Blast: Tile bank.
+      .dw arthur_walking_1_tiles      ; Blast: Tiles.
+      .dw ADDRESS_OF_PLAYER_FIRST_TILE; Blast: Addx of first tile in tile bank.
+      .db XLARGE_BLAST                ; Blast: Blast size.
       .db 14                       
       .db INDEX_OF_PLAYER_FIRST_TILE                        
       .dw arthur_walking_layout_1          
     @frame_2:
       .db 7                       
       .db TRUE                   
-      .dw arthur_walking_2_blast                   
+      .db PLAYER_TILE_BANK            ; Blast: Tile bank.
+      .dw arthur_walking_2_tiles      ; Blast: Tiles.
+      .dw ADDRESS_OF_PLAYER_FIRST_TILE; Blast: Addx of first tile in tile bank.
+      .db XLARGE_BLAST                ; Blast: Blast size.
       .db 12                       
       .db INDEX_OF_PLAYER_FIRST_TILE                        
       .dw arthur_walking_layout_2          
     @frame_3:
       .db 8                       
       .db TRUE                   
-      .dw arthur_walking_3_blast                   
+      .db PLAYER_TILE_BANK            ; Blast: Tile bank.
+      .dw arthur_walking_3_tiles      ; Blast: Tiles.
+      .dw ADDRESS_OF_PLAYER_FIRST_TILE; Blast: Addx of first tile in tile bank.
+      .db XLARGE_BLAST                ; Blast: Blast size.
       .db 14                       
       .db INDEX_OF_PLAYER_FIRST_TILE                        
       .dw arthur_walking_layout_3          
-
-    arthur_walking_0_blast:
-      TILEBLAST arthur_walking_0_tiles
-    arthur_walking_1_blast:
-      TILEBLAST arthur_walking_1_tiles
-    arthur_walking_2_blast:
-      TILEBLAST arthur_walking_2_tiles
-    arthur_walking_3_blast:
-      TILEBLAST arthur_walking_3_tiles
     
-    arthur_walking_0_tiles:
-      .include "bank_2/arthur/walking/arthur_walking_0_tiles_optm.asm"
-    arthur_walking_1_tiles:
-      .include "bank_2/arthur/walking/arthur_walking_1_tiles_optm.asm"
-    arthur_walking_2_tiles:
-      .include "bank_2/arthur/walking/arthur_walking_2_tiles_optm.asm"
-    arthur_walking_3_tiles:
-      .include "bank_2/arthur/walking/arthur_walking_3_tiles_optm.asm"
+    .include "bank_2/arthur/walking/tiles.asm"
 
     arthur_walking_layout_0:
       .db -56, -11      

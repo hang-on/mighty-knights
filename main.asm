@@ -35,6 +35,7 @@
 .include "psglib.inc"
 .include "mighty_knights_lib.asm"
 .include "animations_lib.asm"
+.include "actors_lib.asm"
 .include "sub_workshop.asm"
 .include "sub_tests.asm"        
 ; -----------------------------------------------------------------------------
@@ -47,13 +48,13 @@
   hline_counter db
   pause_flag db
   input_ports dw
-
   
   critical_routines_finish_at db
 
   arthur instanceof actor
-
+  
 .ends
+
 .org 0
 .bank 0 slot 0
 ; -----------------------------------------------------------------------------
@@ -149,21 +150,23 @@
     call initialize_acm
     INITIALIZE_ACTOR arthur, 0, 175, 65
 
-
-    ld a,0
+    .equ PLAYER_ACM_SLOT 0
+    ld a,PLAYER_ACM_SLOT
     ld hl,arthur_standing
     call set_animation
+    ld a,IDLE
+    ld hl,arthur.motor
+    ld (hl),a
 
-    ;
     ei
     halt
     halt
     xor a
     ld (vblank_counter),a
-    ;
+    
     ld a,ENABLED
     call set_display
-    ;
+    
   jp main_loop
     vdp_register_init:
     .db %00100110  %10100000 $ff $ff $ff
@@ -191,87 +194,85 @@
     in a,(INPUT_PORT_2)
     ld (input_ports+1),a
 
+    ; ------------------
+
+    ld a,(arthur.motor)
+    cp IDLE
+    jp nz,+++
+      call is_right_pressed
+      jp c,++
+      call is_left_pressed
+      jp c,++
+      jp handle_arthur_state_end
+        ++:
+          ld a,WALKING
+          ld (arthur.motor),a
+          ld a,TRUE
+          ld (arthur.state_changed),a
+          call is_right_pressed
+          jp nz,+
+            ld a,FACING_RIGHT
+            ld (arthur.face),a
+            ld a,ARTHUR_SPEED
+            ld (arthur.hspeed),a
+            jp handle_arthur_state_end    
+          +:
+            ld a,FACING_LEFT
+            ld (arthur.face),a
+            ld a,ARTHUR_SPEED
+            neg
+            ld (arthur.hspeed),a
+            jp handle_arthur_state_end   
+    +++:
+    cp WALKING
+    jp nz,+
+      call is_dpad_pressed
+      jp c,+
+        stop_walking:
+          ld a,IDLE
+          ld (arthur.motor),a
+          ld a,TRUE
+          ld (arthur.state_changed),a
+        jp handle_arthur_state_end
+    +:
+    handle_arthur_state_end:
+
+
+    ; If Arthur's state was updated, set his animation accordingly.
+    ld a,(arthur.state_changed)
+    cp TRUE
+    jp nz,end_arthur_state_changed
+      ld a,(arthur.motor)
+      cp IDLE
+      jp nz,++
+        ld a,(arthur.face)
+        cp FACING_RIGHT
+        jp nz,+
+          ld a,PLAYER_ACM_SLOT
+          ld hl,arthur_standing
+          call set_animation
+          jp end_arthur_state_changed
+        +:
+          ld a,PLAYER_ACM_SLOT
+          ld hl,arthur_standing_left
+          call set_animation
+          jp end_arthur_state_changed
+      ++:
+      ld a,(arthur.motor)
+      cp WALKING
+      jp nz,+
+        ld a,PLAYER_ACM_SLOT
+        ld hl,arthur_walking
+        call set_animation
+        jp end_arthur_state_changed
+      +:
+    end_arthur_state_changed:
+    ld a,FALSE                      ; Reset Arthur's state-changed flag
+    ld (arthur.state_changed),a
+
     call process_animations
 
-    ; FIXME: This should be states, cycling through
-    ; the bitfield in the state byte.
-
-    ; Set Arthur's state depending on controller input.
-    ; FIXME: Duplicate code follows!
-    call is_right_pressed
-    jp nc,+
-      ld hl,arthur
-      call get_actor_state
-      and ACTOR_WALKING
-      jp nz,++
-        ld a, ACTOR_WALKING
-        ld hl,arthur
-        call set_actor_state
-        ld a, ACTOR_FACING_LEFT
-        ld hl,arthur
-        call reset_actor_state
-        ld a,0
-        ld hl,arthur_walking
-        call set_animation
-      jp ++
-    +:
-    call is_left_pressed
-    jp nc,+
-      ld hl,arthur
-      call get_actor_state
-      and ACTOR_WALKING
-      jp nz,++
-        ld a, ACTOR_WALKING
-        or ACTOR_FACING_LEFT
-        ld hl,arthur
-        call set_actor_state
-        ld a,0
-        ld hl,arthur_walking
-        call set_animation
-      jp ++
-    +:
-      ld a, ACTOR_WALKING
-      ld hl,arthur
-      call reset_actor_state
-      ld a,0
-      ld hl,arthur_standing
-      call set_animation
-    ++:
-
-    ; Set state-dependent speed and move Arthur.
-    .equ ARTHUR_HSPEED 1
-    ld hl,arthur
-    call get_actor_state
-    and ACTOR_WALKING
-    jp z,arthur_not_walking
-      ; Arthur is walking...
-      ld hl,arthur
-      call get_actor_state
-      and ACTOR_FACING_LEFT
-      jp z,+
-        ; Facing left...
-        ld a,ARTHUR_HSPEED
-        neg
-        ld hl,arthur
-        call set_actor_hspeed
-        jp end_arthur_speed
-      +:
-        ; Facing right
-        ld a,ARTHUR_HSPEED
-        ld hl,arthur
-        call set_actor_hspeed
-        jp end_arthur_speed
-
-    arthur_not_walking:
-      ld a,0
-      ld hl,arthur
-      call set_actor_hspeed
-    end_arthur_speed:
-    
-    ld hl,arthur
-    call move_actor
-
-    ld a,0
+    ld a,PLAYER_ACM_SLOT
     ld hl,arthur
     call draw_actor
 
