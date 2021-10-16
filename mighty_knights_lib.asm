@@ -46,22 +46,7 @@
 ; -----------------------------------------------------------------------------
 .section "Misc. routines sorted alphabetically" free
 ; -----------------------------------------------------------------------------
-  clear_vram:
-    ; Write 00 to all vram addresses.
-    ; Uses AF, BC
-    xor a
-    out (CONTROL_PORT),a
-    or VRAM_WRITE_COMMAND
-    out (CONTROL_PORT),a
-    ld bc,VRAM_SIZE
-    -:
-      xor a
-      out (DATA_PORT),a
-      dec bc
-      ld a,b
-      or c
-    jp nz,-
-  ret
+
 
   get_word:
     ; In: Pointer in HL. Out: Word pointed to in HL.
@@ -106,66 +91,6 @@
     scf
   ret               ; Return with carry flag set.
 
-  load_cram:
-    ; Consecutively load a number of color values into color ram (CRAM), given a
-    ; destination color to write the first value.
-    ; Entry: A = Destination color in color ram (0-31)
-    ;        B = Number of color values to load
-    ;        HL = Base address of source data (color values are bytes = SMS)
-    ; Uses: AF, BC, HL
-    ; Assumes blanked display and interrupts off.
-    out (CONTROL_PORT),a
-    ld a,CRAM_WRITE_COMMAND
-    out (CONTROL_PORT),a
-    -:
-      ld a,(hl)
-      out (DATA_PORT),a
-      inc hl
-    djnz -
-  ret
-
-  load_vram:
-    ; Load a number of bytes from a source address into vram.
-    ; Entry: A = Bank
-    ;        BC = Number of bytes to load
-    ;        DE = Destination address in vram
-    ;        HL = Source address
-    ; Exit:  DE = Next free byte in vram.
-    ; Uses: AF, BC, DE, HL,
-    .ifdef USE_TEST_KERNEL
-      push hl
-      pop ix ; save HL
-      ld hl,test_kernel_destination
-      ld (hl),e
-      inc hl
-      ld (hl),d
-      ld hl,test_kernel_bytes_written
-      ld (hl),c
-      inc hl
-      ld (hl),b
-      ld hl,test_kernel_source
-      push ix
-      pop de
-      ld (hl),e
-      inc hl
-      ld (hl),d
-    .else
-      ld (SLOT_2_CONTROL),a
-      ld a,e
-      out (CONTROL_PORT),a
-      ld a,d
-      or VRAM_WRITE_COMMAND
-      out (CONTROL_PORT),a
-      -:
-        ld a,(hl)
-        out (DATA_PORT),a
-        inc hl
-        dec bc
-        ld a,c
-        or b
-      jp nz,-
-    .endif
-  ret
 
 
   offset_byte_table:
@@ -215,26 +140,7 @@
   ret
 
 
-  setup_vram_write:
-    ; HL = Address in vram
-    ld a,l
-    out (CONTROL_PORT),a
-    ld a,h
-    or VRAM_WRITE_COMMAND
-    out (CONTROL_PORT),a
-  ret
 
-  wait_for_vblank:
-    ; Wait until vblank interrupt > 0.
-    ld hl,vblank_counter
-    -:
-      ld a,(hl)
-      cp 0
-    jp z,-
-    ; Reset counter.
-    xor a
-    ld (hl),a
-  ret
 .ends
 
 .section "String to stack various stuff" free

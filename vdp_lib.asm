@@ -7,10 +7,16 @@
 ; --- Add Sprite: Add a sprite tile to the buffer.
 ; --- Load SAT: Load the SAT with the buffer.
 ; --- Refresh SAT Handler: Reset buffer and load mode.
-; VDP Register Handler 
+; VDP Register Handler. 
 ; --- Initialize Registers: Load all 11 registers with a string of values.
 ; --- Set Display: Turn the display on/off.
 ; --- Set Register: Load a byte into a given register.
+; Misc. VDP Functions.
+; --- Clear Video RAM (VRAM): Write 00 to all (16K) vram addresses.
+; --- Load Color RAM (CRAM): Load a string of colors into CRAM.
+; --- Load Video RAM: Load a string of bytes into VRAM.
+; --- Setup Video RAM write: Send a destination address to VDP, but not data.
+; --- Wait for VBLANK: Keep looping until VBLANK interrupt is detected.
 
 ; -----------------------------------------------------------------------------
 ; SAT Handler
@@ -236,3 +242,105 @@
   ret
 .ends
 ; -----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
+.section "Misc. VDP functions" free
+; -----------------------------------------------------------------------------
+  clear_vram:
+    ; Write 00 to all vram addresses.
+    ; Uses AF, BC
+    xor a
+    out (CONTROL_PORT),a
+    or VRAM_WRITE_COMMAND
+    out (CONTROL_PORT),a
+    ld bc,VRAM_SIZE ; This is the whole 16K of VRAM.
+    -:
+      xor a
+      out (DATA_PORT),a
+      dec bc
+      ld a,b
+      or c
+    jp nz,-
+  ret  
+  
+  load_cram:
+    ; Consecutively load a number of color values into color ram (CRAM), given a
+    ; destination color to write the first value.
+    ; Entry: A = Destination color in color ram (0-31)
+    ;        B = Number of color values to load
+    ;        HL = Base address of source data (color values are bytes = SMS)
+    ; Uses: AF, BC, HL
+    ; Assumes blanked display and interrupts off.
+    out (CONTROL_PORT),a
+    ld a,CRAM_WRITE_COMMAND
+    out (CONTROL_PORT),a
+    -:
+      ld a,(hl)
+      out (DATA_PORT),a
+      inc hl
+    djnz -
+  ret
+
+  load_vram:
+    ; Load a number of bytes from a source address into vram.
+    ; Entry: A = Bank
+    ;        BC = Number of bytes to load
+    ;        DE = Destination address in vram
+    ;        HL = Source address
+    ; Exit:  DE = Next free byte in vram.
+    ; Uses: AF, BC, DE, HL,
+    .ifdef USE_TEST_KERNEL
+      push hl
+      pop ix ; save HL
+      ld hl,test_kernel_destination
+      ld (hl),e
+      inc hl
+      ld (hl),d
+      ld hl,test_kernel_bytes_written
+      ld (hl),c
+      inc hl
+      ld (hl),b
+      ld hl,test_kernel_source
+      push ix
+      pop de
+      ld (hl),e
+      inc hl
+      ld (hl),d
+    .else
+      ld (SLOT_2_CONTROL),a
+      ld a,e
+      out (CONTROL_PORT),a
+      ld a,d
+      or VRAM_WRITE_COMMAND
+      out (CONTROL_PORT),a
+      -:
+        ld a,(hl)
+        out (DATA_PORT),a
+        inc hl
+        dec bc
+        ld a,c
+        or b
+      jp nz,-
+    .endif
+  ret
+
+  setup_vram_write:
+    ; HL = Address in vram
+    ld a,l
+    out (CONTROL_PORT),a
+    ld a,h
+    or VRAM_WRITE_COMMAND
+    out (CONTROL_PORT),a
+  ret
+
+  wait_for_vblank:
+    ; Wait until vblank interrupt > 0.
+    ld hl,vblank_counter
+    -:
+      ld a,(hl)
+      cp 0
+    jp z,-
+    ; Reset counter.
+    xor a
+    ld (hl),a
+  ret
+.ends
