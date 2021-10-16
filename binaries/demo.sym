@@ -72,10 +72,6 @@
 00:c13c PSGSFXLoopFlag
 00:c13d PSGSFXSubstringLen
 00:c13e PSGSFXSubstringRetAddr
-00:c157 vdp_registers
-00:13c6 initialize_vdp_registers
-00:13dc set_display
-00:13f2 set_register
 00:11e9 clear_vram
 00:11fd get_word
 00:1205 is_button_1_pressed
@@ -99,6 +95,10 @@
 00:07a1 load_sat
 00:0b18 refresh_sat_handler
 00:0b40 clean_buffer
+00:c157 vdp_registers
+00:13c6 initialize_vdp_registers
+00:13dc set_display
+00:13f2 set_register
 00:c0f3 acm_enabled
 00:c0fb acm_frame
 00:c103 acm_timer
@@ -275,10 +275,6 @@
 00000001 _sizeof_PSGSFXLoopFlag
 00000001 _sizeof_PSGSFXSubstringLen
 00000002 _sizeof_PSGSFXSubstringRetAddr
-0000000b _sizeof_vdp_registers
-00000016 _sizeof_initialize_vdp_registers
-00000016 _sizeof_set_display
-00000010 _sizeof_set_register
 00000014 _sizeof_clear_vram
 00000008 _sizeof_get_word
 00000008 _sizeof_is_button_1_pressed
@@ -302,6 +298,10 @@
 00000377 _sizeof_load_sat
 00000028 _sizeof_refresh_sat_handler
 00000040 _sizeof_clean_buffer
+0000000b _sizeof_vdp_registers
+00000016 _sizeof_initialize_vdp_registers
+00000016 _sizeof_set_display
+00000010 _sizeof_set_register
 00000008 _sizeof_acm_enabled
 00000008 _sizeof_acm_frame
 00000008 _sizeof_acm_timer

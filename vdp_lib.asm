@@ -2,7 +2,15 @@
 ; Generic, low level VDP routines.
 ;
 ; Contents:
-; * SAT handler
+; Sprite Attribute Table (SAT) handler.
+; A simple flicker-enabled engine for handling hardware sprites.
+; --- Add Sprite: Add a sprite tile to the buffer.
+; --- Load SAT: Load the SAT with the buffer.
+; --- Refresh SAT Handler: Reset buffer and load mode.
+; VDP Register Handler 
+; --- Initialize Registers: Load all 11 registers with a string of values.
+; --- Set Display: Turn the display on/off.
+; --- Set Register: Load a byte into a given register.
 
 ; -----------------------------------------------------------------------------
 ; SAT Handler
@@ -153,3 +161,78 @@
       .db 192
     .endr
 .ends
+
+; -----------------------------------------------------------------------------
+; VDP Register Handler
+; -----------------------------------------------------------------------------
+  .equ MODE_0 0
+  .equ MODE_1 1
+  .equ BORDER_COLOR 7
+  .equ HSCROLL 8
+  .equ VSCROLL 9
+  .equ LINE_INTERRUPT 10
+; -----------------------------------------------------------------------------
+; -----------------------------------------------------------------------------
+.ramsection "VDP Register Variables" slot 3
+; -----------------------------------------------------------------------------
+  vdp_registers dsb 11
+.ends
+; -----------------------------------------------------------------------------
+.section "VDP Register Handler" free
+; -----------------------------------------------------------------------------
+  initialize_vdp_registers:
+    ; Load 11 bytes of init values into the 11 VDP registers and the RAM mirror.
+    ; Entry: HL = Pointer to initialization data (11 bytes).
+    ; Exit:  None
+    ; Uses:  A, BC, DE, HL
+    ld de,vdp_registers
+    ld b,11
+    ld c,0
+    -:
+      ld a,(hl)
+      ld (de),a
+      out (CONTROL_PORT),a
+      ld a,REGISTER_WRITE_COMMAND
+      or c
+      out (CONTROL_PORT),a
+      inc hl
+      inc de
+      inc c
+    djnz -
+  ret
+  ;
+  set_display:
+    ; Use value passed in A to either set or reset the display bit of vdp
+    ; register 1 mirror. Then load the whole mirror into the actual register.
+    ; Entry: A = $ff = enable display, else disable display.
+    ; Uses: A, B, HL 
+    ld hl,vdp_registers+1
+    cp $ff
+    jp z,+
+      res 6,(hl)
+      jp ++
+    +:
+      set 6,(hl)
+    ++:
+    ld a,(hl)
+    ld b,1
+    call set_register
+  ret
+  ;
+  set_register:
+    ; Write to target register and register mirror.
+    ; Entry: A = byte to be loaded into vdp register.
+    ;        B = target register 0-10.
+    ; Uses: AF, B, DE, HL
+    ld hl,vdp_registers
+    ld d,0
+    ld e,b
+    add hl,de
+    ld (hl),A
+    out (CONTROL_PORT),a
+    ld a,REGISTER_WRITE_COMMAND
+    or b
+    out (CONTROL_PORT),a
+  ret
+.ends
+; -----------------------------------------------------------------------------
