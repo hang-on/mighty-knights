@@ -4,10 +4,7 @@
 ; GLOBAL DEFINITIONS
 ; -----------------------------------------------------------------------------
 .include "sms_constants.asm"
-.equ ENABLED $ff
-.equ DISABLED 0
-.equ TRUE $ff
-.equ FALSE 0
+.include "core.asm"
 
 ; Remove comment to enable unit testing
 ;.equ TEST_MODE
@@ -32,11 +29,12 @@
   banks 8
 .endro
 ;
+; Hierarchy: Most fundamental first. 
 .include "psglib.inc"
-.include "mighty_knights_lib.asm"
 .include "vdp_lib.asm"
 .include "animations_lib.asm"
 .include "actors_lib.asm"
+.include "mighty_knights_lib.asm"
 .include "sub_workshop.asm"
 .include "sub_tests.asm"        
 ; -----------------------------------------------------------------------------
@@ -273,9 +271,9 @@
 
     call process_animations
 
-    ld a,PLAYER_ACM_SLOT
-    ld hl,arthur
-    call draw_actor
+    ld a,PLAYER_ACM_SLOT            ; Let the actor "arthur" be represented
+    ld hl,arthur                    ; by the animation currently playing in
+    call draw_actor                 ; animation control matrix' PLAYER_ACM_SLOT
 
   jp main_loop
 .ends

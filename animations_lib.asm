@@ -1,5 +1,14 @@
 ; animations_lib.asm
 ; Code  for controlling animations. Including tileblasting.
+; 
+; The Animation Control Matrix (ACM) controls and updates the animations
+; available for actors on a frame by frame basis.
+; Initialize the ACM with "initialize_acm" and update it once per game loop
+; with "process_animations".
+; Each slot in the ACM can hold an animation, which is updated independently of
+; actors etc. Think of the ACM as a table of actor "skins", that is animated,
+; and can be assigned to various actors with the "draw_actor" routine. The
+; actor library is built on top of animations library, interfacing the ACM.
 
 ; -----------------------------------------------------------------------------
 .equ ACM_SLOTS 8
