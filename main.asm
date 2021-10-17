@@ -40,7 +40,7 @@
 .include "sub_workshop.asm"
 .include "sub_tests.asm"        
 ; -----------------------------------------------------------------------------
-.ramsection "main variables" slot 3
+.ramsection "System variables" slot 3
 ; -----------------------------------------------------------------------------
   temp_byte db                  ; Temporary variable - byte.
   temp_word db                  ; Temporary variable - word.
@@ -49,11 +49,15 @@
   hline_counter db
   pause_flag db
   input_ports dw
-  
+  ;  
   critical_routines_finish_at db
+.ends
 
+; -----------------------------------------------------------------------------
+.ramsection "Game variables" slot 3
+; -----------------------------------------------------------------------------
   arthur instanceof actor
-  
+  ;
 .ends
 
 .org 0
@@ -116,8 +120,6 @@
   ; Run this function once (on game load/reset). 
     ;
     call PSGInit
-    ld hl,adventure_awaits
-    ;call PSGPlay
     ;
     call clear_vram
     ld hl,vdp_register_init
@@ -149,15 +151,15 @@
     call load_vram
 
     call initialize_acm
+    
     INITIALIZE_ACTOR arthur, 0, 175, 65
-
     .equ PLAYER_ACM_SLOT 0
-    ld a,PLAYER_ACM_SLOT
-    ld hl,arthur_standing
-    call set_animation
+    
     ld a,IDLE
     ld hl,arthur.motor
     ld (hl),a
+    ld a,TRUE
+    ld (arthur.state_changed),a
 
     ei
     halt
@@ -195,16 +197,14 @@
     in a,(INPUT_PORT_2)
     ld (input_ports+1),a
 
-    ; ------------------
-
+    ; Update Arthur's motor state:
     ld a,(arthur.motor)
     cp IDLE
     jp nz,+++
       call is_right_pressed
       jp c,++
       call is_left_pressed
-      jp c,++
-      jp handle_arthur_state_end
+      jp nc,++++
         ++:
           ld a,WALKING
           ld (arthur.motor),a
@@ -216,14 +216,14 @@
             ld (arthur.face),a
             ld a,ARTHUR_SPEED
             ld (arthur.hspeed),a
-            jp handle_arthur_state_end    
+            jp ++++    
           +:
             ld a,FACING_LEFT
             ld (arthur.face),a
             ld a,ARTHUR_SPEED
             neg
             ld (arthur.hspeed),a
-            jp handle_arthur_state_end   
+            jp ++++   
     +++:
     cp WALKING
     jp nz,+
@@ -234,9 +234,9 @@
           ld (arthur.motor),a
           ld a,TRUE
           ld (arthur.state_changed),a
-        jp handle_arthur_state_end
+        jp ++++
     +:
-    handle_arthur_state_end:
+    ++++: ; Arthur motor state updating finished.
 
 
     ; If Arthur's state was updated, set his animation accordingly.

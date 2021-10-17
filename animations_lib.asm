@@ -256,7 +256,7 @@
     ; IN:  A = Slot number in ACM
     ; OUT: A = TRUE or FALSE.
     ld (temp_byte),a              ; Save the slot number.
-    ld hl,acm_label             ; HL = Start of pointer table.
+    ld hl,acm_label               ; HL = Start of pointer table.
     call offset_word_table        ; HL = Item holding ptr. to animation file.
     call get_word                 ; HL = Start (at t.o.c.) of animation file. 
     call get_word                 ; HL = Header section in animation file.
@@ -277,7 +277,7 @@
   is_animation_looping:
     ; IN:  A = Slot number in ACM
     ; OUT: A = TRUE or FALSE.
-    ld hl,acm_label             ; HL = Start of pointer table.
+    ld hl,acm_label               ; HL = Start of pointer table.
     call offset_word_table        ; HL = Item holding ptr. to animation file.
     call get_word                 ; HL = Start (at t.o.c.) of animation file. 
     call get_word                 ; HL = Header section in animation file.
@@ -286,12 +286,12 @@
   ret
 
   is_tileblast_required:
-    ; Look up animation file to check whether a tilblast is required for the 
+    ; Look up animation file to check whether a tileblast is required for the 
     ; current frame.
     ; IN: A = animation slot number in ACM.
     ; OUT: A = TRUE/FALSE
     ld (temp_byte),a
-    ld hl,acm_label             ; HL = Start of pointer table.
+    ld hl,acm_label               ; HL = Start of pointer table.
     call offset_word_table        ; HL = Item holding ptr. to animation file.
     call get_word                 ; HL = Start (at t.o.c.) of animation file. 
     push hl                       ; Save base address of t.o.c.
