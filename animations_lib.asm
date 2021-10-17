@@ -9,6 +9,28 @@
 ; actors etc. Think of the ACM as a table of actor "skins", that is animated,
 ; and can be assigned to various actors with the "draw_actor" routine. The
 ; actor library is built on top of animations library, interfacing the ACM.
+;
+; An animation is a collection of data such as frames duration, tiles and layouts.
+; This is the format of an animation "file", for a generic idle animation:
+;  hedgehog_idle:                      ; Animation label.
+;    ; Table of contents:
+;    .dw @header, @frame_0             ; Must have a header and at least one frame.
+;    @header:
+;      .db 0                           ; Max frame.
+;      .db FALSE                       ; Looping.
+;    @frame_0:
+;      .db 7                           ; Duration.
+;      .db TRUE                        ; Require tileblast?
+;      .db PLAYER_TILE_BANK            ; Blast: Tile bank.
+;      .dw hedgehog_idle_tiles         ; Blast: Tiles.
+;      .dw ADDRESS_OF_PLAYER_FIRST_TILE; Blast: Addx of first tile in tile bank.
+;      .db XLARGE_BLAST                ; Blast: Blast size.
+;      .db 14                          ; Size (number of tiles in frame).
+;      .db INDEX_OF_PLAYER_FIRST_TILE  ; Index of first tile in tile bank.
+;      .dw hedgehog_idle_layout      ; Pointer to layout.
+;
+; Tileblasting is the act of streaming tiles to the tile bank in VRAM, as fast
+; (and unsafe) as possible.
 
 ; -----------------------------------------------------------------------------
 .equ ACM_SLOTS 8
