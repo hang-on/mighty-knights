@@ -136,17 +136,17 @@
       jp test_bench
     .endif
 
-    ld a,2
-    ld hl,mockup_background_tiles
-    ld de,BACKGROUND_BANK_START
-    ld bc,mockup_background_tiles_end - mockup_background_tiles
-    call load_vram
+    ;ld a,2
+    ;ld hl,mockup_background_tiles
+    ;ld de,BACKGROUND_BANK_START
+    ;ld bc,mockup_background_tiles_end - mockup_background_tiles
+    ;call load_vram
 
-    ld a,2
-    ld hl,mockup_background_tilemap
-    ld de,NAME_TABLE_START
-    ld bc,VISIBLE_NAME_TABLE_SIZE
-    call load_vram
+    ;ld a,2
+    ;ld hl,mockup_background_tilemap
+    ;ld de,NAME_TABLE_START
+    ;ld bc,VISIBLE_NAME_TABLE_SIZE
+    ;call load_vram
 
     call initialize_acm
     
@@ -290,13 +290,12 @@
   .include "bank_2/arthur/arthur_animations.asm"
 
   mockup_background_tiles:
-    .include "bank_2/mockup_background_tiles.asm"
+    ;.include "bank_2/mockup_background_tiles.asm"
   mockup_background_tiles_end:    
   mockup_background_tilemap:
-  .include "bank_2/mockup_background_tilemap.asm"
+  ;.include "bank_2/mockup_background_tilemap.asm"
   mockup_background_tilemap_end:
   
-  adventure_awaits:
-    .incbin "adventure_awaits_compr.psg"
+
 
 .ends
