@@ -123,7 +123,7 @@
     ld hl,vdp_register_init
     call initialize_vdp_registers
     ;
-    ld a,5
+    ld a,1
     ld b,BORDER_COLOR
     call set_register
     ;
@@ -136,17 +136,17 @@
       jp test_bench
     .endif
 
-    ;ld a,2
-    ;ld hl,mockup_background_tiles
-    ;ld de,BACKGROUND_BANK_START
-    ;ld bc,mockup_background_tiles_end - mockup_background_tiles
-    ;call load_vram
+    ld a,2
+    ld hl,mockup_background_tiles
+    ld de,BACKGROUND_BANK_START
+    ld bc,mockup_background_tiles_end - mockup_background_tiles
+    call load_vram
 
-    ;ld a,2
-    ;ld hl,mockup_background_tilemap
-    ;ld de,NAME_TABLE_START
-    ;ld bc,VISIBLE_NAME_TABLE_SIZE
-    ;call load_vram
+    ld a,2
+    ld hl,mockup_background_tilemap
+    ld de,NAME_TABLE_START
+    ld bc,VISIBLE_NAME_TABLE_SIZE
+    call load_vram
 
     call initialize_acm
     
@@ -271,9 +271,9 @@
 
     call process_animations
 
-    ld a,PLAYER_ACM_SLOT            ; Let the actor "arthur" be represented
-    ld hl,arthur                    ; by the animation currently playing in
-    call draw_actor                 ; animation control matrix' PLAYER_ACM_SLOT
+    ;ld a,PLAYER_ACM_SLOT            ; Let the actor "arthur" be represented
+    ;ld hl,arthur                    ; by the animation currently playing in
+    ;call draw_actor                 ; animation control matrix' PLAYER_ACM_SLOT
 
   jp main_loop
 .ends
@@ -283,17 +283,17 @@
 ; -----------------------------------------------------------------------------
 
   demo_palette:
-    .db $00 $20 $12 $08 $06 $15 $2A $3F $13 $0B $0F $0C $38 $25 $3B $1B
-    .db $23 $10 $12 $18 $06 $15 $2A $3F $13 $0B $0F $0C $38 $26 $27 $2F
+    .db $23 $00 $11 $12 $17 $1B $2E $19 $14 $10 $35 $38 $3D $3F $2A $15
+    .db $23 $00 $11 $12 $17 $1B $2E $19 $14 $10 $35 $38 $3D $3F $2A $15
     demo_palette_end:
 
   .include "bank_2/arthur/arthur_animations.asm"
 
   mockup_background_tiles:
-    ;.include "bank_2/mockup_background_tiles.asm"
+    .include "bank_2/mockup_background_tiles.asm"
   mockup_background_tiles_end:    
   mockup_background_tilemap:
-  ;.include "bank_2/mockup_background_tilemap.asm"
+    .include "bank_2/mockup_background_tilemap.asm"
   mockup_background_tilemap_end:
   
 
