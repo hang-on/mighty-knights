@@ -27,7 +27,7 @@
 ;      .db XLARGE_BLAST                ; Blast: Blast size.
 ;      .db 14                          ; Size (number of tiles in frame).
 ;      .db INDEX_OF_PLAYER_FIRST_TILE  ; Index of first tile in tile bank.
-;      .dw hedgehog_idle_layout      ; Pointer to layout.
+;      .dw hedgehog_idle_layout        ; Pointer to layout.
 ;
 ; Tileblasting is the act of streaming tiles to the tile bank in VRAM, as fast
 ; (and unsafe) as possible.
@@ -57,10 +57,13 @@
   size db
 .endst
 
-.equ SMALL_BLAST 4
-.equ MEDIUM_BLAST 8
+.equ SMALL_BLAST 8
+.equ MEDIUM_BLAST 10
 .equ LARGE_BLAST 12
 .equ XLARGE_BLAST 14
+.equ XXLARGE_BLAST 16
+.equ XXXLARGE_BLAST 18
+
 
 .bank 0 slot 0
 .section "Animations: Subroutines" free 
@@ -381,14 +384,19 @@
 .section "Tileblasting: Subroutines" free
   ; OUTI-blocks for tileblasting.
   .ifdef USE_TEST_KERNEL
-      .equ SMALL_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*4
-      .equ MEDIUM_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*8
+      .equ SMALL_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*8
+      .equ MEDIUM_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*10
       .equ LARGE_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*12
       .equ XLARGE_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*14
+      .equ XXLARGE_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*16
+      .equ XXXLARGE_BLAST_SIZE_IN_BYTES CHARACTER_SIZE*18
+
       small_blast:
       medium_blast:
       large_blast:
       xlarge_blast:
+      xxlarge_blast:
+      xxxlarge_blast:
       push hl
       pop ix ; save HL
       
@@ -409,9 +417,18 @@
         jp ++
       +:
       cp XLARGE_BLAST
-      jp nz,++
+      jp nz,+
         ld bc,XLARGE_BLAST_SIZE_IN_BYTES
-  
+        jp ++
+      +:
+      cp XXLARGE_BLAST
+      jp nz,+
+        ld bc,XXLARGE_BLAST_SIZE_IN_BYTES
+        jp ++
+      +:
+      cp XXXLARGE_BLAST
+      jp nz,++
+        ld bc,XXXLARGE_BLAST_SIZE_IN_BYTES
       ++:
       ld hl,test_kernel_bytes_written
       ld (hl),c
@@ -429,20 +446,28 @@
       inc hl
       ld (hl),d
   .else
+    xxxlarge_blast:
+      .rept CHARACTER_SIZE * 2
+        outi
+      .endr
+    xxlarge_blast:
+      .rept CHARACTER_SIZE * 2
+        outi
+      .endr
     xlarge_blast:
       .rept CHARACTER_SIZE * 2
         outi
       .endr
     large_blast:
-      .rept CHARACTER_SIZE * 4
+      .rept CHARACTER_SIZE * 2
         outi
       .endr
     medium_blast:
-      .rept CHARACTER_SIZE * 4
+      .rept CHARACTER_SIZE * 2
         outi
       .endr
     small_blast:
-      .rept CHARACTER_SIZE * 4
+      .rept CHARACTER_SIZE * 8
         outi
       .endr
   .endif
@@ -536,6 +561,16 @@
         jp ++
       +:
       cp XLARGE_BLAST
+      jp nz,+
+        call xlarge_blast
+        jp ++
+      +:
+      cp XXLARGE_BLAST
+      jp nz,+
+        call xxlarge_blast
+        jp ++
+      +:
+      cp XXXLARGE_BLAST
       jp nz,++
         call xlarge_blast
       ++:
