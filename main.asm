@@ -150,7 +150,7 @@
 
     call initialize_acm
     
-    INITIALIZE_ACTOR arthur, 0, 175, 65
+    INITIALIZE_ACTOR arthur, 0, 167, 56
     .equ PLAYER_ACM_SLOT 0
     
     ld a,IDLE

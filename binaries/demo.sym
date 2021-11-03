@@ -184,10 +184,10 @@
 02:80c6 arthur_walking_layout_2
 02:80de arthur_walking_layout_3
 02:80fa arthur_idle_tiles
-02:831a mockup_background_tiles
-02:8bba mockup_background_tiles_end
-02:8bba mockup_background_tilemap
-02:91ba mockup_background_tilemap_end
+02:833a mockup_background_tiles
+02:8bda mockup_background_tiles_end
+02:8bda mockup_background_tilemap
+02:91da mockup_background_tilemap_end
 
 [definitions]
 00000011 _sizeof_PSGInit
@@ -368,7 +368,7 @@
 0000001c _sizeof_arthur_walking_layout_1
 00000018 _sizeof_arthur_walking_layout_2
 0000001c _sizeof_arthur_walking_layout_3
-00000220 _sizeof_arthur_idle_tiles
+00000240 _sizeof_arthur_idle_tiles
 000008a0 _sizeof_mockup_background_tiles
 00000000 _sizeof_mockup_background_tiles_end
 00000600 _sizeof_mockup_background_tilemap

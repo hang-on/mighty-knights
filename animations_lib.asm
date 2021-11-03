@@ -572,7 +572,7 @@
       +:
       cp XXXLARGE_BLAST
       jp nz,++
-        call xlarge_blast
+        call xxxlarge_blast
       ++:
     .endr
     _tileblasting_finished:
